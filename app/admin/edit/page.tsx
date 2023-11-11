@@ -7,7 +7,7 @@ export const metadata = {
 const EditorPage = () => {
   return (
     <div>
-      <Editor />{' '}
+      <Editor />
     </div>
   )
 }

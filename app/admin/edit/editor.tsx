@@ -1,14 +1,20 @@
 'use client'
 
 import * as React from 'react'
+import { useFormState } from 'react-dom'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import EditorJS from '@editorjs/editorjs'
+import { publishPost, savePost } from '@/app/api/editor'
 
 //import '@/styles/editor.css'
 
+const initialState = {}
+
 export const Editor = () => {
   const ref = React.useRef<EditorJS>()
+  const [state, save] = useFormState(savePost, initialState)
+  const [state2, publish] = useFormState(publishPost, initialState)
   const router = useRouter()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
   const [isMounted, setIsMounted] = React.useState<boolean>(false)
@@ -73,8 +79,11 @@ export const Editor = () => {
             </Link>
             <p className="text-sm text-muted-foreground">Draft</p>
           </div>
-          <button type="submit">
+          <button formAction={save}>
             <span>Save</span>
+          </button>
+          <button formAction={publish}>
+            <span>Publish</span>
           </button>
         </div>
         <div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
