@@ -28,7 +28,7 @@ connection.connect((err) => {
   // Create the "Post" table first
   connection.query(
     `CREATE TABLE IF NOT EXISTS Post (
-      id INT AUTO_INCREMENT PRIMARY KEY,
+      id VARCHAR(36) PRIMARY KEY UNIQUE,
       title VARCHAR(255),
       slug VARCHAR(255),
       content JSON,
