@@ -1,4 +1,4 @@
-import { Editor } from '@/app/admin/new/editor'
+import { NewPostForm } from '@/app/admin/new/form'
 import { checkIfPostExists } from '@/app/api/posts'
 
 export const dynamic = 'force-dynamic'
@@ -11,7 +11,7 @@ const NewPost = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
-      <Editor id={params.id} />
+      <NewPostForm id={params.id} />
     </div>
   )
 }
