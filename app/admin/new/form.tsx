@@ -21,6 +21,7 @@ export const NewPostForm = ({ id }: { id: string }) => {
             <span>Save</span>
           </button>
         </div>
+        {/** Edit header */}
         <div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
           <textarea
             autoFocus
