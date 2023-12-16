@@ -12,8 +12,7 @@ export const connection2 = await mysql.createConnection({
   database: 'mikey_db',
   host: 'localhost',
   user: 'root',
-  password: 'password',
-  multipleStatements: true
+  password: 'password'
 })
 
 export const db = drizzle(connection2)

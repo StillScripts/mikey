@@ -1,4 +1,4 @@
-import { db } from '@/db/connection.mts'
+import { db } from '@/db/connection'
 import { posts } from '@/db/schema'
 
 const PostsPage = async () => {

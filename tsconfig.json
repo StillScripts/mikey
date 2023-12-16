@@ -27,10 +27,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "db/connection.mts",
-    "db/migrate.mts",
-    "db/schema.mts"
+    "**/*.mts",
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

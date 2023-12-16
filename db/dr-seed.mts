@@ -1,5 +1,5 @@
-import { db, connection2 } from './connection.mts'
-import { posts } from './schema.mts'
+import { db, connection2 } from './connection'
+import { posts } from './schema'
 
 await db.insert(posts).values({
   // @ts-ignore
