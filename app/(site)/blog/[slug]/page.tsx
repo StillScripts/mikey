@@ -1,4 +1,4 @@
-import { getPost, getPostBySlug } from '@/app/(server)/routers/posts'
+import { getPostBySlug } from '@/app/(server)/routers/posts'
 import { BlockRenderer } from '@/components/editor/block-renderer'
 import { notFound } from 'next/navigation'
 

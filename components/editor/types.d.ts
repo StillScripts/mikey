@@ -7,11 +7,21 @@ export interface EditorjsData {
 export interface Block {
   id: string
   type: BlockType
-  data: Data
+  data: Partial<Data>
 }
 
 export interface Data {
+  // text
   text: string
+  level: 1 | 2 | 3 | 4 | 5 | 6
+  // list
+  style: 'ordered' | 'unordered'
+  items: string[]
+  // link
+  link: string
+  meta: {
+    title: string
+  }
 }
 
 export type BlockType = 'header' | 'paragraph' | 'link' | 'list'

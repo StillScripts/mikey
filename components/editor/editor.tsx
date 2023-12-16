@@ -32,7 +32,12 @@ export const Editor = ({ data }: { data?: string }) => {
     const tools: Record<BlockType, any> = {
       header: Header,
       paragraph: Paragraph,
-      link: LinkTool,
+      link: {
+        class: LinkTool,
+        config: {
+          endpoint: 'http://localhost:3000/api/read-url'
+        }
+      },
       list: List
     }
 
