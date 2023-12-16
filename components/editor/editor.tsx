@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import EditorJS from '@editorjs/editorjs'
+import type { BlockType } from './types'
 
 import '@/app/editor.css'
 
@@ -28,6 +29,13 @@ export const Editor = ({ data }: { data?: string }) => {
     // @ts-ignore
     const LinkTool = (await import('@editorjs/link')).default
 
+    const tools: Record<BlockType, any> = {
+      header: Header,
+      paragraph: Paragraph,
+      link: LinkTool,
+      list: List
+    }
+
     if (!ref.current) {
       const editor = new EditorJS({
         holder: 'editor',
@@ -39,12 +47,7 @@ export const Editor = ({ data }: { data?: string }) => {
         },
         placeholder: 'Type here to write your post...',
         inlineToolbar: true,
-        tools: {
-          header: Header,
-          paragraph: Paragraph,
-          linkTool: LinkTool,
-          list: List
-        },
+        tools,
         data: data ? JSON.parse(data!) : undefined
       })
     }
@@ -73,8 +76,8 @@ export const Editor = ({ data }: { data?: string }) => {
 
   return (
     <>
-      <div id="editor" className="min-h-[500px]" />
-      <p className="text-sm text-gray-500">
+      <div id="editor" className="min-h-[400px]" />
+      <p className="text-sm text-muted">
         Use{' '}
         <kbd className="rounded-md border bg-muted px-1 text-xs uppercase">
           Tab

@@ -18,6 +18,11 @@ export const getPost = async (id: number) => {
 
 export type SinglePost = Awaited<ReturnType<typeof getPost>>[number]
 
+export const getPostBySlug = async (slug: string) => {
+  const db = await getDb()
+  return await db.select().from(posts).where(eq(posts.slug, slug))
+}
+
 export const createPost = async (state: ActionStatus, formData: FormData) => {
   const db = await getDb()
   const title = formData.get('title') as string
