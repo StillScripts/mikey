@@ -1,4 +1,4 @@
-import { connection } from './connection'
+import { connection } from './connection.mjs'
 
 // First connect to the database locally
 connection.connect((err) => {
