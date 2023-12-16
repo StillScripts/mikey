@@ -29,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "db/connection.mts",
-    "db/migrate.mts"
+    "db/migrate.mts",
+    "db/schema.mts"
   ],
   "exclude": ["node_modules"]
 }
