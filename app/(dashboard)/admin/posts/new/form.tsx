@@ -4,6 +4,7 @@ import { useFormState } from 'react-dom'
 import Link from 'next/link'
 import { createPost } from '@/app/(server)/routers/posts'
 import { Editor } from './editor'
+import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 
 export const NewPostForm = () => {
   const returnUrl = '/admin/posts'
@@ -11,6 +12,7 @@ export const NewPostForm = () => {
 
   return (
     <form>
+      {/* <PageHeading></PageHeading> */}
       <div className="grid w-full gap-10">
         {/** Edit header */}
         <div className="flex w-full items-center justify-end space-x-4">
