@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { ToastAction } from '@/components/ui/toast'
 import { Button } from '@/components/ui/button'
+import { NewPostButtons } from './buttons'
 
 export const NewPostForm = () => {
   const returnUrl = '/admin/posts'
@@ -44,10 +45,7 @@ export const NewPostForm = () => {
           { title: 'New Post', href: '/admin/posts/new' }
         ]}
       >
-        <Button type="button" variant="outline" asChild>
-          <Link href="/admin/posts">Discard</Link>
-        </Button>
-        <Button formAction={create}>Save Post</Button>
+        <NewPostButtons action={create} />
       </PageHeading>
       <div className="grid w-full gap-10">
         {/** Edit header */}
