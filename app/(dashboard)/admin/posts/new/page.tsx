@@ -1,6 +1,9 @@
+import type { Metadata } from 'next'
 import { NewPostForm } from './form'
 
-export const dynamic = 'force-dynamic'
+export const metadata: Metadata = {
+  title: 'Create New Post'
+}
 
 const NewPost = () => {
   return (

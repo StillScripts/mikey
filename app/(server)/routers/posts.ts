@@ -3,10 +3,17 @@
 import { getDb } from '@/db/get-connection'
 import { posts } from '@/db/schema'
 import { type ActionStatus, getStatus } from '@/lib/utils'
+import { eq } from 'drizzle-orm'
+import { revalidatePath } from 'next/cache'
 
 export const getAllPosts = async () => {
   const db = await getDb()
   return await db.select().from(posts)
+}
+
+export const getPost = async (id: number) => {
+  const db = await getDb()
+  return await db.select().from(posts).where(eq(posts.id, id))
 }
 
 export const createPost = async (state: ActionStatus, formData: FormData) => {
@@ -23,7 +30,14 @@ export const createPost = async (state: ActionStatus, formData: FormData) => {
       description: '',
       draftContent: blocks
     })
+    revalidatePath('/admin/posts')
     return getStatus('success')
   }
   return getStatus('error')
+}
+
+export const deletePost = async (id: number) => {
+  const db = await getDb()
+  await db.delete(posts).where(eq(posts.id, id))
+  revalidatePath('/admin/posts')
 }

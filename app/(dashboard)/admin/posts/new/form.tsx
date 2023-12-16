@@ -8,11 +8,9 @@ import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { useEffect } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { ToastAction } from '@/components/ui/toast'
-import { Button } from '@/components/ui/button'
 import { NewPostButtons } from './buttons'
 
 export const NewPostForm = () => {
-  const returnUrl = '/admin/posts'
   const { toast } = useToast()
   const [state, create] = useFormState(createPost, {})
 
@@ -29,7 +27,7 @@ export const NewPostForm = () => {
         description: 'Your new post was successfully created.',
         action: (
           <ToastAction altText="View all posts">
-            <Link href={returnUrl}>View all posts</Link>
+            <Link href="/admin/posts">View all posts</Link>
           </ToastAction>
         )
       })

@@ -1,6 +1,8 @@
 'use client'
 
+import { deletePost } from '@/app/(server)/routers/posts'
 import { Button } from '@/components/ui/button'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useFormStatus } from 'react-dom'
@@ -32,5 +34,13 @@ export const NewPostButtons = ({
         )}
       </Button>
     </>
+  )
+}
+
+export const DeletePostMenuItem = ({ id }: { id: number }) => {
+  return (
+    <DropdownMenuItem>
+      <button onClick={async () => await deletePost(id)}>Delete</button>
+    </DropdownMenuItem>
   )
 }
