@@ -27,7 +27,7 @@ connection.connect((err) => {
   })
   // Create the "Post" table first
   connection.query(
-    `CREATE TABLE IF NOT EXISTS Post (
+    `CREATE TABLE IF NOT EXISTS posts (
       id VARCHAR(36) PRIMARY KEY UNIQUE,
       title VARCHAR(255),
       slug VARCHAR(255),
@@ -49,13 +49,16 @@ connection.connect((err) => {
   )
 
   // Create an index for the slugs field
-  connection.query(`CREATE INDEX idx_slug ON Post (slug);`, (err) => {
-    if (err) {
-      console.error('Error creating INDEX on Posts table:', err)
-    } else {
-      console.log('Successfully created INDEX on Posts Table')
-    }
-  })
+  // connection.query(
+  //   `CREATE INDEX IF NOT EXISTS idx_slug ON Post (slug);`,
+  //   (err) => {
+  //     if (err) {
+  //       console.error('Error creating INDEX on Posts table:', err)
+  //     } else {
+  //       console.log('Successfully created INDEX on Posts Table')
+  //     }
+  //   }
+  // )
 
   // Close the database connection
   connection.end()

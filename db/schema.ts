@@ -3,14 +3,13 @@ import {
   mysqlTable,
   serial,
   text,
-  int,
   varchar,
   json,
   boolean,
   timestamp
 } from 'drizzle-orm/mysql-core'
 
-export const posts = mysqlTable('Post', {
+export const posts = mysqlTable('posts', {
   id: serial('id').primaryKey(),
   title: varchar('title', { length: 255 }).notNull(),
   slug: varchar('slug', { length: 255 }).notNull(),
