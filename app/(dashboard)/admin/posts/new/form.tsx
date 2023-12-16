@@ -5,10 +5,34 @@ import Link from 'next/link'
 import { createPost } from '@/app/(server)/routers/posts'
 import { Editor } from './editor'
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
+import { useEffect } from 'react'
+import { useToast } from '@/components/ui/use-toast'
+import { ToastAction } from '@/components/ui/toast'
 
 export const NewPostForm = () => {
   const returnUrl = '/admin/posts'
+  const { toast } = useToast()
   const [state, create] = useFormState(createPost, {})
+
+  useEffect(() => {
+    if (state?.error) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'An error occured when saving this data.'
+      })
+    } else if (state?.success) {
+      toast({
+        title: 'Success',
+        description: 'Your new post was successfully created.',
+        action: (
+          <ToastAction altText="View all posts">
+            <Link href={returnUrl}>View all</Link>
+          </ToastAction>
+        )
+      })
+    }
+  }, [state?.error, state?.success, toast])
 
   return (
     <form>
