@@ -1,8 +1,7 @@
-import { db } from '@/db/connection'
-import { posts } from '@/db/schema'
+import { getAllPosts } from '@/app/(server)/routers/posts'
 
 const PostsPage = async () => {
-  const allPosts = await db.select().from(posts)
+  const allPosts = await getAllPosts()
   return (
     <div>
       <h1>Posts</h1>
