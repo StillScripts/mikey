@@ -5,7 +5,7 @@ import EditorJS from '@editorjs/editorjs'
 
 import '@/app/editor.css'
 
-export const Editor = () => {
+export const Editor = ({ data }: { data?: string }) => {
   const ref = useRef<EditorJS>()
   const [isMounted, setIsMounted] = useState(false)
   const [blocksJSON, setBlocksJSON] = useState('')
@@ -44,10 +44,11 @@ export const Editor = () => {
           paragraph: Paragraph,
           linkTool: LinkTool,
           list: List
-        }
+        },
+        data: data ? JSON.parse(data!) : undefined
       })
     }
-  }, [])
+  }, [data])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
