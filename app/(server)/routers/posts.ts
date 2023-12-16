@@ -2,13 +2,14 @@
 
 import { getDb } from '@/db/get-connection'
 import { posts } from '@/db/schema'
+import { type ActionStatus, getStatus } from '@/lib/utils'
 
 export const getAllPosts = async () => {
   const db = await getDb()
   return await db.select().from(posts)
 }
 
-export const createPost = async (state: any, formData: FormData) => {
+export const createPost = async (state: ActionStatus, formData: FormData) => {
   const db = await getDb()
   const title = formData.get('title') as string
   const blocks = formData.get('blocks') as string
@@ -22,7 +23,7 @@ export const createPost = async (state: any, formData: FormData) => {
       description: '',
       draftContent: blocks
     })
-    return { error: false, success: true }
+    return getStatus('success')
   }
-  return { error: true, success: false }
+  return getStatus('error')
 }
