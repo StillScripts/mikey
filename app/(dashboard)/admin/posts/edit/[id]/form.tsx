@@ -8,14 +8,11 @@ import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { useEffect } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { ToastAction } from '@/components/ui/toast'
-import {
-  EditPostButtons,
-  NewPostButtons
-} from '@/app/(dashboard)/admin/posts/buttons'
+import { EditPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
 
 export const EditPostForm = ({ post }: { post: SinglePost }) => {
   const { toast } = useToast()
-  const [state, create] = useFormState(updatePost, { ...post })
+  const [state, update] = useFormState(updatePost, { ...post })
 
   useEffect(() => {
     if (state?.error) {
@@ -27,7 +24,7 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
     } else if (state?.success) {
       toast({
         title: 'Success',
-        description: 'Your new post was successfully created.',
+        description: 'Your new post was successfully updated.',
         action: (
           <ToastAction altText="View all posts">
             <Link href="/admin/posts">View all posts</Link>
@@ -47,7 +44,7 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
           { title: 'Edit Post', href: `/admin/posts/edit/${state?.id}` }
         ]}
       >
-        {state?.id && <EditPostButtons action={create} id={state.id} />}
+        {state?.id && <EditPostButtons action={update} id={state.id} />}
       </PageHeading>
       <div className="grid w-full gap-10">
         {/** Edit header */}

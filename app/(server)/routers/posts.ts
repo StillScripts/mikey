@@ -48,13 +48,16 @@ export const updatePost = async (
 
   if (title && blocks) {
     const slug = title.trim().toLowerCase().replace(/ /g, '-')
-    await db.insert(posts).values({
-      title,
-      slug,
-      metaTitle: title,
-      description: '',
-      draftContent: blocks
-    })
+    await db
+      .update(posts)
+      .set({
+        title,
+        slug,
+        metaTitle: title,
+        description: '',
+        draftContent: blocks
+      })
+      .where(eq(posts.id, state.id!))
     revalidatePath('/admin/posts')
     return getStatus('success')
   }
