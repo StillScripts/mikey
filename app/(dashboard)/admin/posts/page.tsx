@@ -19,17 +19,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-// import {
-//   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogCancel,
-//   AlertDialogContent,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-//   AlertDialogTrigger
-// } from '@/components/ui/alert-dialog'
 import { DeletePostMenuItem } from './buttons'
 
 export const metadata: Metadata = {
@@ -79,7 +68,9 @@ const Posts = async () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-[160px]">
                     <DropdownMenuItem>View</DropdownMenuItem>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/admin/posts/edit/${id}`}>Edit</Link>
+                    </DropdownMenuItem>
                     <DeletePostMenuItem id={id} />
                     {/* <DropdownMenuItem>
                       <AlertDialog>

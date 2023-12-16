@@ -8,7 +8,10 @@ import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { useEffect } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { ToastAction } from '@/components/ui/toast'
-import { NewPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
+import {
+  EditPostButtons,
+  NewPostButtons
+} from '@/app/(dashboard)/admin/posts/buttons'
 
 export const EditPostForm = ({ post }: { post: SinglePost }) => {
   const { toast } = useToast()
@@ -37,13 +40,14 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
   return (
     <form className="p-6">
       <PageHeading
-        heading="Create New Post"
+        heading="Edit This Post"
         links={[
           { title: 'Posts', href: '/admin/posts' },
-          { title: 'New Post', href: '/admin/posts/new' }
+          // @ts-expect-error this is a valid route
+          { title: 'Edit Post', href: `/admin/posts/edit/${state?.id}` }
         ]}
       >
-        <NewPostButtons action={create} />
+        {state?.id && <EditPostButtons action={create} id={state.id} />}
       </PageHeading>
       <div className="grid w-full gap-10">
         {/** Edit header */}
@@ -53,9 +57,10 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
             id="title"
             placeholder="Post title"
             name="title"
+            defaultValue={state?.title}
             className="w-full resize-none appearance-none overflow-hidden bg-transparent text-3xl font-bold focus:outline-none"
           />
-          <Editor />
+          <Editor data={state?.draftContent as string} />
         </div>
       </div>
     </form>
