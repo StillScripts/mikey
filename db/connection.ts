@@ -8,7 +8,7 @@ export const connection = mysql2.createConnection({
   password: 'password'
 })
 
-const connection2 = await mysql.createConnection({
+export const connection2 = await mysql.createConnection({
   database: 'mikey_db',
   host: 'localhost',
   user: 'root',
