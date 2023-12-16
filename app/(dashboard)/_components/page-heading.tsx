@@ -1,12 +1,13 @@
-import { Button } from '@/components/ui/button'
 import { type BreadcrubLink, Breadcrumbs } from './breadcrumbs'
 
-const PageHeading = ({
+export const PageHeading = ({
   heading,
-  links
+  links,
+  children
 }: {
   heading: string
   links?: BreadcrubLink[]
+  children?: React.ReactNode
 }) => {
   return (
     <div className="pb-6">
@@ -18,14 +19,9 @@ const PageHeading = ({
           </h2>
         </div>
         <div className="mt-4 space-x-3 flex flex-shrink-0 md:ml-4 md:mt-0">
-          <Button type="button" variant="outline">
-            Edit
-          </Button>
-          <Button type="button">Publish</Button>
+          {children}
         </div>
       </div>
     </div>
   )
 }
-
-export default PageHeading

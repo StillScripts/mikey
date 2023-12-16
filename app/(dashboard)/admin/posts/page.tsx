@@ -9,7 +9,9 @@ import {
   TableRow
 } from '@/components/ui/table'
 import type { Metadata } from 'next'
-import PageHeading from './_components/page-heading'
+import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Your Posts',
@@ -17,13 +19,18 @@ export const metadata: Metadata = {
 }
 
 const Posts = async () => {
+  const currentPath = '/admin/posts'
   const allPosts = await getAllPosts()
   return (
     <div className="bg-background p-6">
       <PageHeading
         heading="Blog Posts"
-        links={[{ title: 'Posts', href: '/admin/posts' }]}
-      />
+        links={[{ title: 'Posts', href: currentPath }]}
+      >
+        <Button type="button" asChild>
+          <Link href={currentPath + '/new'}>New Post</Link>
+        </Button>
+      </PageHeading>
       <h1 className="text-xl font-bold mb-6">Posts</h1>
       <Table>
         <TableCaption>A list of your posts.</TableCaption>

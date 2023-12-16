@@ -2,12 +2,12 @@
 
 import { useFormState } from 'react-dom'
 import Link from 'next/link'
-import { createPost } from '@/app/api/posts'
+import { createPost } from '@/app/(server)/routers/posts'
 import { Editor } from './editor'
 
-export const NewPostForm = ({ id }: { id: string }) => {
-  const [state, create] = useFormState(createPost, { id })
-  console.log(state)
+export const NewPostForm = () => {
+  const returnUrl = '/admin/posts'
+  const [state, create] = useFormState(createPost, {})
 
   return (
     <form>
@@ -15,7 +15,7 @@ export const NewPostForm = ({ id }: { id: string }) => {
         {/** Edit header */}
         <div className="flex w-full items-center justify-end space-x-4">
           <div className="flex items-center space-x-10">
-            <Link href="/admin">Discard</Link>
+            <Link href={returnUrl}>Discard</Link>
           </div>
           <button formAction={create}>
             <span>Save</span>

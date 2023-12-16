@@ -1,7 +1,7 @@
 'use server'
 
 import { v4 as uuidv4 } from 'uuid'
-import { connection } from '@/db/connection.mts'
+import { connection } from '@/db/connection'
 
 const connectionDB = () => {
   connection.query('USE mikey_db', (err) => {
