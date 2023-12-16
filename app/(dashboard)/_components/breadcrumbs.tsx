@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import type { Route } from 'next'
 
 export interface BreadcrubLink {
   title: string
-  href: string
+  href: Route
 }
 
 export const Breadcrumbs = ({ links }: { links?: BreadcrubLink[] }) => {

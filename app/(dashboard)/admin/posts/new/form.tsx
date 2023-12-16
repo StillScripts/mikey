@@ -8,6 +8,7 @@ import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { useEffect } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { ToastAction } from '@/components/ui/toast'
+import { Button } from '@/components/ui/button'
 
 export const NewPostForm = () => {
   const returnUrl = '/admin/posts'
@@ -27,7 +28,7 @@ export const NewPostForm = () => {
         description: 'Your new post was successfully created.',
         action: (
           <ToastAction altText="View all posts">
-            <Link href={returnUrl}>View all</Link>
+            <Link href={returnUrl}>View all posts</Link>
           </ToastAction>
         )
       })
@@ -35,18 +36,20 @@ export const NewPostForm = () => {
   }, [state?.error, state?.success, toast])
 
   return (
-    <form>
-      {/* <PageHeading></PageHeading> */}
+    <form className="p-6">
+      <PageHeading
+        heading="Create New Post"
+        links={[
+          { title: 'Posts', href: '/admin/posts' },
+          { title: 'New Post', href: '/admin/posts/new' }
+        ]}
+      >
+        <Button type="button" variant="outline" asChild>
+          <Link href="/admin/posts">Discard</Link>
+        </Button>
+        <Button formAction={create}>Save Post</Button>
+      </PageHeading>
       <div className="grid w-full gap-10">
-        {/** Edit header */}
-        <div className="flex w-full items-center justify-end space-x-4">
-          <div className="flex items-center space-x-10">
-            <Link href={returnUrl}>Discard</Link>
-          </div>
-          <button formAction={create}>
-            <span>Save</span>
-          </button>
-        </div>
         {/** Edit header */}
         <div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
           <textarea

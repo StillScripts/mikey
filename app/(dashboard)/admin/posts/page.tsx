@@ -19,16 +19,15 @@ export const metadata: Metadata = {
 }
 
 const Posts = async () => {
-  const currentPath = '/admin/posts'
   const allPosts = await getAllPosts()
   return (
     <div className="bg-background p-6">
       <PageHeading
         heading="Blog Posts"
-        links={[{ title: 'Posts', href: currentPath }]}
+        links={[{ title: 'Posts', href: '/admin/posts' }]}
       >
         <Button type="button" asChild>
-          <Link href={currentPath + '/new'}>New Post</Link>
+          <Link href="/admin/posts/new">New Post</Link>
         </Button>
       </PageHeading>
       <h1 className="text-xl font-bold mb-6">Posts</h1>
