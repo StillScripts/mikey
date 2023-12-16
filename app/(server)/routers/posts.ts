@@ -1,22 +1,21 @@
 'use server'
 
-import { db } from '@/db/connection.mts'
-import { posts } from '@/db/schema.mts'
+import { getDb } from '@/db/get-connection'
+import { posts } from '@/db/schema'
+import { type ActionStatus, getStatus } from '@/lib/utils'
 
 export const getAllPosts = async () => {
+  const db = await getDb()
   return await db.select().from(posts)
 }
 
-export const createPost = async (state: any, formData: FormData) => {
-  const id = state.id
+export const createPost = async (state: ActionStatus, formData: FormData) => {
+  const db = await getDb()
   const title = formData.get('title') as string
   const blocks = formData.get('blocks') as string
 
-  if (id && title && blocks) {
+  if (title && blocks) {
     const slug = title.trim().toLowerCase().replace(/ /g, '-')
-    console.log(`INSERT INTO Post (id, title, slug, meta_title, draft_content)
-    VALUES ('${id}', '${title}', '${slug}', '${title}', '${blocks}');
-    ;`)
     await db.insert(posts).values({
       title,
       slug,
@@ -24,7 +23,7 @@ export const createPost = async (state: any, formData: FormData) => {
       description: '',
       draftContent: blocks
     })
-    return { error: false, success: true }
+    return getStatus('success')
   }
-  return { error: true, success: false }
+  return getStatus('error')
 }
