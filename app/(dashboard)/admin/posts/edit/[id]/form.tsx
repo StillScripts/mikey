@@ -44,7 +44,9 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
           { title: 'Edit Post', href: `/admin/posts/edit/${state?.id}` }
         ]}
       >
-        {state?.id && <EditPostButtons action={update} id={state.id} />}
+        {state?.id && (
+          <EditPostButtons action={update} id={state.id} slug={state.slug!} />
+        )}
       </PageHeading>
       <div className="grid w-full gap-10">
         {/** Edit header */}

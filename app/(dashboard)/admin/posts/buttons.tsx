@@ -52,10 +52,12 @@ export const NewPostButtons = ({
 
 export const EditPostButtons = ({
   action,
-  id
+  id,
+  slug
 }: {
   action: (payload: FormData) => void
   id: number
+  slug: string
 }) => {
   const router = useRouter()
   const { toast } = useToast()
@@ -81,11 +83,14 @@ export const EditPostButtons = ({
   }
   return (
     <>
+      <Button variant="link" asChild>
+        <Link href={`/blog/${slug}`}>View Post</Link>
+      </Button>
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button
             type="button"
-            variant="outline"
+            variant="destructive"
             disabled={pending}
             aria-disabled={pending}
           >
