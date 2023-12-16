@@ -30,7 +30,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 //   AlertDialogTitle,
 //   AlertDialogTrigger
 // } from '@/components/ui/alert-dialog'
-import { DeletePostMenuItem } from './new/buttons'
+import { DeletePostMenuItem } from './buttons'
 
 export const metadata: Metadata = {
   title: 'Your Posts',

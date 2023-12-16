@@ -2,7 +2,7 @@
 
 import { useFormState } from 'react-dom'
 import Link from 'next/link'
-import { createPost } from '@/app/(server)/routers/posts'
+import { type SinglePost, updatePost } from '@/app/(server)/routers/posts'
 import { Editor } from '@/app/(dashboard)/admin/posts/editor'
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { useEffect } from 'react'
@@ -10,9 +10,9 @@ import { useToast } from '@/components/ui/use-toast'
 import { ToastAction } from '@/components/ui/toast'
 import { NewPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
 
-export const NewPostForm = () => {
+export const EditPostForm = ({ post }: { post: SinglePost }) => {
   const { toast } = useToast()
-  const [state, create] = useFormState(createPost, {})
+  const [state, create] = useFormState(updatePost, { ...post })
 
   useEffect(() => {
     if (state?.error) {

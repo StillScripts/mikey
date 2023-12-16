@@ -1,4 +1,6 @@
 import { getPost } from '@/app/(server)/routers/posts'
+import { EditPostForm } from './form'
+import { notFound } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
@@ -6,10 +8,13 @@ const EditPost = async ({ params }: { params: { id: string } }) => {
   const posts = await getPost(parseInt(params.id))
   const post = posts ? posts[0] : null
 
+  if (!post) {
+    notFound()
+  }
+
   return (
     <div>
-      {post?.title}
-      {/* <NewPostForm id={params.id} /> */}
+      <EditPostForm post={post} />
     </div>
   )
 }
