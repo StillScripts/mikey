@@ -1,5 +1,5 @@
-import { db, connection2 } from './connection'
-import { posts } from './schema'
+import { db, connection } from './scripts-connection.mts'
+import { posts } from './scripts-schema.mts'
 
 await db.insert(posts).values({
   // @ts-ignore
@@ -10,6 +10,6 @@ await db.insert(posts).values({
   slug: 'about-us'
 })
 
-await connection2.end().then(() => {
+await connection.end().then(() => {
   console.log('Seed finished and db closed')
 })
