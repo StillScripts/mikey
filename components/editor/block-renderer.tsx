@@ -64,7 +64,7 @@ const ResolveBlock = ({ block }: { block: Block }) => {
 export const BlockRenderer = ({ content }: { content: string }) => {
 	const blocks = JSON.parse(content)?.blocks as Block[]
 	return (
-		<main className="prose prose-stone p-4">
+		<main className="prose prose-stone p-4 text-muted-foreground prose-headings:text-foreground">
 			{blocks?.map(block => <ResolveBlock key={block.id} block={block} />)}
 		</main>
 	)
