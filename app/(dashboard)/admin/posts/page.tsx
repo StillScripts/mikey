@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 const Posts = async () => {
   const allPosts = await getAllPosts()
   return (
-    <div className="bg-background">
+    <>
       <PageHeading
         heading="Blog Posts"
         links={[{ title: 'Posts', href: '/admin/posts' }]}
@@ -102,7 +102,7 @@ const Posts = async () => {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   )
 }
 

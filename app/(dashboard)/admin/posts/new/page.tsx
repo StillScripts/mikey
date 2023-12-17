@@ -6,11 +6,7 @@ export const metadata: Metadata = {
 }
 
 const NewPost = () => {
-  return (
-    <div>
-      <NewPostForm />
-    </div>
-  )
+  return <NewPostForm />
 }
 
 export default NewPost

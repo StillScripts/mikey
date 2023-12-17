@@ -35,7 +35,7 @@ export const NewPostForm = () => {
   }, [state?.error, state?.success, toast])
 
   return (
-    <form className="p-6">
+    <form>
       <PageHeading
         heading="Create New Post"
         links={[
@@ -53,7 +53,7 @@ export const NewPostForm = () => {
             id="title"
             placeholder="Post title"
             name="title"
-            className="w-full resize-none appearance-none overflow-hidden bg-transparent text-3xl font-bold focus:outline-none"
+            className="w-full resize-none appearance-none overflow-hidden bg-transparent text-2xl font-bold focus:outline-none"
           />
           <Editor />
         </div>

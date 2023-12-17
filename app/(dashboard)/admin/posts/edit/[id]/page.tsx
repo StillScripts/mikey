@@ -11,11 +11,7 @@ const EditPost = async ({ params }: { params: { id: string } }) => {
     notFound()
   }
 
-  return (
-    <div>
-      <EditPostForm post={post} />
-    </div>
-  )
+  return <EditPostForm post={post} />
 }
 
 export default EditPost
