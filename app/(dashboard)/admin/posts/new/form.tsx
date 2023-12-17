@@ -3,7 +3,7 @@
 import { useFormState } from 'react-dom'
 import Link from 'next/link'
 import { createPost } from '@/app/(server)/routers/posts'
-import { Editor } from '@/app/(dashboard)/admin/posts/editor'
+import { Editor } from '@/components/editor/editor'
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { useEffect } from 'react'
 import { useToast } from '@/components/ui/use-toast'
