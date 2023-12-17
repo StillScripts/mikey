@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import type {
@@ -8,15 +8,32 @@ import type {
 	BlockToolConstructorOptions
 } from '@editorjs/editorjs'
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
+import { CardsToolForm } from './form'
+
 interface CustomBlockData {
 	blockId: number
 }
 
 const Cards = ({ data, toolInfo, onDataChange }: any) => {
+	const [edit, setEdit] = useState(false)
 	return (
-		<div className="bg-light my-3 rounded border p-3 shadow-sm">
-			This will be the cards tool
-		</div>
+		<Card className="mt-4 rounded-none shadow-none">
+			<CardHeader className="flex flex-row justify-between">
+				<p className="my-0 text-lg text-muted-foreground">Cards Section</p>
+				<div className="flex items-center space-x-2">
+					<Switch
+						id="edit-cards"
+						checked={edit}
+						onCheckedChange={() => setEdit(!edit)}
+					/>
+					<Label htmlFor="edit-cards">Edit</Label>
+				</div>
+			</CardHeader>
+			<CardContent>{edit ? <CardsToolForm /> : <p>UI preview</p>}</CardContent>
+		</Card>
 	)
 }
 
