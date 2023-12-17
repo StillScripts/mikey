@@ -8,6 +8,10 @@ import type {
 	BlockToolConstructorOptions
 } from '@editorjs/editorjs'
 
+interface CustomBlockData {
+	blockId: number
+}
+
 const Cards = ({ data, toolInfo, onDataChange }: any) => {
 	return (
 		<div className="bg-light my-3 rounded border p-3 shadow-sm">
@@ -17,25 +21,20 @@ const Cards = ({ data, toolInfo, onDataChange }: any) => {
 }
 
 export class CardsTool implements BlockTool {
-	private data: any
+	private data: Partial<CustomBlockData>
 	private nodes: { holder: HTMLElement | null }
 	private api: API
 	private config: any
 
-	constructor({ data, api, config }: BlockToolConstructorOptions<any>) {
+	constructor({
+		data,
+		api,
+		config
+	}: BlockToolConstructorOptions<CustomBlockData>) {
 		this.api = api
-		this.config = config // use config for checking curent website
+		this.config = config
 
-		const defaultData: any = {
-			activated: false,
-			cards: [],
-			heading: '',
-			subheading: '',
-			type: 'plain',
-			rounded: false,
-			imageHeight: null,
-			imageWidth: null
-		}
+		const defaultData = {}
 
 		this.data = Object.keys(data).length ? data : defaultData
 
@@ -57,7 +56,7 @@ export class CardsTool implements BlockTool {
 		const rootNode = document.createElement('div')
 		this.nodes.holder = rootNode
 
-		const onDataChange = (newData: Partial<any>) => {
+		const onDataChange = (newData: Partial<CustomBlockData>) => {
 			this.data = {
 				...this.data,
 				...newData
@@ -71,7 +70,6 @@ export class CardsTool implements BlockTool {
 	}
 
 	save() {
-		// Do not override backend tool with this...
 		return this.data
 	}
 }
