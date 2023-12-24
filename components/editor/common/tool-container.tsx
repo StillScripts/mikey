@@ -7,19 +7,18 @@ import { Switch } from '@/components/ui/switch'
 
 export function ToolContainer<T extends object>({
 	data,
+	heading,
 	onChange,
 	Form,
 	Preview,
 	Provider
 }: {
 	data: Partial<T>
+	heading:string
 	onChange: (data: Partial<T>) => void
-	Form: ({ onChange }: { onChange: (data: Partial<T>) => void }) => JSX.Element
+	Form: (props: { onChange: (data: Partial<T>) => void }) => JSX.Element
 	Preview: () => JSX.Element
-	Provider: ({
-		data,
-		children
-	}: {
+	Provider: (props: {
 		data: Partial<T>
 		children: React.ReactNode
 	}) => JSX.Element
@@ -28,7 +27,7 @@ export function ToolContainer<T extends object>({
 	return (
 		<Card className="mt-4 rounded-none border-stone-400 shadow-none">
 			<CardHeader className="flex flex-row justify-between">
-				<p className="my-0 text-lg text-muted-foreground">Cards Section</p>
+				<p className="my-0 text-lg text-muted-foreground">{heading}</p>
 				<div className="flex items-center space-x-2">
 					<Switch
 						id="edit-cards"

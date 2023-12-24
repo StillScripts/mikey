@@ -61,21 +61,6 @@ export const CardsToolForm = ({ onChange }: CardsToolFormProps) => {
 		}
 	}
 
-	// const values = form.watch()
-
-	// useEffect(() => {
-	// 	console.log(values)
-	// 	if (onChange && setCardsData) {
-	// 		if (
-	// 			values.heading !== cardsData.heading ||
-	// 			values.subheading !== cardsData.subheading
-	// 		) {
-	// 			onChange(values)
-	// 			setCardsData(values)
-	// 		}
-	// 	}
-	// }, [values, onChange, setCardsData, cardsData.heading, cardsData.subheading])
-
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

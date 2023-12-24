@@ -12,19 +12,11 @@ import { ToolContainer } from '@/components/editor/common/tool-container'
 import { CardsSection } from '@/components/ui/cards-section'
 
 import { CardsProvider, useCards } from './context'
-import {
-	type CardsToolData,
-	CardsToolForm,
-	type CardsToolFormProps
-} from './form'
+import { type CardsToolData, CardsToolForm } from './form'
 
 const CardsPreview = () => {
 	const { cardsData } = useCards()
 	return <CardsSection {...cardsData} />
-}
-
-interface CardsToolProps extends CardsToolFormProps {
-	data: Partial<CardsToolData>
 }
 
 export class CardsTool implements BlockTool {
@@ -41,7 +33,6 @@ export class CardsTool implements BlockTool {
 		this.api = api
 		this.config = config
 
-		console.log(data)
 		const defaultData = {}
 
 		this.data = Object.keys(data).length ? data : defaultData
@@ -76,6 +67,7 @@ export class CardsTool implements BlockTool {
 		root.render(
 			<ToolContainer
 				data={this.data}
+				heading="Cards Section"
 				onChange={onChange}
 				Provider={CardsProvider}
 				Form={CardsToolForm}
