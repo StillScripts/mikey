@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { useCards } from './cards-tool'
 
 const formSchema = z.object({
 	heading: z.string().min(2).max(200).optional(),
@@ -33,18 +34,19 @@ const formSchema = z.object({
 })
 
 export type CardsToolData = z.infer<typeof formSchema>
-export interface CardsToolFormProps {
+export interface CardsToolProps {
 	data: Partial<CardsToolData>
 	onChange: (data: Partial<CardsToolData>) => void
 }
 
-export const CardsToolForm = ({ data, onChange }: CardsToolFormProps) => {
+export const CardsToolForm = ({ onChange }: CardsToolProps) => {
+	const data = useCards()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			heading: '',
-			subheading: '',
-			cards: []
+			heading: data.heading ?? '',
+			subheading: data.subheading ?? '',
+			cards: data.cards ?? []
 		}
 	})
 	const { fields, append, remove } = useFieldArray({

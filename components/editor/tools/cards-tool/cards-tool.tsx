@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import type {
@@ -12,10 +12,34 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 
-import { type CardsToolData, CardsToolForm, CardsToolFormProps } from './form'
+import { CardsPreview } from './cards-preview'
+import { type CardsToolData, CardsToolForm, type CardsToolProps } from './form'
 
-const Cards = ({ data, onChange }: CardsToolFormProps) => {
+export const CardsContext = createContext<Partial<CardsToolData>>({})
+
+export const CardsProvider = ({
+	data,
+	children
+}: {
+	data: Partial<CardsToolData>
+	children: React.ReactNode
+}) => <CardsContext.Provider value={data}>{children}</CardsContext.Provider>
+
+export const useCards = () => {
+	const cards = useContext(CardsContext)
+	if (typeof cards === 'undefined') {
+		throw new Error('Missing CardsProvider')
+	}
+	return cards
+}
+
+const Cards = ({ data, onChange }: CardsToolProps) => {
 	const [edit, setEdit] = useState(false)
+	const [activeData, setActiveData] = useState(data)
+	const handleUpdate = (newData: Partial<CardsToolData>) => {
+		setActiveData({ ...activeData, ...newData })
+		onChange(newData)
+	}
 	return (
 		<Card className="mt-4 rounded-none border-stone-400 shadow-none">
 			<CardHeader className="flex flex-row justify-between">
@@ -29,13 +53,16 @@ const Cards = ({ data, onChange }: CardsToolFormProps) => {
 					<Label htmlFor="edit-cards">Edit</Label>
 				</div>
 			</CardHeader>
-			<CardContent>
-				{edit ? (
-					<CardsToolForm data={data} onChange={onChange} />
-				) : (
-					<p>UI preview</p>
-				)}
-			</CardContent>
+
+			<CardsProvider data={data}>
+				<CardContent>
+					{edit ? (
+						<CardsToolForm data={data} onChange={onChange} />
+					) : (
+						<CardsPreview />
+					)}
+				</CardContent>
+			</CardsProvider>
 		</Card>
 	)
 }
@@ -54,6 +81,7 @@ export class CardsTool implements BlockTool {
 		this.api = api
 		this.config = config
 
+		console.log(data)
 		const defaultData = {}
 
 		this.data = Object.keys(data).length ? data : defaultData
@@ -81,6 +109,7 @@ export class CardsTool implements BlockTool {
 				...this.data,
 				...newData
 			}
+			this.save()
 		}
 
 		const root = createRoot(rootNode)
