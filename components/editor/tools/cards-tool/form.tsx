@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+
+import { Button } from '@/components/ui/button'
 import {
 	Form,
 	FormControl,
@@ -14,10 +16,10 @@ import {
 	FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 
 const formSchema = z.object({
-	heading: z.string().min(2).max(200)
+	heading: z.string().min(2).max(200),
+	subheading: z.string().min(2).max(1000).optional()
 })
 
 export const CardsToolForm = () => {
@@ -44,10 +46,26 @@ export const CardsToolForm = () => {
 						<FormItem>
 							<FormLabel>Section Heading</FormLabel>
 							<FormControl>
-								<Input placeholder="shadcn" {...field} />
+								<Input placeholder="Section heading..." {...field} />
 							</FormControl>
 							<FormDescription>
-								This is your public display name.
+								This is the section heading text
+							</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="heading"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Section Subheading</FormLabel>
+							<FormControl>
+								<Input placeholder="Section subheading..." {...field} />
+							</FormControl>
+							<FormDescription>
+								This is the section subheading text (optional)
 							</FormDescription>
 							<FormMessage />
 						</FormItem>

@@ -9,8 +9,9 @@ import type {
 } from '@editorjs/editorjs'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+
 import { CardsToolForm } from './form'
 
 interface CustomBlockData {
