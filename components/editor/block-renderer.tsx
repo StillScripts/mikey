@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
+import { CardsSection } from '@/components/ui/cards-section'
 
 import type { Block } from './types'
 
@@ -56,6 +57,9 @@ const ResolveBlock = ({ block }: { block: Block }) => {
 					<Link href={block.data.link}>{block.data?.meta?.title}</Link>
 				</Button>
 			)
+		case 'cards': {
+			return <CardsSection {...block.data} />
+		}
 		default:
 			return null
 	}

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import { createRoot } from 'react-dom/client'
 
 import type {
@@ -8,10 +8,8 @@ import type {
 	BlockToolConstructorOptions
 } from '@editorjs/editorjs'
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { ToolContainer } from '@/components/editor/common/tool-container'
 import { CardsSection } from '@/components/ui/cards-section'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
 
 import { CardsProvider, useCards } from './context'
 import {
@@ -27,30 +25,6 @@ const CardsPreview = () => {
 
 interface CardsToolProps extends CardsToolFormProps {
 	data: Partial<CardsToolData>
-}
-
-const Cards = ({ data, onChange }: CardsToolProps) => {
-	const [edit, setEdit] = useState(false)
-	return (
-		<Card className="mt-4 rounded-none border-stone-400 shadow-none">
-			<CardHeader className="flex flex-row justify-between">
-				<p className="my-0 text-lg text-muted-foreground">Cards Section</p>
-				<div className="flex items-center space-x-2">
-					<Switch
-						id="edit-cards"
-						checked={edit}
-						onCheckedChange={() => setEdit(!edit)}
-					/>
-					<Label htmlFor="edit-cards">Edit</Label>
-				</div>
-			</CardHeader>
-			<CardContent>
-				<CardsProvider data={data}>
-					{edit ? <CardsToolForm onChange={onChange} /> : <CardsPreview />}
-				</CardsProvider>
-			</CardContent>
-		</Card>
-	)
 }
 
 export class CardsTool implements BlockTool {
@@ -99,7 +73,15 @@ export class CardsTool implements BlockTool {
 		}
 
 		const root = createRoot(rootNode)
-		root.render(<Cards onChange={onChange} data={this.data} />)
+		root.render(
+			<ToolContainer
+				data={this.data}
+				onChange={onChange}
+				Provider={CardsProvider}
+				Form={CardsToolForm}
+				Preview={CardsPreview}
+			/>
+		)
 
 		return this.nodes.holder
 	}
