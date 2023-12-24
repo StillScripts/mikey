@@ -1,5 +1,5 @@
 'use client'
-import React, { createContext, useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import type {
@@ -9,37 +9,28 @@ import type {
 } from '@editorjs/editorjs'
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { CardsSection } from '@/components/ui/cards-section'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 
-import { CardsPreview } from './cards-preview'
-import { type CardsToolData, CardsToolForm, type CardsToolProps } from './form'
+import { CardsProvider, useCards } from './context'
+import {
+	type CardsToolData,
+	CardsToolForm,
+	type CardsToolFormProps
+} from './form'
 
-export const CardsContext = createContext<Partial<CardsToolData>>({})
+const CardsPreview = () => {
+	const { cardsData } = useCards()
+	return <CardsSection {...cardsData} />
+}
 
-export const CardsProvider = ({
-	data,
-	children
-}: {
+interface CardsToolProps extends CardsToolFormProps {
 	data: Partial<CardsToolData>
-	children: React.ReactNode
-}) => <CardsContext.Provider value={data}>{children}</CardsContext.Provider>
-
-export const useCards = () => {
-	const cards = useContext(CardsContext)
-	if (typeof cards === 'undefined') {
-		throw new Error('Missing CardsProvider')
-	}
-	return cards
 }
 
 const Cards = ({ data, onChange }: CardsToolProps) => {
 	const [edit, setEdit] = useState(false)
-	const [activeData, setActiveData] = useState(data)
-	const handleUpdate = (newData: Partial<CardsToolData>) => {
-		setActiveData({ ...activeData, ...newData })
-		onChange(newData)
-	}
 	return (
 		<Card className="mt-4 rounded-none border-stone-400 shadow-none">
 			<CardHeader className="flex flex-row justify-between">
@@ -53,16 +44,11 @@ const Cards = ({ data, onChange }: CardsToolProps) => {
 					<Label htmlFor="edit-cards">Edit</Label>
 				</div>
 			</CardHeader>
-
-			<CardsProvider data={data}>
-				<CardContent>
-					{edit ? (
-						<CardsToolForm data={data} onChange={onChange} />
-					) : (
-						<CardsPreview />
-					)}
-				</CardContent>
-			</CardsProvider>
+			<CardContent>
+				<CardsProvider data={data}>
+					{edit ? <CardsToolForm onChange={onChange} /> : <CardsPreview />}
+				</CardsProvider>
+			</CardContent>
 		</Card>
 	)
 }

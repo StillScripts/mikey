@@ -1,11 +1,10 @@
+import type { CardsToolData } from '@/components/editor/tools/cards-tool/form'
 import {
 	Card,
 	CardDescription,
 	CardHeader,
 	CardTitle
 } from '@/components/ui/card'
-
-import type { CardsToolData } from './form'
 
 export const CardsSection = ({
 	heading,
