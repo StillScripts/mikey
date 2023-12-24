@@ -21,7 +21,7 @@ interface CustomBlockData {
 const Cards = ({ data, toolInfo, onDataChange }: any) => {
 	const [edit, setEdit] = useState(false)
 	return (
-		<Card className="mt-4 rounded-none shadow-none">
+		<Card className="mt-4 rounded-none border-stone-400 shadow-none">
 			<CardHeader className="flex flex-row justify-between">
 				<p className="my-0 text-lg text-muted-foreground">Cards Section</p>
 				<div className="flex items-center space-x-2">

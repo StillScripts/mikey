@@ -3,9 +3,11 @@
 import { useFieldArray, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Cross1Icon } from '@radix-ui/react-icons'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
 	Form,
 	FormControl,
@@ -16,13 +18,14 @@ import {
 	FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 const formSchema = z.object({
 	heading: z.string().min(2).max(200).optional(),
 	subheading: z.string().min(2).max(1000).optional(),
 	cards: z.array(
 		z.object({
-			heading: z.string().min(1, { message: 'Required field' }),
+			title: z.string().min(1, { message: 'Required field' }),
 			description: z.string().min(1, { message: 'Required field' })
 		})
 	)
@@ -43,10 +46,11 @@ export const CardsToolForm = () => {
 	})
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
+		// This could be useful for saving the cards as a reusable component
 		console.log(values)
 	}
+
+	console.log(form.watch())
 
 	return (
 		<Form {...form}>
@@ -74,7 +78,7 @@ export const CardsToolForm = () => {
 						<FormItem>
 							<FormLabel>Section Subheading</FormLabel>
 							<FormControl>
-								<Input placeholder="Section subheading..." {...field} />
+								<Textarea placeholder="Section subheading..." {...field} />
 							</FormControl>
 							<FormDescription>
 								This is the section subheading text (optional)
@@ -83,7 +87,64 @@ export const CardsToolForm = () => {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit">Submit</Button>
+				<div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+					{fields.map((field, index) => (
+						<Card key={field.id}>
+							<CardHeader className="m-0 flex flex-row items-center justify-between py-0">
+								<CardTitle className="text-lg">Card {index + 1}</CardTitle>
+								<Button
+									type="button"
+									variant="ghost"
+									size="icon"
+									onClick={() => remove(index)}
+								>
+									<Cross1Icon className="h-4 w-4" />
+								</Button>
+							</CardHeader>
+							<CardContent>
+								<FormField
+									control={form.control}
+									name={`cards.${index}.title`}
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Card Title</FormLabel>
+											<FormControl>
+												<Input {...field} placeholder="Add a title..." />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name={`cards.${index}.description`}
+									render={({ field }) => (
+										<FormItem className="w-full">
+											<FormLabel>Card Description</FormLabel>
+											<FormControl>
+												<Textarea
+													{...field}
+													placeholder="Add a description..."
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</CardContent>
+						</Card>
+					))}
+				</div>
+				<Button
+					type="button"
+					variant="outline"
+					size="sm"
+					className="mt-2"
+					onClick={() => append({ title: '', description: '' })}
+				>
+					Add Card
+				</Button>
 			</form>
 		</Form>
 	)
