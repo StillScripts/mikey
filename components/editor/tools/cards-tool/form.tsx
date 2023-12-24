@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -55,19 +54,27 @@ export const CardsToolForm = ({ onChange }: CardsToolFormProps) => {
 	})
 
 	function onSubmit(values: CardsToolData) {
-		// This could be useful for saving the cards as a reusable component
-		console.log(values)
-	}
-
-	const values = form.watch()
-
-	useEffect(() => {
-		console.log(values)
+		// This could also be useful for saving the cards as a reusable component
 		if (onChange && setCardsData) {
 			onChange(values)
 			setCardsData(values)
 		}
-	}, [values, onChange, setCardsData])
+	}
+
+	// const values = form.watch()
+
+	// useEffect(() => {
+	// 	console.log(values)
+	// 	if (onChange && setCardsData) {
+	// 		if (
+	// 			values.heading !== cardsData.heading ||
+	// 			values.subheading !== cardsData.subheading
+	// 		) {
+	// 			onChange(values)
+	// 			setCardsData(values)
+	// 		}
+	// 	}
+	// }, [values, onChange, setCardsData, cardsData.heading, cardsData.subheading])
 
 	return (
 		<Form {...form}>
@@ -161,6 +168,9 @@ export const CardsToolForm = ({ onChange }: CardsToolFormProps) => {
 					onClick={() => append({ title: '', description: '' })}
 				>
 					Add Card
+				</Button>
+				<Button type="submit" variant="default" size="sm" className="ml-3 mt-2">
+					Save
 				</Button>
 			</form>
 		</Form>
