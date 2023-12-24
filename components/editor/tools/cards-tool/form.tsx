@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -31,7 +32,13 @@ const formSchema = z.object({
 	)
 })
 
-export const CardsToolForm = () => {
+export type CardsToolData = z.infer<typeof formSchema>
+export interface CardsToolFormProps {
+	data: Partial<CardsToolData>
+	onChange: (data: Partial<CardsToolData>) => void
+}
+
+export const CardsToolForm = ({ data, onChange }: CardsToolFormProps) => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -45,12 +52,17 @@ export const CardsToolForm = () => {
 		control: form.control
 	})
 
-	function onSubmit(values: z.infer<typeof formSchema>) {
+	function onSubmit(values: CardsToolData) {
 		// This could be useful for saving the cards as a reusable component
 		console.log(values)
 	}
 
-	console.log(form.watch())
+	const values = form.watch()
+
+	useEffect(() => {
+		console.log(values)
+		onChange && onChange(values)
+	}, [values, onChange])
 
 	return (
 		<Form {...form}>
@@ -73,7 +85,7 @@ export const CardsToolForm = () => {
 				/>
 				<FormField
 					control={form.control}
-					name="heading"
+					name="subheading"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Section Subheading</FormLabel>

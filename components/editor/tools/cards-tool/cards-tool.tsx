@@ -8,17 +8,13 @@ import type {
 	BlockToolConstructorOptions
 } from '@editorjs/editorjs'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 
-import { CardsToolForm } from './form'
+import { type CardsToolData, CardsToolForm, CardsToolFormProps } from './form'
 
-interface CustomBlockData {
-	blockId: number
-}
-
-const Cards = ({ data, toolInfo, onDataChange }: any) => {
+const Cards = ({ data, onChange }: CardsToolFormProps) => {
 	const [edit, setEdit] = useState(false)
 	return (
 		<Card className="mt-4 rounded-none border-stone-400 shadow-none">
@@ -33,13 +29,19 @@ const Cards = ({ data, toolInfo, onDataChange }: any) => {
 					<Label htmlFor="edit-cards">Edit</Label>
 				</div>
 			</CardHeader>
-			<CardContent>{edit ? <CardsToolForm /> : <p>UI preview</p>}</CardContent>
+			<CardContent>
+				{edit ? (
+					<CardsToolForm data={data} onChange={onChange} />
+				) : (
+					<p>UI preview</p>
+				)}
+			</CardContent>
 		</Card>
 	)
 }
 
 export class CardsTool implements BlockTool {
-	private data: Partial<CustomBlockData>
+	private data: Partial<CardsToolData>
 	private nodes: { holder: HTMLElement | null }
 	private api: API
 	private config: any
@@ -48,7 +50,7 @@ export class CardsTool implements BlockTool {
 		data,
 		api,
 		config
-	}: BlockToolConstructorOptions<CustomBlockData>) {
+	}: BlockToolConstructorOptions<CardsToolData>) {
 		this.api = api
 		this.config = config
 
@@ -74,7 +76,7 @@ export class CardsTool implements BlockTool {
 		const rootNode = document.createElement('div')
 		this.nodes.holder = rootNode
 
-		const onDataChange = (newData: Partial<CustomBlockData>) => {
+		const onChange = (newData: Partial<CardsToolData>) => {
 			this.data = {
 				...this.data,
 				...newData
@@ -82,7 +84,7 @@ export class CardsTool implements BlockTool {
 		}
 
 		const root = createRoot(rootNode)
-		root.render(<Cards onDataChange={onDataChange} data={this.data} />)
+		root.render(<Cards onChange={onChange} data={this.data} />)
 
 		return this.nodes.holder
 	}
