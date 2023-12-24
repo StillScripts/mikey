@@ -1,6 +1,6 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -18,16 +18,28 @@ import {
 import { Input } from '@/components/ui/input'
 
 const formSchema = z.object({
-	heading: z.string().min(2).max(200),
-	subheading: z.string().min(2).max(1000).optional()
+	heading: z.string().min(2).max(200).optional(),
+	subheading: z.string().min(2).max(1000).optional(),
+	cards: z.array(
+		z.object({
+			heading: z.string().min(1, { message: 'Required field' }),
+			description: z.string().min(1, { message: 'Required field' })
+		})
+	)
 })
 
 export const CardsToolForm = () => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			heading: ''
+			heading: '',
+			subheading: '',
+			cards: []
 		}
+	})
+	const { fields, append, remove } = useFieldArray({
+		name: 'cards',
+		control: form.control
 	})
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
