@@ -27,6 +27,12 @@ import {
 	FormMessage
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger
+} from '@/components/ui/tooltip'
 import { generateBlockId } from '@/lib/utils'
 
 const sample = {
@@ -178,11 +184,25 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 				)
 			)}
 			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button className="mt-6" type="button" size="sm" variant="ghost">
-						<PlusCircledIcon className="h-6 w-6" />
-					</Button>
-				</DropdownMenuTrigger>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger>
+							<DropdownMenuTrigger asChild>
+								<Button
+									className="mt-6"
+									type="button"
+									size="sm"
+									variant="ghost"
+								>
+									<PlusCircledIcon className="h-6 w-6" />
+								</Button>
+							</DropdownMenuTrigger>
+						</TooltipTrigger>
+						<TooltipContent className="py-1">
+							<p className="text-sm">Add New Block</p>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
 				<DropdownMenuContent>
 					<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
 					<DropdownMenuSeparator />
