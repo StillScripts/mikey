@@ -1,9 +1,23 @@
 'use client'
 import { useFieldArray, type UseFormReturn } from 'react-hook-form'
 
+import {
+	HeadingIcon,
+	ListBulletIcon,
+	PlusCircledIcon,
+	TextIcon
+} from '@radix-ui/react-icons'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import {
 	FormControl,
 	FormDescription,
@@ -163,16 +177,49 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 					<div key={block.id}>Tool not ready...</div>
 				)
 			)}
-			<Button
-				className="mt-3"
-				type="button"
-				size="sm"
-				onClick={() =>
-					append({ id: generateBlockId(), type: 'paragraph', text: '' })
-				}
-			>
-				Add new Paragraph
-			</Button>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button className="mt-6" type="button" size="sm" variant="ghost">
+						<PlusCircledIcon className="h-6 w-6" />
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent>
+					<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem
+						onClick={() =>
+							append({
+								id: generateBlockId(),
+								type: 'header',
+								text: '',
+								level: 2
+							})
+						}
+					>
+						<HeadingIcon className="mr-2 h-4 w-4" /> Heading
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						onClick={() =>
+							append({ id: generateBlockId(), type: 'paragraph', text: '' })
+						}
+					>
+						<TextIcon className="mr-2 h-4 w-4" /> Paragraph
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						onClick={() =>
+							append({
+								id: generateBlockId(),
+								type: 'list',
+								style: 'unordered',
+								items: []
+							})
+						}
+					>
+						<ListBulletIcon className="mr-2 h-4 w-4" />
+						List
+					</DropdownMenuItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
 		</div>
 	)
 }

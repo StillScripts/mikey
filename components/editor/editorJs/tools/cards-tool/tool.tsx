@@ -8,7 +8,7 @@ import type {
 	BlockToolConstructorOptions
 } from '@editorjs/editorjs'
 
-import { ToolContainer } from '@/components/editor/common/tool-container'
+import { ToolContainer } from '@/components/editor/editorJs/common/tool-container'
 import { CardsSection } from '@/components/ui/cards-section'
 
 import { CardsProvider, useCards } from './context'
