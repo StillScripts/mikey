@@ -21,6 +21,7 @@ import {
 	FormItem,
 	FormMessage
 } from '@/components/ui/form'
+import { Textarea } from '@/components/ui/textarea'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
 import { generateBlockId } from '@/lib/utils'
@@ -93,10 +94,11 @@ export const NewPostForm = () => {
 							render={({ field }) => (
 								<FormItem>
 									<FormControl>
-										<textarea
+										<Textarea
 											autoFocus
 											placeholder="Post title"
-											className="w-full resize-none appearance-none overflow-hidden bg-transparent text-2xl font-bold focus:outline-none"
+											editor
+											heading
 											{...field}
 										/>
 									</FormControl>

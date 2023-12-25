@@ -13,6 +13,7 @@ import {
 	FormMessage
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { generateBlockId } from '@/lib/utils'
 
 const sample = {
 	time: 1703384217818,
@@ -112,6 +113,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 									<FormControl>
 										<Textarea
 											editor
+											heading
 											placeholder="Your heading text..."
 											{...field}
 										/>
@@ -138,7 +140,11 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 								<FormItem>
 									<FormLabel>Paragraph Text</FormLabel>
 									<FormControl>
-										<Textarea placeholder="Your paragraph text..." {...field} />
+										<Textarea
+											editor
+											placeholder="Your paragraph text..."
+											{...field}
+										/>
 									</FormControl>
 									<FormDescription>This is the paragraph text</FormDescription>
 									<FormMessage />
@@ -158,8 +164,12 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 				)
 			)}
 			<Button
+				className="mt-3"
 				type="button"
-				onClick={() => append({ id: '12344', type: 'paragraph', text: '' })}
+				size="sm"
+				onClick={() =>
+					append({ id: generateBlockId(), type: 'paragraph', text: '' })
+				}
 			>
 				Add new Paragraph
 			</Button>
