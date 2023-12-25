@@ -1,6 +1,7 @@
 'use client'
 
 import { useFormStatus } from 'react-dom'
+import { useFormState } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -22,12 +23,10 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/components/ui/use-toast'
 
-export const NewPostButtons = ({
-	action
-}: {
-	action?: (payload: FormData) => void
-}) => {
-	const { pending } = useFormStatus()
+/** Header buttons in new post form. State is managed by `react-hook-form` */
+export const NewPostButtons = () => {
+	const { isValidating, isSubmitting } = useFormState()
+	const pending = isValidating || isSubmitting
 	return (
 		<>
 			<Button

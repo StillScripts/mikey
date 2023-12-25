@@ -39,13 +39,7 @@ export const NewPostForm = () => {
 	const [state, create] = useFormState(createPost, {})
 
 	useEffect(() => {
-		if (state?.error) {
-			toast({
-				variant: 'destructive',
-				title: 'Uh oh! Something went wrong.',
-				description: 'An error occured when saving this data.'
-			})
-		} else if (state?.success) {
+		if (form.formState?.isSubmitSuccessful) {
 			toast({
 				title: 'Success',
 				description: 'Your new post was successfully created.',
@@ -56,20 +50,20 @@ export const NewPostForm = () => {
 				)
 			})
 		}
-	}, [state?.error, state?.success, toast])
+	}, [form.formState?.errors, form.formState?.isSubmitSuccessful, toast])
 
-	function onSubmit(values: EditorFormData) {
+  /** Convert values into form data then run server action */
+	async function onSubmit(values: EditorFormData) {
 		const title = values.title
 		const blocks = JSON.stringify({
 			time: values.time,
 			version: values.version,
 			blocks: values.blocks
 		})
-		console.log(values)
 		const formData = new FormData()
 		formData.append('title', title)
 		formData.append('blocks', blocks)
-		createPost(state, formData)
+		await createPost(state, formData)
 	}
 
 	return (
@@ -82,7 +76,7 @@ export const NewPostForm = () => {
 						{ title: 'New Post', href: '/admin/posts/new' }
 					]}
 				>
-					<NewPostButtons action={create} />
+					<NewPostButtons />
 				</PageHeading>
 				<div className="grid w-full gap-10">
 					{/** Edit header */}
