@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
+import { Breadcrumbs } from '@/app/(dashboard)/_components/breadcrumbs'
 import { NewPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
 import { createPost } from '@/app/(server)/routers/posts'
 import Editor, {
@@ -68,36 +68,42 @@ export const NewPostForm = () => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-				<PageHeading
-					heading="Create New Post"
-					links={[
-						{ title: 'Posts', href: '/admin/posts' },
-						{ title: 'New Post', href: '/admin/posts/new' }
-					]}
-				>
-					<NewPostButtons />
-				</PageHeading>
+				<div className="pb-8">
+					<Breadcrumbs
+						links={[
+							{ title: 'Posts', href: '/admin/posts' },
+							{ title: 'New Post', href: '/admin/posts/new' }
+						]}
+					/>
+					<div className="mt-2 md:flex md:items-center md:justify-between">
+						<div className="min-w-0 flex-1">
+							<FormField
+								control={form.control}
+								name="title"
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Textarea
+												autoFocus
+												placeholder="Post title"
+												editor
+												className="text-2xl sm:text-3xl"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						</div>
+						<div className="mt-4 flex flex-shrink-0 space-x-3 md:ml-4 md:mt-0">
+							<NewPostButtons />
+						</div>
+					</div>
+				</div>
 				<div className="grid w-full gap-10">
 					{/** Edit header */}
 					<div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
-						<FormField
-							control={form.control}
-							name="title"
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<Textarea
-											autoFocus
-											placeholder="Post title"
-											editor
-											heading
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
 						<Editor form={form} />
 					</div>
 				</div>

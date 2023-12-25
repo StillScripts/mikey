@@ -3,6 +3,7 @@ import { useFieldArray, type UseFormReturn } from 'react-hook-form'
 
 import {
 	HeadingIcon,
+	IdCardIcon,
 	ListBulletIcon,
 	PlusCircledIcon,
 	TextIcon
@@ -74,7 +75,7 @@ const sample = {
 
 export const formSchema = z.object({
 	// not Editor.js, but just the entry title
-	title: z.string(),
+	title: z.string().min(1, { message: 'Title is required' }),
 	// timestamp
 	time: z.number(),
 	// version of app
@@ -129,16 +130,14 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 							name={`blocks.${index}.text`}
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Heading Text</FormLabel>
 									<FormControl>
 										<Textarea
 											editor
-											heading
-											placeholder="Your heading text..."
+											placeholder="Heading..."
+											className="text-xl sm:text-2xl"
 											{...field}
 										/>
 									</FormControl>
-									<FormDescription>This is the heading text</FormDescription>
 									<FormMessage />
 								</FormItem>
 							)}
@@ -158,15 +157,9 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 							name={`blocks.${index}.text`}
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Paragraph Text</FormLabel>
 									<FormControl>
-										<Textarea
-											editor
-											placeholder="Your paragraph text..."
-											{...field}
-										/>
+										<Textarea editor placeholder="Paragraph..." {...field} />
 									</FormControl>
-									<FormDescription>This is the paragraph text</FormDescription>
 									<FormMessage />
 								</FormItem>
 							)}
@@ -184,25 +177,11 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 				)
 			)}
 			<DropdownMenu>
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger>
-							<DropdownMenuTrigger asChild>
-								<Button
-									className="mt-6"
-									type="button"
-									size="sm"
-									variant="ghost"
-								>
-									<PlusCircledIcon className="h-6 w-6" />
-								</Button>
-							</DropdownMenuTrigger>
-						</TooltipTrigger>
-						<TooltipContent className="py-1">
-							<p className="text-sm">Add New Block</p>
-						</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
+				<DropdownMenuTrigger asChild>
+					<Button className="mt-6" type="button" size="sm" variant="ghost">
+						<PlusCircledIcon className="h-6 w-6" />
+					</Button>
+				</DropdownMenuTrigger>
 				<DropdownMenuContent>
 					<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
 					<DropdownMenuSeparator />
@@ -237,6 +216,18 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 					>
 						<ListBulletIcon className="mr-2 h-4 w-4" />
 						List
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						onClick={() =>
+							append({
+								id: generateBlockId(),
+								type: 'cards',
+								cards: []
+							})
+						}
+					>
+						<IdCardIcon className="mr-2 h-4 w-4" />
+						Cards
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
