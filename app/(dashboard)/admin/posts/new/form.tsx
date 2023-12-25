@@ -24,21 +24,13 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
-import { generateBlockId } from '@/lib/utils'
 
 export const NewPostForm = () => {
 	const form = useForm<EditorFormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			time: new Date().getTime(),
-			blocks: [
-				{
-					id: generateBlockId(),
-					type: 'header',
-					level: 1,
-					text: 'This is an example'
-				}
-			],
+			blocks: [],
 			version: '2.28.2'
 		}
 	})
