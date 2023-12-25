@@ -1,15 +1,19 @@
-import { BarChart, Calendar, File, Folder, Home, User } from 'lucide-react'
+import type { Route } from 'next'
+import Link from 'next/link'
+
+import { HomeIcon, Pencil2Icon } from '@radix-ui/react-icons'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-const navigation = [
-	{ name: 'Dashboard', href: '#', icon: Home, current: true },
-	{ name: 'Team', href: '#', icon: User, current: false },
-	{ name: 'Projects', href: '#', icon: Folder, current: false },
-	{ name: 'Calendar', href: '#', icon: Calendar, current: false },
-	{ name: 'Documents', href: '#', icon: File, current: false },
-	{ name: 'Reports', href: '#', icon: BarChart, current: false }
+const navigation: {
+	name: string
+	href: Route
+	icon: any
+	current?: boolean
+}[] = [
+	{ name: 'Dashboard', href: '/admin', icon: HomeIcon, current: true },
+	{ name: 'Posts', href: '/admin/posts', icon: Pencil2Icon, current: false }
 ]
 
 export const SidebarNavigation = () => {
@@ -28,7 +32,7 @@ export const SidebarNavigation = () => {
 									variant="ghost"
 									asChild
 								>
-									<a
+									<Link
 										href={item.href}
 										className="group flex w-full items-center justify-start gap-x-3"
 									>
@@ -42,7 +46,7 @@ export const SidebarNavigation = () => {
 											aria-hidden="true"
 										/>
 										{item.name}
-									</a>
+									</Link>
 								</Button>
 							</li>
 						))}
