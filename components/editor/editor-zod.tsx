@@ -1,12 +1,10 @@
 'use client'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useFieldArray, type UseFormReturn } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import {
-	Form,
 	FormControl,
 	FormDescription,
 	FormField,
@@ -54,7 +52,9 @@ const sample = {
 	version: '2.28.2'
 }
 
-const formSchema = z.object({
+export const formSchema = z.object({
+	// not Editor.js, but just the entry title
+	title: z.string(),
 	// timestamp
 	time: z.number(),
 	// version of app
@@ -91,95 +91,76 @@ const formSchema = z.object({
 	)
 })
 
-type EditorFormData = z.infer<typeof formSchema>
+export type EditorFormData = z.infer<typeof formSchema>
 
-const EditorForm = () => {
-	const form = useForm<EditorFormData>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			blocks: [
-				{ id: '77777', type: 'header', level: 1, text: 'This is an example' }
-			]
-		}
-	})
+const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 	const { fields, append, remove } = useFieldArray({
 		name: 'blocks',
 		control: form.control
 	})
 
-	function onSubmit(values: EditorFormData) {
-		console.log(values)
-	}
-
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-				{fields.map((block, index) =>
-					block.type === 'header' ? (
-						<div key={block.id}>
-							<FormField
-								control={form.control}
-								name={`blocks.${index}.text`}
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Heading Text</FormLabel>
-										<FormControl>
-											<Input placeholder="Your heading text..." {...field} />
-										</FormControl>
-										<FormDescription>This is the heading text</FormDescription>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<Button
-								type="button"
-								onClick={() => remove(index)}
-								variant="destructive"
-							>
-								Delete
-							</Button>
-						</div>
-					) : block.type === 'paragraph' ? (
-						<div key={block.id}>
-							<FormField
-								control={form.control}
-								name={`blocks.${index}.text`}
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Paragraph Text</FormLabel>
-										<FormControl>
-											<Textarea
-												placeholder="Your paragraph text..."
-												{...field}
-											/>
-										</FormControl>
-										<FormDescription>
-											This is the paragraph text
-										</FormDescription>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<Button
-								type="button"
-								onClick={() => remove(index)}
-								variant="destructive"
-							>
-								Delete
-							</Button>
-						</div>
-					) : (
-						<div key={block.id}>Tool not ready...</div>
-					)
-				)}
-				<Button
-					type="button"
-					onClick={() => append({ id: '12344', type: 'paragraph', text: '' })}
-				>
-					Add new Paragraph
-				</Button>
-			</form>
-		</Form>
+		<div>
+			{fields.map((block, index) =>
+				block.type === 'header' ? (
+					<div key={block.id}>
+						<FormField
+							control={form.control}
+							name={`blocks.${index}.text`}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Heading Text</FormLabel>
+									<FormControl>
+										<Input placeholder="Your heading text..." {...field} />
+									</FormControl>
+									<FormDescription>This is the heading text</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<Button
+							type="button"
+							onClick={() => remove(index)}
+							variant="destructive"
+						>
+							Delete
+						</Button>
+					</div>
+				) : block.type === 'paragraph' ? (
+					<div key={block.id}>
+						<FormField
+							control={form.control}
+							name={`blocks.${index}.text`}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Paragraph Text</FormLabel>
+									<FormControl>
+										<Textarea placeholder="Your paragraph text..." {...field} />
+									</FormControl>
+									<FormDescription>This is the paragraph text</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<Button
+							type="button"
+							onClick={() => remove(index)}
+							variant="destructive"
+						>
+							Delete
+						</Button>
+					</div>
+				) : (
+					<div key={block.id}>Tool not ready...</div>
+				)
+			)}
+			<Button
+				type="button"
+				onClick={() => append({ id: '12344', type: 'paragraph', text: '' })}
+			>
+				Add new Paragraph
+			</Button>
+		</div>
 	)
 }
 

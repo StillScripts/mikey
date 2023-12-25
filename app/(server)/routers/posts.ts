@@ -27,8 +27,10 @@ export const getPostBySlug = async (slug: string) => {
 
 export const createPost = async (state: ActionStatus, formData: FormData) => {
 	const db = await getDb()
-	const title = formData.get('title') as string
+	const title = 'Test Title' //formData.get('title') as string
 	const blocks = formData.get('blocks') as string
+	console.log(title)
+	console.log(blocks)
 
 	if (title && blocks) {
 		const slug = title.trim().toLowerCase().replace(/ /g, '-')
