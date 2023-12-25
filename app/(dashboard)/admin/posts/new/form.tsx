@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/form'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
+import { generateBlockId } from '@/lib/utils'
 
 export const NewPostForm = () => {
 	const form = useForm<EditorFormData>({
@@ -30,13 +31,18 @@ export const NewPostForm = () => {
 		defaultValues: {
 			time: new Date().getTime(),
 			blocks: [
-				{ id: '77777', type: 'header', level: 1, text: 'This is an example' }
+				{
+					id: generateBlockId(),
+					type: 'header',
+					level: 1,
+					text: 'This is an example'
+				}
 			],
 			version: '2.28.2'
 		}
 	})
 	const { toast } = useToast()
-	const [state, create] = useFormState(createPost, {})
+	const [state] = useFormState(createPost, {})
 
 	useEffect(() => {
 		if (form.formState?.isSubmitSuccessful) {
@@ -52,12 +58,12 @@ export const NewPostForm = () => {
 		}
 	}, [form.formState?.errors, form.formState?.isSubmitSuccessful, toast])
 
-  /** Convert values into form data then run server action */
+	/** Convert values into form data then run server action */
 	async function onSubmit(values: EditorFormData) {
 		const title = values.title
 		const blocks = JSON.stringify({
-			time: values.time,
-			version: values.version,
+			time: new Date().getTime(),
+			version: '2.28.2',
 			blocks: values.blocks
 		})
 		const formData = new FormData()

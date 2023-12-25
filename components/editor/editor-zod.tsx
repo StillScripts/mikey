@@ -12,7 +12,6 @@ import {
 	FormLabel,
 	FormMessage
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
 const sample = {
@@ -111,7 +110,11 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 								<FormItem>
 									<FormLabel>Heading Text</FormLabel>
 									<FormControl>
-										<Input placeholder="Your heading text..." {...field} />
+										<Textarea
+											editor
+											placeholder="Your heading text..."
+											{...field}
+										/>
 									</FormControl>
 									<FormDescription>This is the heading text</FormDescription>
 									<FormMessage />
