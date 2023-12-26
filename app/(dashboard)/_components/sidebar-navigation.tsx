@@ -1,22 +1,36 @@
+'use client'
 import type { Route } from 'next'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import { HomeIcon, Pencil2Icon } from '@radix-ui/react-icons'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-const navigation: {
-	name: string
-	href: Route
-	icon: any
-	current?: boolean
-}[] = [
-	{ name: 'Dashboard', href: '/admin', icon: HomeIcon, current: true },
-	{ name: 'Posts', href: '/admin/posts', icon: Pencil2Icon, current: false }
-]
-
 export const SidebarNavigation = () => {
+	const pathname = usePathname()
+
+	const navigation: {
+		name: string
+		href: Route
+		icon: any
+		current?: boolean
+	}[] = [
+		{
+			name: 'Dashboard',
+			href: '/admin',
+			icon: HomeIcon,
+			current: pathname === '/admin'
+		},
+		{
+			name: 'Posts',
+			href: '/admin/posts',
+			icon: Pencil2Icon,
+			current: pathname.includes('/admin/post')
+		}
+	]
+
 	return (
 		<nav className="flex flex-1 flex-col">
 			<ul role="list" className="flex flex-1 flex-col gap-y-7">
