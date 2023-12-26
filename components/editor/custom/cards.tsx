@@ -9,10 +9,11 @@ import {
 
 import { Cross1Icon } from '@radix-ui/react-icons'
 
+import type { EditorFormData } from '@/components/editor/editor-zod'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardsSection } from '@/components/ui/cards-section'
 import {
-	Form,
 	FormControl,
 	FormDescription,
 	FormField,
@@ -24,13 +25,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-
-import type { EditorFormData } from '../editor-zod'
-import {
-	CardsPreview,
-	CardsProvider
-} from '../editorJs/tools/cards-tool/context'
-import { CardsSection } from '@/components/ui/cards-section'
 
 export const CardsForm = ({
 	form,
@@ -145,9 +139,10 @@ export function CardsInput<T extends object>({
 	const [edit, setEdit] = useState(false)
 	const { watch } = useFormContext<EditorFormData>()
 	const [blocks] = watch(['blocks'])
+	const { data } = blocks[index]
 
 	return (
-		<Card className="mt-4 rounded-none border-stone-400 shadow-none">
+		<Card className="my-6 w-full rounded-none border-stone-400 shadow-none">
 			<CardHeader className="flex flex-row justify-between">
 				<p className="my-0 text-lg text-muted-foreground">Cards Section</p>
 				<div className="flex items-center space-x-2">
@@ -160,7 +155,11 @@ export function CardsInput<T extends object>({
 				</div>
 			</CardHeader>
 			<CardContent>
-				{edit ? <CardsForm form={form} index={index} /> : <CardsSection />}
+				{edit ? (
+					<CardsForm form={form} index={index} />
+				) : (
+					<CardsSection {...data} />
+				)}
 			</CardContent>
 		</Card>
 	)
