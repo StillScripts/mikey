@@ -41,6 +41,7 @@ import {
 	FormItem,
 	FormMessage
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { cn, generateBlockId } from '@/lib/utils'
 
@@ -162,13 +163,24 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 									</FormItem>
 								)}
 							/>
+						) : block.type === 'link' ? (
+							<FormField
+								control={form.control}
+								name={`blocks.${index}.data.link`}
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Input placeholder="Url..." {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 						) : block.type === 'list' ? (
 							<ListInput form={form} index={index} />
 						) : block.type === 'cards' ? (
 							<CardsInput form={form} index={index} />
-						) : (
-							<div>Not ready...</div>
-						)}
+						) : null}
 					</div>
 					<div className="flex items-center">
 						{/** Edit this block */}
@@ -274,7 +286,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 											type: 'list',
 											data: {
 												style: 'ordered',
-												items: []
+												items: [{ text: '' }]
 											}
 										})
 									}

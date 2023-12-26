@@ -75,15 +75,17 @@ export const ListInput = ({
 					/>
 				))}
 			</div>
-			<Button
-				type="button"
-				variant="outline"
-				size="sm"
-				className="mt-2"
-				onClick={() => append({ text: '' })}
-			>
-				Add List Item
-			</Button>
+			{fields.length === 0 && (
+				<Button
+					type="button"
+					variant="outline"
+					size="sm"
+					className="mt-2"
+					onClick={() => append({ text: '' })}
+				>
+					Add List Item
+				</Button>
+			)}
 		</div>
 	)
 }
