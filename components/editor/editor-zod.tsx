@@ -41,10 +41,11 @@ import {
 	FormItem,
 	FormMessage
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { cn, generateBlockId } from '@/lib/utils'
 
-import { CardsInput } from './custom/cards'
+import { CardsInput, ListInput } from './custom'
 
 export const formSchema = z.object({
 	// not Editor.js, but just the entry title
@@ -63,7 +64,8 @@ export const formSchema = z.object({
 				level: z.number().optional(),
 				// list
 				style: z.enum(['ordered', 'unordered']).optional(),
-				items: z.array(z.string()).optional(),
+				// THIS IS DIFFERENT TO EDITOR.JS
+				items: z.array(z.object({ text: z.string() })).optional(),
 				// link
 				link: z.string().optional(),
 				meta: z
@@ -140,7 +142,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 											<Textarea
 												editor
 												placeholder="Heading..."
-												className="text-xl sm:text-2xl"
+												className="text-xl font-bold sm:text-2xl"
 												{...field}
 											/>
 										</FormControl>
@@ -161,11 +163,24 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 									</FormItem>
 								)}
 							/>
+						) : block.type === 'link' ? (
+							<FormField
+								control={form.control}
+								name={`blocks.${index}.data.link`}
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Input placeholder="Url..." {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						) : block.type === 'list' ? (
+							<ListInput form={form} index={index} />
 						) : block.type === 'cards' ? (
 							<CardsInput form={form} index={index} />
-						) : (
-							<div>Not ready...</div>
-						)}
+						) : null}
 					</div>
 					<div className="flex items-center">
 						{/** Edit this block */}
@@ -205,13 +220,19 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 										<DropdownMenuSeparator />
 									</>
 								)}
-								<DropdownMenuItem onClick={() => move(index, index - 1)}>
+								<DropdownMenuItem
+									disabled={index === 0}
+									onClick={() => move(index, index - 1)}
+								>
 									<ArrowUpIcon className="mr-2 h-4 w-4" /> Move Up
 								</DropdownMenuItem>
 								<DropdownMenuItem onClick={() => remove(index)}>
 									<Cross1Icon className="mr-2 h-4 w-4" /> Delete
 								</DropdownMenuItem>
-								<DropdownMenuItem onClick={() => move(index, index + 1)}>
+								<DropdownMenuItem
+									disabled={index >= blocks.length - 1}
+									onClick={() => move(index, index + 1)}
+								>
 									<ArrowDownIcon className="mr-2 h-4 w-4" /> Move Down
 								</DropdownMenuItem>
 							</DropdownMenuContent>
@@ -264,8 +285,8 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 											id: generateBlockId(),
 											type: 'list',
 											data: {
-												style: 'unordered',
-												items: []
+												style: 'ordered',
+												items: [{ text: '' }]
 											}
 										})
 									}

@@ -25,6 +25,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
+import { EDITOR } from '@/lib/constants'
 
 export const NewPostForm = () => {
 	const form = useForm<EditorFormData>({
@@ -66,8 +67,6 @@ export const NewPostForm = () => {
 		await createPost(state, formData)
 	}
 
-	const isEditorJs = false
-
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -90,7 +89,7 @@ export const NewPostForm = () => {
 												autoFocus
 												placeholder="Post title"
 												editor
-												className="text-2xl sm:text-3xl"
+												className="text-2xl font-bold sm:text-3xl"
 												{...field}
 											/>
 										</FormControl>
@@ -107,7 +106,7 @@ export const NewPostForm = () => {
 				<div className="grid w-full gap-10">
 					{/** Edit header */}
 					<div className="prose prose-stone mx-auto w-full  max-w-none dark:prose-invert">
-						{isEditorJs ? <EditorJsForm /> : <Editor form={form} />}
+						{EDITOR === 'editor.js' ? <EditorJsForm /> : <Editor form={form} />}
 					</div>
 				</div>
 			</form>
