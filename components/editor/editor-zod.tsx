@@ -1,4 +1,5 @@
 'use client'
+import { useMemo } from 'react'
 import {
 	useFieldArray,
 	useFormContext,
@@ -42,7 +43,7 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { generateBlockId } from '@/lib/utils'
+import { cn, generateBlockId } from '@/lib/utils'
 
 export const formSchema = z.object({
 	// not Editor.js, but just the entry title
@@ -88,7 +89,7 @@ export const formSchema = z.object({
 export type EditorFormData = z.infer<typeof formSchema>
 
 const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
-	const { setValue } = useFormContext()
+	const { setValue, getValues, watch } = useFormContext<EditorFormData>()
 	const { fields, append, remove } = useFieldArray({
 		name: 'blocks',
 		control: form.control
@@ -112,6 +113,16 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 				throw new Error('Level should always be 1-6')
 		}
 	}
+
+	const [blocks] = watch(['blocks'])
+
+	/** Track the heading levels */
+	const levels: Record<number, number | undefined> = {}
+	blocks.forEach((block, index) => {
+		if (block.type === 'header') {
+			levels[index] = block.data?.level
+		}
+	})
 
 	return (
 		<div>
@@ -173,10 +184,15 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 									<>
 										{[1, 2, 3, 4, 5, 6].map(level => {
 											const Icon = getHeadingIcon(level)
+											const currentLevel = levels[index]
+											console.log(currentLevel)
 											return (
 												<DropdownMenuItem
 													key={`level-${level}`}
-													onClick={() => {}}
+													className={cn(currentLevel === level && 'bg-accent')}
+													onClick={() => {
+														setValue(`blocks.${index}.data.level`, level)
+													}}
 												>
 													<Icon className="mr-2 h-5 w-5" /> Heading&nbsp;
 													{level}
