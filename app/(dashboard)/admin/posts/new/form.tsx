@@ -90,7 +90,7 @@ export const NewPostForm = () => {
 												autoFocus
 												placeholder="Post title"
 												editor
-												className="text-2xl sm:text-3xl"
+												className="text-2xl font-bold sm:text-3xl"
 												{...field}
 											/>
 										</FormControl>

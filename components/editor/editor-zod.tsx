@@ -44,7 +44,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { cn, generateBlockId } from '@/lib/utils'
 
-import { CardsInput } from './custom/cards'
+import { CardsInput, ListInput } from './custom'
 
 export const formSchema = z.object({
 	// not Editor.js, but just the entry title
@@ -63,7 +63,7 @@ export const formSchema = z.object({
 				level: z.number().optional(),
 				// list
 				style: z.enum(['ordered', 'unordered']).optional(),
-				items: z.array(z.string()).optional(),
+				items: z.array(z.object({ text: z.string() })).optional(),
 				// link
 				link: z.string().optional(),
 				meta: z
@@ -140,7 +140,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 											<Textarea
 												editor
 												placeholder="Heading..."
-												className="text-xl sm:text-2xl"
+												className="text-xl font-bold sm:text-2xl"
 												{...field}
 											/>
 										</FormControl>
@@ -161,6 +161,8 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 									</FormItem>
 								)}
 							/>
+						) : block.type === 'list' ? (
+							<ListInput form={form} index={index} />
 						) : block.type === 'cards' ? (
 							<CardsInput form={form} index={index} />
 						) : (
@@ -264,7 +266,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 											id: generateBlockId(),
 											type: 'list',
 											data: {
-												style: 'unordered',
+												style: 'ordered',
 												items: []
 											}
 										})
