@@ -85,30 +85,32 @@ export const formSchema = z.object({
 		z.object({
 			id: z.string(),
 			type: z.enum(['header', 'paragraph', 'link', 'list', 'cards']),
-			// text
-			text: z.string().optional(),
-			level: z.number().optional(),
-			// list
-			style: z.enum(['ordered', 'unordered']).optional(),
-			items: z.array(z.string()).optional(),
-			// link
-			link: z.string().optional(),
-			meta: z
-				.object({
-					title: z.string()
-				})
-				.optional(),
-			// cards
-			heading: z.string().min(2).max(200).optional(),
-			subheading: z.string().min(2).max(1000).optional(),
-			cards: z
-				.array(
-					z.object({
-						title: z.string().min(1, { message: 'Required field' }),
-						description: z.string().min(1, { message: 'Required field' })
+			data: z.object({
+				// text
+				text: z.string().optional(),
+				level: z.number().optional(),
+				// list
+				style: z.enum(['ordered', 'unordered']).optional(),
+				items: z.array(z.string()).optional(),
+				// link
+				link: z.string().optional(),
+				meta: z
+					.object({
+						title: z.string()
 					})
-				)
-				.optional()
+					.optional(),
+				// cards
+				heading: z.string().min(2).max(200).optional(),
+				subheading: z.string().min(2).max(1000).optional(),
+				cards: z
+					.array(
+						z.object({
+							title: z.string().min(1, { message: 'Required field' }),
+							description: z.string().min(1, { message: 'Required field' })
+						})
+					)
+					.optional()
+			})
 		})
 	)
 })
@@ -129,7 +131,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 						{block.type === 'header' ? (
 							<FormField
 								control={form.control}
-								name={`blocks.${index}.text`}
+								name={`blocks.${index}.data.text`}
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
@@ -147,7 +149,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 						) : block.type === 'paragraph' ? (
 							<FormField
 								control={form.control}
-								name={`blocks.${index}.text`}
+								name={`blocks.${index}.data.text`}
 								render={({ field }) => (
 									<FormItem>
 										<FormControl>
@@ -202,8 +204,10 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 										append({
 											id: generateBlockId(),
 											type: 'header',
-											text: '',
-											level: 2
+											data: {
+												text: '',
+												level: 2
+											}
 										})
 									}
 								>
@@ -214,7 +218,9 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 										append({
 											id: generateBlockId(),
 											type: 'paragraph',
-											text: ''
+											data: {
+												text: ''
+											}
 										})
 									}
 								>
@@ -225,8 +231,10 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 										append({
 											id: generateBlockId(),
 											type: 'list',
-											style: 'unordered',
-											items: []
+											data: {
+												style: 'unordered',
+												items: []
+											}
 										})
 									}
 								>
@@ -238,7 +246,9 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 										append({
 											id: generateBlockId(),
 											type: 'cards',
-											cards: []
+											data: {
+												cards: []
+											}
 										})
 									}
 								>
@@ -265,8 +275,10 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 								append({
 									id: generateBlockId(),
 									type: 'header',
-									text: '',
-									level: 2
+									data: {
+										text: '',
+										level: 2
+									}
 								})
 							}
 						>
@@ -274,7 +286,11 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 						</DropdownMenuItem>
 						<DropdownMenuItem
 							onClick={() =>
-								append({ id: generateBlockId(), type: 'paragraph', text: '' })
+								append({
+									id: generateBlockId(),
+									type: 'paragraph',
+									data: { text: '' }
+								})
 							}
 						>
 							<TextIcon className="mr-2 h-4 w-4" /> Paragraph
@@ -284,8 +300,10 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 								append({
 									id: generateBlockId(),
 									type: 'list',
-									style: 'unordered',
-									items: []
+									data: {
+										style: 'unordered',
+										items: []
+									}
 								})
 							}
 						>
@@ -297,7 +315,9 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 								append({
 									id: generateBlockId(),
 									type: 'cards',
-									cards: []
+									data: {
+										cards: []
+									}
 								})
 							}
 						>
