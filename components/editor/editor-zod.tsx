@@ -5,6 +5,7 @@ import {
 	HeadingIcon,
 	IdCardIcon,
 	ListBulletIcon,
+	MixerVerticalIcon,
 	PlusCircledIcon,
 	TextIcon
 } from '@radix-ui/react-icons'
@@ -122,115 +123,190 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 
 	return (
 		<div>
-			{fields.map((block, index) =>
-				block.type === 'header' ? (
-					<div key={block.id}>
-						<FormField
-							control={form.control}
-							name={`blocks.${index}.text`}
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<Textarea
-											editor
-											placeholder="Heading..."
-											className="text-xl sm:text-2xl"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<Button
-							type="button"
-							onClick={() => remove(index)}
-							variant="destructive"
-						>
-							Delete
-						</Button>
+			{fields.map((block, index) => (
+				<div className="flex items-start justify-between" key={block.id}>
+					<div>
+						{block.type === 'header' ? (
+							<FormField
+								control={form.control}
+								name={`blocks.${index}.text`}
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Textarea
+												editor
+												placeholder="Heading..."
+												className="text-xl sm:text-2xl"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						) : block.type === 'paragraph' ? (
+							<FormField
+								control={form.control}
+								name={`blocks.${index}.text`}
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<Textarea editor placeholder="Paragraph..." {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						) : (
+							<div>Not ready...</div>
+						)}
 					</div>
-				) : block.type === 'paragraph' ? (
-					<div key={block.id}>
-						<FormField
-							control={form.control}
-							name={`blocks.${index}.text`}
-							render={({ field }) => (
-								<FormItem>
-									<FormControl>
-										<Textarea editor placeholder="Paragraph..." {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<Button
-							type="button"
-							onClick={() => remove(index)}
-							variant="destructive"
-						>
-							Delete
-						</Button>
+					<div className="flex items-center">
+						{/** Edit this block */}
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button
+									className="mt-6"
+									type="button"
+									size="sm"
+									variant="ghost"
+								>
+									<MixerVerticalIcon className="h-6 w-6" />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>Edit This Block</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem onClick={() => remove(index)}>
+									Delete
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+						{/** Add new block */}
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button
+									className="mt-6"
+									type="button"
+									size="sm"
+									variant="ghost"
+								>
+									<PlusCircledIcon className="h-6 w-6" />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem
+									onClick={() =>
+										append({
+											id: generateBlockId(),
+											type: 'header',
+											text: '',
+											level: 2
+										})
+									}
+								>
+									<HeadingIcon className="mr-2 h-4 w-4" /> Heading
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() =>
+										append({
+											id: generateBlockId(),
+											type: 'paragraph',
+											text: ''
+										})
+									}
+								>
+									<TextIcon className="mr-2 h-4 w-4" /> Paragraph
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() =>
+										append({
+											id: generateBlockId(),
+											type: 'list',
+											style: 'unordered',
+											items: []
+										})
+									}
+								>
+									<ListBulletIcon className="mr-2 h-4 w-4" />
+									List
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() =>
+										append({
+											id: generateBlockId(),
+											type: 'cards',
+											cards: []
+										})
+									}
+								>
+									<IdCardIcon className="mr-2 h-4 w-4" />
+									Cards
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</div>
-				) : (
-					<div key={block.id}>Tool not ready...</div>
-				)
+				</div>
+			))}
+			{fields.length === 0 && (
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button className="mt-6" type="button" size="sm" variant="ghost">
+							<PlusCircledIcon className="mr-2 h-6 w-6" /> Add Your First Block
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem
+							onClick={() =>
+								append({
+									id: generateBlockId(),
+									type: 'header',
+									text: '',
+									level: 2
+								})
+							}
+						>
+							<HeadingIcon className="mr-2 h-4 w-4" /> Heading
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() =>
+								append({ id: generateBlockId(), type: 'paragraph', text: '' })
+							}
+						>
+							<TextIcon className="mr-2 h-4 w-4" /> Paragraph
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() =>
+								append({
+									id: generateBlockId(),
+									type: 'list',
+									style: 'unordered',
+									items: []
+								})
+							}
+						>
+							<ListBulletIcon className="mr-2 h-4 w-4" />
+							List
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() =>
+								append({
+									id: generateBlockId(),
+									type: 'cards',
+									cards: []
+								})
+							}
+						>
+							<IdCardIcon className="mr-2 h-4 w-4" />
+							Cards
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
 			)}
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button className="mt-6" type="button" size="sm" variant="ghost">
-						<PlusCircledIcon className="h-6 w-6" />
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
-					<DropdownMenuSeparator />
-					<DropdownMenuItem
-						onClick={() =>
-							append({
-								id: generateBlockId(),
-								type: 'header',
-								text: '',
-								level: 2
-							})
-						}
-					>
-						<HeadingIcon className="mr-2 h-4 w-4" /> Heading
-					</DropdownMenuItem>
-					<DropdownMenuItem
-						onClick={() =>
-							append({ id: generateBlockId(), type: 'paragraph', text: '' })
-						}
-					>
-						<TextIcon className="mr-2 h-4 w-4" /> Paragraph
-					</DropdownMenuItem>
-					<DropdownMenuItem
-						onClick={() =>
-							append({
-								id: generateBlockId(),
-								type: 'list',
-								style: 'unordered',
-								items: []
-							})
-						}
-					>
-						<ListBulletIcon className="mr-2 h-4 w-4" />
-						List
-					</DropdownMenuItem>
-					<DropdownMenuItem
-						onClick={() =>
-							append({
-								id: generateBlockId(),
-								type: 'cards',
-								cards: []
-							})
-						}
-					>
-						<IdCardIcon className="mr-2 h-4 w-4" />
-						Cards
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
 		</div>
 	)
 }

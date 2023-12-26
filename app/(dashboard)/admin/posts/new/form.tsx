@@ -103,7 +103,7 @@ export const NewPostForm = () => {
 				</div>
 				<div className="grid w-full gap-10">
 					{/** Edit header */}
-					<div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
+					<div className="prose prose-stone mx-auto w-full max-w-none dark:prose-invert">
 						<Editor form={form} />
 					</div>
 				</div>
