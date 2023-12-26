@@ -35,15 +35,14 @@ import {
 } from '@/components/ui/dropdown-menu'
 import {
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
-	FormLabel,
 	FormMessage
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { cn, generateBlockId } from '@/lib/utils'
+
+import { CardsInput } from './custom/cards'
 
 export const formSchema = z.object({
 	// not Editor.js, but just the entry title
@@ -89,7 +88,7 @@ export const formSchema = z.object({
 export type EditorFormData = z.infer<typeof formSchema>
 
 const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
-	const { setValue, getValues, watch } = useFormContext<EditorFormData>()
+	const { setValue, watch } = useFormContext<EditorFormData>()
 	const { fields, append, remove } = useFieldArray({
 		name: 'blocks',
 		control: form.control
@@ -160,6 +159,8 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 									</FormItem>
 								)}
 							/>
+						) : block.type === 'cards' ? (
+							<CardsInput form={form} index={index} />
 						) : (
 							<div>Not ready...</div>
 						)}

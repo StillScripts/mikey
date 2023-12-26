@@ -2,6 +2,7 @@
 import { createContext, useContext, useMemo, useState } from 'react'
 
 import type { CardsToolData } from './form'
+import { CardsSection } from '@/components/ui/cards-section'
 
 export const useInitialValue = ({ data }: { data: Partial<CardsToolData> }) => {
 	const [cardsData, setCardsData] = useState(data)
@@ -35,4 +36,9 @@ export const useCards = () => {
 		throw new Error('Missing CardsProvider')
 	}
 	return cards
+}
+
+export const CardsPreview = () => {
+	const { cardsData } = useCards()
+	return <CardsSection {...cardsData} />
 }
