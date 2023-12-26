@@ -1,5 +1,4 @@
 'use client'
-import { useMemo } from 'react'
 import {
 	useFieldArray,
 	useFormContext,
@@ -7,6 +6,9 @@ import {
 } from 'react-hook-form'
 
 import {
+	ArrowDownIcon,
+	ArrowUpIcon,
+	Cross1Icon,
 	HeadingIcon,
 	IdCardIcon,
 	ListBulletIcon,
@@ -89,7 +91,7 @@ export type EditorFormData = z.infer<typeof formSchema>
 
 const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 	const { setValue, watch } = useFormContext<EditorFormData>()
-	const { fields, append, remove } = useFieldArray({
+	const { fields, append, remove, move } = useFieldArray({
 		name: 'blocks',
 		control: form.control
 	})
@@ -175,7 +177,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 									size="sm"
 									variant="ghost"
 								>
-									<MixerVerticalIcon className="h-6 w-6" />
+									<MixerVerticalIcon className="h-5 w-5" />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
@@ -200,13 +202,17 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 												</DropdownMenuItem>
 											)
 										})}
-
 										<DropdownMenuSeparator />
 									</>
 								)}
-
+								<DropdownMenuItem onClick={() => move(index, index - 1)}>
+									<ArrowUpIcon className="mr-2 h-4 w-4" /> Move Up
+								</DropdownMenuItem>
 								<DropdownMenuItem onClick={() => remove(index)}>
-									Delete
+									<Cross1Icon className="mr-2 h-4 w-4" /> Delete
+								</DropdownMenuItem>
+								<DropdownMenuItem onClick={() => move(index, index + 1)}>
+									<ArrowDownIcon className="mr-2 h-4 w-4" /> Move Down
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
@@ -219,7 +225,7 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 									size="sm"
 									variant="ghost"
 								>
-									<PlusCircledIcon className="h-6 w-6" />
+									<PlusCircledIcon className="h-5 w-5" />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
