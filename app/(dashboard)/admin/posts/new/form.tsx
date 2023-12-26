@@ -66,7 +66,7 @@ export const NewPostForm = () => {
 		await createPost(state, formData)
 	}
 
-	const isEditorJs = false
+	const isEditorJs = true
 
 	return (
 		<Form {...form}>

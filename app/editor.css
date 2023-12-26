@@ -65,3 +65,7 @@
 .dark .ce-popover-item__title {
 	color: theme('colors.accent.foreground');
 }
+
+.dark .link-tool__content {
+	background-color: theme('colors.background');
+}
