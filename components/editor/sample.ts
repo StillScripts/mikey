@@ -1,4 +1,4 @@
-import type { EditorjsData } from './types'
+import type { EditorjsData } from './editorJs/types'
 
 const sample: EditorjsData = {
 	time: 1703384217818,

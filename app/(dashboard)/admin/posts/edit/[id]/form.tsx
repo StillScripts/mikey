@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { EditPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
 import { type SinglePost, updatePost } from '@/app/(server)/routers/posts'
-import { Editor } from '@/components/editor/editor'
+import { Editor } from '@/components/editor/editorJs/editor'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
 

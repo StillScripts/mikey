@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import EditorJS from '@editorjs/editorjs'
 
-import { CardsTool } from './tools'
-import type { BlockType } from './types'
+import { CardsTool } from '@/components/editor/editorJs/tools'
+import type { BlockType } from '@/components/editor/editorJs/types'
 
 import '@/app/editor.css'
 

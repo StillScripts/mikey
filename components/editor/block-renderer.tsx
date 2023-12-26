@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { CardsSection } from '@/components/ui/cards-section'
 
-import type { Block } from './types'
+import type { Block } from './editorJs/types'
 
 const ResolveBlock = ({ block }: { block: Block }) => {
 	switch (block.type) {

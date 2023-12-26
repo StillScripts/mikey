@@ -8,16 +8,11 @@ import type {
 	BlockToolConstructorOptions
 } from '@editorjs/editorjs'
 
-import { ToolContainer } from '@/components/editor/common/tool-container'
+import { ToolContainer } from '@/components/editor/editorJs/common/tool-container'
 import { CardsSection } from '@/components/ui/cards-section'
 
-import { CardsProvider, useCards } from './context'
+import { CardsPreview, CardsProvider } from './context'
 import { type CardsToolData, CardsToolForm } from './form'
-
-const CardsPreview = () => {
-	const { cardsData } = useCards()
-	return <CardsSection {...cardsData} />
-}
 
 export class CardsTool implements BlockTool {
 	private data: Partial<CardsToolData>
