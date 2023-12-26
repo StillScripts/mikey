@@ -63,6 +63,7 @@ export const formSchema = z.object({
 				level: z.number().optional(),
 				// list
 				style: z.enum(['ordered', 'unordered']).optional(),
+				// THIS IS DIFFERENT TO EDITOR.JS
 				items: z.array(z.object({ text: z.string() })).optional(),
 				// link
 				link: z.string().optional(),
