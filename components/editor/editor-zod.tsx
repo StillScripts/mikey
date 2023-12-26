@@ -208,13 +208,19 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 										<DropdownMenuSeparator />
 									</>
 								)}
-								<DropdownMenuItem onClick={() => move(index, index - 1)}>
+								<DropdownMenuItem
+									disabled={index === 0}
+									onClick={() => move(index, index - 1)}
+								>
 									<ArrowUpIcon className="mr-2 h-4 w-4" /> Move Up
 								</DropdownMenuItem>
 								<DropdownMenuItem onClick={() => remove(index)}>
 									<Cross1Icon className="mr-2 h-4 w-4" /> Delete
 								</DropdownMenuItem>
-								<DropdownMenuItem onClick={() => move(index, index + 1)}>
+								<DropdownMenuItem
+									disabled={index >= blocks.length - 1}
+									onClick={() => move(index, index + 1)}
+								>
 									<ArrowDownIcon className="mr-2 h-4 w-4" /> Move Down
 								</DropdownMenuItem>
 							</DropdownMenuContent>
