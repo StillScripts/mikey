@@ -14,6 +14,7 @@ import Editor, {
 	type EditorFormData,
 	formSchema
 } from '@/components/editor/editor-zod'
+import { Editor as EditorJsForm } from '@/components/editor/editorJs/editor'
 import {
 	Form,
 	FormControl,
@@ -65,6 +66,8 @@ export const NewPostForm = () => {
 		await createPost(state, formData)
 	}
 
+	const isEditorJs = false
+
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -103,8 +106,8 @@ export const NewPostForm = () => {
 				</div>
 				<div className="grid w-full gap-10">
 					{/** Edit header */}
-					<div className="prose prose-stone mx-auto w-full max-w-none dark:prose-invert">
-						<Editor form={form} />
+					<div className="prose prose-stone mx-auto w-full  max-w-none dark:prose-invert">
+						{isEditorJs ? <EditorJsForm /> : <Editor form={form} />}
 					</div>
 				</div>
 			</form>

@@ -1,5 +1,9 @@
 'use client'
-import { useFieldArray, type UseFormReturn } from 'react-hook-form'
+import {
+	useFieldArray,
+	useFormContext,
+	type UseFormReturn
+} from 'react-hook-form'
 
 import {
 	HeadingIcon,
@@ -9,6 +13,14 @@ import {
 	PlusCircledIcon,
 	TextIcon
 } from '@radix-ui/react-icons'
+import {
+	Heading1,
+	Heading2,
+	Heading3,
+	Heading4,
+	Heading5,
+	Heading6
+} from 'lucide-react'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
@@ -29,50 +41,8 @@ import {
 	FormMessage
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger
-} from '@/components/ui/tooltip'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { generateBlockId } from '@/lib/utils'
-
-const sample = {
-	time: 1703384217818,
-	blocks: [
-		{
-			id: 'Mald2whe4I',
-			type: 'paragraph',
-			data: { text: 'Yet another post to test' }
-		},
-		{
-			id: 'oXBm0Y9Oc1',
-			type: 'paragraph',
-			data: {
-				text: 'Woah, this post has been updated! You can be a little old for a lot of things..This'
-			}
-		},
-		{
-			id: 'rFbDnUxCKR',
-			type: 'cards',
-			data: {
-				cards: [
-					{
-						title: 'The first card is cool',
-						description: 'This card is super useful'
-					},
-					{
-						title: 'This is another card',
-						description: 'I am super happy about this card!'
-					}
-				],
-				heading: 'This is a cards section',
-				subheading: 'Wow, have a look at this. It is pretty amazing bro.'
-			}
-		}
-	],
-	version: '2.28.2'
-}
 
 export const formSchema = z.object({
 	// not Editor.js, but just the entry title
@@ -118,10 +88,30 @@ export const formSchema = z.object({
 export type EditorFormData = z.infer<typeof formSchema>
 
 const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
+	const { setValue } = useFormContext()
 	const { fields, append, remove } = useFieldArray({
 		name: 'blocks',
 		control: form.control
 	})
+
+	const getHeadingIcon = (level: number) => {
+		switch (level) {
+			case 1:
+				return Heading1
+			case 2:
+				return Heading2
+			case 3:
+				return Heading3
+			case 4:
+				return Heading4
+			case 5:
+				return Heading5
+			case 6:
+				return Heading6
+			default:
+				throw new Error('Level should always be 1-6')
+		}
+	}
 
 	return (
 		<div>
@@ -177,8 +167,27 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuLabel>Edit This Block</DropdownMenuLabel>
+								<DropdownMenuLabel>Manage</DropdownMenuLabel>
 								<DropdownMenuSeparator />
+								{block.type === 'header' && (
+									<>
+										{[1, 2, 3, 4, 5, 6].map(level => {
+											const Icon = getHeadingIcon(level)
+											return (
+												<DropdownMenuItem
+													key={`level-${level}`}
+													onClick={() => {}}
+												>
+													<Icon className="mr-2 h-5 w-5" /> Heading&nbsp;
+													{level}
+												</DropdownMenuItem>
+											)
+										})}
+
+										<DropdownMenuSeparator />
+									</>
+								)}
+
 								<DropdownMenuItem onClick={() => remove(index)}>
 									Delete
 								</DropdownMenuItem>
