@@ -2,31 +2,17 @@
 
 import { useEffect } from 'react'
 import { useFormState } from 'react-dom'
-import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-
-import { zodResolver } from '@hookform/resolvers/zod'
 
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { EditPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
 import { type SinglePost, updatePost } from '@/app/(server)/routers/posts'
-import Editor, {
-	type EditorFormData,
-	formSchema
-} from '@/components/editor/editor-zod'
+import { Editor } from '@/components/editor/editorJs/editor'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
 
 export const EditPostForm = ({ post }: { post: SinglePost }) => {
-	const form = useForm<EditorFormData>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			time: new Date().getTime(),
-			blocks: [],
-			version: '2.28.2'
-		}
-	})
 	const router = useRouter()
 	const { toast } = useToast()
 	const [state, update] = useFormState(updatePost, { ...post })
@@ -77,7 +63,7 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
 						defaultValue={state?.title}
 						className="w-full resize-none appearance-none overflow-hidden bg-transparent text-2xl font-bold focus:outline-none"
 					/>
-					<Editor form={form} />
+					<Editor data={state?.draftContent as string} />
 				</div>
 			</div>
 		</form>
