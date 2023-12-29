@@ -1,4 +1,5 @@
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 const SettingsPage = () => {
 	return (
@@ -6,7 +7,9 @@ const SettingsPage = () => {
 			<PageHeading
 				heading="Settings"
 				links={[{ title: 'Settings', href: '/admin/settings' }]}
-			></PageHeading>
+			>
+				<ThemeToggle />
+			</PageHeading>
 		</div>
 	)
 }
