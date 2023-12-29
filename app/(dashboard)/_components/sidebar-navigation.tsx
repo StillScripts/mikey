@@ -3,7 +3,7 @@ import type { Route } from 'next'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { HomeIcon, Pencil2Icon } from '@radix-ui/react-icons'
+import { GearIcon, HomeIcon, Pencil2Icon } from '@radix-ui/react-icons'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -28,6 +28,12 @@ export const SidebarNavigation = () => {
 			href: '/admin/posts',
 			icon: Pencil2Icon,
 			current: pathname.includes('/admin/post')
+		},
+		{
+			name: 'Settings',
+			href: '/admin/settings',
+			icon: GearIcon,
+			current: pathname.includes('/admin/settings')
 		}
 	]
 
