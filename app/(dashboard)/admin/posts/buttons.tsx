@@ -56,7 +56,7 @@ export const EditPostButtons = ({
 	id,
 	slug
 }: {
-	action: (payload: FormData) => void
+	action?: (payload: FormData) => void
 	id: number
 	slug: string
 }) => {
@@ -112,7 +112,11 @@ export const EditPostButtons = ({
 				</AlertDialogContent>
 			</AlertDialog>
 
-			<Button disabled={pending} aria-disabled={pending} formAction={action}>
+			<Button
+				disabled={pending}
+				aria-disabled={pending}
+				formAction={action ?? undefined}
+			>
 				{pending ? (
 					<>
 						<Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving
