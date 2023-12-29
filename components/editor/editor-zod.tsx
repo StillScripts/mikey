@@ -11,6 +11,7 @@ import {
 	Cross1Icon,
 	HeadingIcon,
 	IdCardIcon,
+	Link1Icon,
 	ListBulletIcon,
 	MixerVerticalIcon,
 	PlusCircledIcon,
@@ -127,6 +128,84 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 		}
 	})
 
+	const NewBlockDropdown = ({ children }: { children: React.ReactNode }) => (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+			<DropdownMenuContent>
+				<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem
+					onClick={() =>
+						append({
+							id: generateBlockId(),
+							type: 'header',
+							data: {
+								text: '',
+								level: 2
+							}
+						})
+					}
+				>
+					<HeadingIcon className="mr-2 h-4 w-4" /> Heading
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() =>
+						append({
+							id: generateBlockId(),
+							type: 'paragraph',
+							data: { text: '' }
+						})
+					}
+				>
+					<TextIcon className="mr-2 h-4 w-4" /> Paragraph
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() =>
+						append({
+							id: generateBlockId(),
+							type: 'list',
+							data: {
+								style: 'unordered',
+								items: []
+							}
+						})
+					}
+				>
+					<ListBulletIcon className="mr-2 h-4 w-4" />
+					List
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() =>
+						append({
+							id: generateBlockId(),
+							type: 'link',
+							data: {
+								link: ''
+							}
+						})
+					}
+				>
+					<Link1Icon className="mr-2 h-4 w-4" />
+					Link
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() =>
+						append({
+							id: generateBlockId(),
+							type: 'cards',
+							data: {
+								cards: []
+							}
+						})
+					}
+				>
+					<IdCardIcon className="mr-2 h-4 w-4" />
+					Cards
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	)
+
 	return (
 		<div>
 			{fields.map((block, index) => (
@@ -238,147 +317,20 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 							</DropdownMenuContent>
 						</DropdownMenu>
 						{/** Add new block */}
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									className="mt-6"
-									type="button"
-									size="sm"
-									variant="ghost"
-								>
-									<PlusCircledIcon className="h-5 w-5" />
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
-								<DropdownMenuSeparator />
-								<DropdownMenuItem
-									onClick={() =>
-										append({
-											id: generateBlockId(),
-											type: 'header',
-											data: {
-												text: '',
-												level: 2
-											}
-										})
-									}
-								>
-									<HeadingIcon className="mr-2 h-4 w-4" /> Heading
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									onClick={() =>
-										append({
-											id: generateBlockId(),
-											type: 'paragraph',
-											data: {
-												text: ''
-											}
-										})
-									}
-								>
-									<TextIcon className="mr-2 h-4 w-4" /> Paragraph
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									onClick={() =>
-										append({
-											id: generateBlockId(),
-											type: 'list',
-											data: {
-												style: 'ordered',
-												items: [{ text: '' }]
-											}
-										})
-									}
-								>
-									<ListBulletIcon className="mr-2 h-4 w-4" />
-									List
-								</DropdownMenuItem>
-								<DropdownMenuItem
-									onClick={() =>
-										append({
-											id: generateBlockId(),
-											type: 'cards',
-											data: {
-												cards: []
-											}
-										})
-									}
-								>
-									<IdCardIcon className="mr-2 h-4 w-4" />
-									Cards
-								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+						<NewBlockDropdown>
+							<Button className="mt-6" type="button" size="sm" variant="ghost">
+								<PlusCircledIcon className="h-5 w-5" />
+							</Button>
+						</NewBlockDropdown>
 					</div>
 				</div>
 			))}
 			{fields.length === 0 && (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button className="mt-6" type="button" size="sm" variant="ghost">
-							<PlusCircledIcon className="mr-2 h-6 w-6" /> Add Your First Block
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent>
-						<DropdownMenuLabel>Add New Block</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem
-							onClick={() =>
-								append({
-									id: generateBlockId(),
-									type: 'header',
-									data: {
-										text: '',
-										level: 2
-									}
-								})
-							}
-						>
-							<HeadingIcon className="mr-2 h-4 w-4" /> Heading
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() =>
-								append({
-									id: generateBlockId(),
-									type: 'paragraph',
-									data: { text: '' }
-								})
-							}
-						>
-							<TextIcon className="mr-2 h-4 w-4" /> Paragraph
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() =>
-								append({
-									id: generateBlockId(),
-									type: 'list',
-									data: {
-										style: 'unordered',
-										items: []
-									}
-								})
-							}
-						>
-							<ListBulletIcon className="mr-2 h-4 w-4" />
-							List
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() =>
-								append({
-									id: generateBlockId(),
-									type: 'cards',
-									data: {
-										cards: []
-									}
-								})
-							}
-						>
-							<IdCardIcon className="mr-2 h-4 w-4" />
-							Cards
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<NewBlockDropdown>
+					<Button type="button" size="sm" variant="ghost">
+						<PlusCircledIcon className="mr-2 h-6 w-6" /> Add Your First Block
+					</Button>
+				</NewBlockDropdown>
 			)}
 		</div>
 	)
