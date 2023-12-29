@@ -60,7 +60,7 @@ export const StickyHeader = () => {
 						<input
 							id="search-field"
 							className="block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 text-gray-900 placeholder:text-muted-foreground focus:ring-0 sm:text-sm"
-							placeholder="Search..."
+							placeholder="Chat..."
 							type="search"
 							name="search"
 						/>
