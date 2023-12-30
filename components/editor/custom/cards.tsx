@@ -14,6 +14,16 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CardsSection } from '@/components/ui/cards-section'
 import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger
+} from '@/components/ui/dialog'
+import {
 	FormControl,
 	FormDescription,
 	FormField,
@@ -33,12 +43,60 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
+export const SaveStarter = ({ data }: { data: object }) => {
+	const [open, setOpen] = useState(false)
+	const [title, setTitle] = useState('')
+
+	const save = () => {
+		const content = JSON.stringify(data)
+		const formData = new FormData()
+		formData.set('title', title)
+		formData.set('content', content)
+	}
+	return (
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger asChild>
+				<Button type="button" size="sm" className="ml-3 mt-4">
+					Save As Starter
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Create New Starter</DialogTitle>
+					<DialogDescription>
+						Save this block as a starter component that you can easily reuse.
+						Give it a title that makes it easy to know what this block contains.
+					</DialogDescription>
+				</DialogHeader>
+				<Input
+					placeholder="Title"
+					onChange={e => setTitle(e.target.value)}
+					value={title}
+				/>
+				<DialogFooter>
+					<Button
+						type="button"
+						disabled={!title}
+						aria-disabled={!title}
+						className="mt-5"
+						onClick={() => setOpen(false)}
+					>
+						Save Block
+					</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	)
+}
+
 export const CardsForm = ({
 	form,
-	index
+	index,
+	data
 }: {
 	form: UseFormReturn<EditorFormData>
 	index: number
+	data: object
 }) => {
 	const { fields, append, remove } = useFieldArray({
 		name: `blocks.${index}.data.cards`,
@@ -77,7 +135,7 @@ export const CardsForm = ({
 					</FormItem>
 				)}
 			/>
-			<div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+			<div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
 				{fields.map((field, cardIndex) => (
 					<Card key={field.id}>
 						<CardHeader className="m-0 flex flex-row items-center justify-between py-0">
@@ -127,11 +185,12 @@ export const CardsForm = ({
 				type="button"
 				variant="outline"
 				size="sm"
-				className="mt-2"
+				className="mt-4"
 				onClick={() => append({ title: '', description: '' })}
 			>
 				Add Card
 			</Button>
+			<SaveStarter data={data} />
 		</div>
 	)
 }
@@ -183,7 +242,7 @@ export function CardsInput<T extends object>({
 			<CardContent>
 				{hasData ? (
 					edit ? (
-						<CardsForm form={form} index={index} />
+						<CardsForm form={form} index={index} data={data} />
 					) : (
 						<CardsSection {...data} />
 					)
