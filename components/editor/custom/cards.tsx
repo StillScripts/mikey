@@ -23,6 +23,13 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -137,9 +144,26 @@ export function CardsInput<T extends object>({
 	index: number
 }) {
 	const [edit, setEdit] = useState(false)
-	const { watch } = useFormContext<EditorFormData>()
+	const [starter, setStarter] = useState('')
+	const { setValue, watch } = useFormContext<EditorFormData>()
 	const [blocks] = watch(['blocks'])
 	const { data } = blocks[index]
+
+	const hasData = data?.heading || data?.subheading || data?.cards?.length
+
+	const defaultCards = {
+		heading: 'Learn More',
+		subheading: '',
+		cards: [{ title: 'Explore Our Blogs' }]
+	}
+
+	const getStarted = () => {
+		if (starter === 'default') {
+			setValue(`blocks.${index}.data.heading`, defaultCards.heading)
+			setValue(`blocks.${index}.data.subheading`, defaultCards.subheading)
+			setValue(`blocks.${index}.data.cards`, defaultCards.cards)
+		}
+	}
 
 	return (
 		<Card className="my-6 w-full rounded-none border-stone-400 shadow-none">
@@ -150,15 +174,43 @@ export function CardsInput<T extends object>({
 						id="edit-cards"
 						checked={edit}
 						onCheckedChange={() => setEdit(!edit)}
+						disabled={!hasData}
+						aria-disabled={!hasData}
 					/>
 					<Label htmlFor="edit-cards">Edit</Label>
 				</div>
 			</CardHeader>
 			<CardContent>
-				{edit ? (
-					<CardsForm form={form} index={index} />
+				{hasData ? (
+					edit ? (
+						<CardsForm form={form} index={index} />
+					) : (
+						<CardsSection {...data} />
+					)
 				) : (
-					<CardsSection {...data} />
+					<div>
+						<Select
+							onValueChange={value => {
+								setStarter(value)
+							}}
+						>
+							<SelectTrigger className="w-[180px]">
+								<SelectValue placeholder="Select a starter" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="default">Default Cards</SelectItem>
+							</SelectContent>
+						</Select>
+						<Button
+							type="button"
+							className="mt-4"
+							onClick={getStarted}
+							disabled={!starter}
+							aria-disabled={!starter}
+						>
+							Get Started
+						</Button>
+					</div>
 				)}
 			</CardContent>
 		</Card>

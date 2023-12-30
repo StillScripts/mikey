@@ -81,7 +81,10 @@ export const formSchema = z.object({
 					.array(
 						z.object({
 							title: z.string().min(1, { message: 'Required field' }),
-							description: z.string().min(1, { message: 'Required field' })
+							description: z
+								.string()
+								.min(1, { message: 'Required field' })
+								.optional()
 						})
 					)
 					.optional()
