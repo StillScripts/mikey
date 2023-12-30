@@ -13,6 +13,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
 
+import { EditPageHeading } from '../edit-page-heading'
+
 export const EditPostForm = ({ post }: { post: SinglePost }) => {
 	const router = useRouter()
 	const { toast } = useToast()
@@ -41,37 +43,17 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
 
 	return (
 		<form>
-			<div className="pb-8">
-				<Breadcrumbs
-					links={[
-						{ title: 'Posts', href: '/admin/posts' },
-						// @ts-expect-error this is a valid route
-						{ title: 'Edit Post', href: `/admin/posts/edit/${state?.id}` }
-					]}
+			<EditPageHeading state={state} action={update}>
+				<Textarea
+					autoFocus
+					placeholder="Post title"
+					editor
+					id="title"
+					name="title"
+					defaultValue={state?.title}
+					className="text-2xl font-bold sm:text-3xl"
 				/>
-				<div className="mt-2 md:flex md:items-center md:justify-between">
-					<div className="min-w-0 flex-1">
-						<Textarea
-							autoFocus
-							placeholder="Post title"
-							editor
-							id="title"
-							name="title"
-							defaultValue={state?.title}
-							className="text-2xl font-bold sm:text-3xl"
-						/>
-					</div>
-					<div className="mt-4 flex flex-shrink-0 space-x-3 md:ml-4 md:mt-0">
-						{state?.id && (
-							<EditPostButtons
-								action={update}
-								id={state.id}
-								slug={state.slug!}
-							/>
-						)}
-					</div>
-				</div>
-			</div>
+			</EditPageHeading>
 			<div className="grid w-full gap-10">
 				{/** Edit header */}
 				<div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">

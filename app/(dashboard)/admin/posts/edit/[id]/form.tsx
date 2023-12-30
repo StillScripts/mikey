@@ -8,8 +8,6 @@ import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Breadcrumbs } from '@/app/(dashboard)/_components/breadcrumbs'
-import { EditPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
 import type { SingleBlock } from '@/app/(server)/routers/blocks'
 import { type SinglePost, updatePost } from '@/app/(server)/routers/posts'
 import Editor, {
@@ -26,6 +24,8 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
+
+import { EditPageHeading } from '../edit-page-heading'
 
 export const EditPostForm = ({
 	post,
@@ -81,42 +81,26 @@ export const EditPostForm = ({
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-				<div className="pb-8">
-					<Breadcrumbs
-						links={[
-							{ title: 'Posts', href: '/admin/posts' },
-							// @ts-expect-error this is a valid route
-							{ title: 'Edit Post', href: `/admin/posts/edit/${state?.id}` }
-						]}
+				<EditPageHeading state={state}>
+					<FormField
+						control={form.control}
+						name="title"
+						render={({ field }) => (
+							<FormItem>
+								<FormControl>
+									<Textarea
+										autoFocus
+										placeholder="Post title"
+										editor
+										className="text-2xl font-bold sm:text-3xl"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
 					/>
-					<div className="mt-2 md:flex md:items-center md:justify-between">
-						<div className="min-w-0 flex-1">
-							<FormField
-								control={form.control}
-								name="title"
-								render={({ field }) => (
-									<FormItem>
-										<FormControl>
-											<Textarea
-												autoFocus
-												placeholder="Post title"
-												editor
-												className="text-2xl font-bold sm:text-3xl"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-						</div>
-						<div className="mt-4 flex flex-shrink-0 space-x-3 md:ml-4 md:mt-0">
-							{state?.id && (
-								<EditPostButtons id={state.id} slug={state.slug!} />
-							)}
-						</div>
-					</div>
-				</div>
+				</EditPageHeading>
 				<div className="grid w-full gap-10">
 					<div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
 						<Editor form={form} starters={starters} />
