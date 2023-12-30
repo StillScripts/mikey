@@ -23,6 +23,30 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/components/ui/use-toast'
 
+export const SubmitButton = ({
+	pending,
+	action
+}: {
+	pending?: boolean
+	action?: (payload: FormData) => void
+}) => {
+	return (
+		<Button
+			disabled={pending}
+			aria-disabled={pending}
+			formAction={action ?? undefined}
+		>
+			{pending ? (
+				<>
+					<Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving
+				</>
+			) : (
+				'Save Changes'
+			)}
+		</Button>
+	)
+}
+
 /** Header buttons in new post form. State is managed by `react-hook-form` */
 export const NewPostButtons = () => {
 	const { isValidating, isSubmitting } = useFormState()
@@ -38,15 +62,7 @@ export const NewPostButtons = () => {
 			>
 				<Link href="/admin/posts">Discard</Link>
 			</Button>
-			<Button type="submit" disabled={pending} aria-disabled={pending}>
-				{pending ? (
-					<>
-						<Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving
-					</>
-				) : (
-					'Save Post'
-				)}
-			</Button>
+			<SubmitButton pending={pending} />
 		</>
 	)
 }
@@ -111,20 +127,7 @@ export const EditPostButtons = ({
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>
-
-			<Button
-				disabled={pending}
-				aria-disabled={pending}
-				formAction={action ?? undefined}
-			>
-				{pending ? (
-					<>
-						<Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving
-					</>
-				) : (
-					'Save Changes'
-				)}
-			</Button>
+			<SubmitButton pending={pending} />
 		</>
 	)
 }

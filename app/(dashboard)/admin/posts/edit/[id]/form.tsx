@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { EditorContainer } from '@/app/(dashboard)/_components/editor-container'
 import type { SingleBlock } from '@/app/(server)/routers/blocks'
 import { type SinglePost, updatePost } from '@/app/(server)/routers/posts'
 import Editor, {
@@ -101,11 +102,9 @@ export const EditPostForm = ({
 						)}
 					/>
 				</EditPageHeading>
-				<div className="grid w-full gap-10">
-					<div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
-						<Editor form={form} starters={starters} />
-					</div>
-				</div>
+				<EditorContainer>
+					<Editor form={form} starters={starters} />
+				</EditorContainer>
 			</form>
 		</Form>
 	)

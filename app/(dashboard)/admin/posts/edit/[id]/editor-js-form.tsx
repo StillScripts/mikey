@@ -5,8 +5,7 @@ import { useFormState } from 'react-dom'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { Breadcrumbs } from '@/app/(dashboard)/_components/breadcrumbs'
-import { EditPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
+import { EditorContainer } from '@/app/(dashboard)/_components/editor-container'
 import { type SinglePost, updatePost } from '@/app/(server)/routers/posts'
 import { Editor } from '@/components/editor/editorJs/editor'
 import { Textarea } from '@/components/ui/textarea'
@@ -54,12 +53,9 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
 					className="text-2xl font-bold sm:text-3xl"
 				/>
 			</EditPageHeading>
-			<div className="grid w-full gap-10">
-				{/** Edit header */}
-				<div className="prose prose-stone mx-auto w-[800px] dark:prose-invert">
-					<Editor data={state?.draftContent as string} />
-				</div>
-			</div>
+			<EditorContainer>
+				<Editor data={state?.draftContent as string} />
+			</EditorContainer>
 		</form>
 	)
 }
