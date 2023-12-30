@@ -3,6 +3,8 @@ import Link from 'next/link'
 
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
+
 export interface BreadcrubLink {
 	title: string
 	href: Route
@@ -13,7 +15,7 @@ export const Breadcrumbs = ({ links }: { links?: BreadcrubLink[] }) => {
 		<div>
 			<nav className="sm:hidden" aria-label="Back">
 				<a
-					href="#"
+					href="/admin"
 					className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700"
 				>
 					<ChevronLeft
@@ -27,27 +29,21 @@ export const Breadcrumbs = ({ links }: { links?: BreadcrubLink[] }) => {
 				<ol role="list" className="flex items-center space-x-4">
 					<li>
 						<div className="flex">
-							<Link
-								href="/admin"
-								className="text-sm font-medium text-gray-500 hover:text-gray-700"
-							>
-								Admin
-							</Link>
+							<Button variant="link" asChild>
+								<Link href="/admin">Admin</Link>
+							</Button>
 						</div>
 					</li>
-					{links?.map(link => (
+					{links?.map((link, i) => (
 						<li key={link.title}>
 							<div className="flex items-center">
 								<ChevronRight
 									className="h-5 w-5 flex-shrink-0 text-gray-400"
 									aria-hidden="true"
 								/>
-								<Link
-									href={link.href}
-									className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-								>
-									{link.title}
-								</Link>
+								<Button className="ml-4" variant="link" asChild>
+									<Link href={link.href}>{link.title}</Link>
+								</Button>
 							</div>
 						</li>
 					))}
