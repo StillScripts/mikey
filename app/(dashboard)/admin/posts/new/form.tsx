@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Breadcrumbs } from '@/app/(dashboard)/_components/breadcrumbs'
 import { NewPostButtons } from '@/app/(dashboard)/admin/posts/buttons'
+import type { SingleBlock } from '@/app/(server)/routers/blocks'
 import { createPost } from '@/app/(server)/routers/posts'
 import Editor, {
 	type EditorFormData,
@@ -27,7 +28,7 @@ import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
 import { EDITOR } from '@/lib/constants'
 
-export const NewPostForm = () => {
+export const NewPostForm = ({ starters }: { starters: SingleBlock[] }) => {
 	const form = useForm<EditorFormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -106,7 +107,11 @@ export const NewPostForm = () => {
 				<div className="grid w-full gap-10">
 					{/** Edit header */}
 					<div className="prose prose-stone mx-auto w-full  max-w-none dark:prose-invert">
-						{EDITOR === 'editor.js' ? <EditorJsForm /> : <Editor form={form} />}
+						{EDITOR === 'editor.js' ? (
+							<EditorJsForm />
+						) : (
+							<Editor form={form} starters={starters} />
+						)}
 					</div>
 				</div>
 			</form>

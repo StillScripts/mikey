@@ -5,24 +5,21 @@ import { revalidatePath } from 'next/cache'
 import { eq } from 'drizzle-orm'
 
 import { getDb } from '@/db/get-connection'
-import { blocks, posts } from '@/db/schema'
+import { blocks } from '@/db/schema'
 import { type ActionStatus, getStatus } from '@/lib/utils'
 
-export const getAllPosts = async () => {
+export type StarterBlockType = (typeof blocks)['type']['enumValues'][number]
+
+export const getBlocks = async () => {
 	const db = await getDb()
-	return await db.select().from(posts)
+	return await db.select().from(blocks)
 }
 
-export const getBlock = async (id: number) => {
-	const db = await getDb()
-	return await db.select().from(blocks).where(eq(blocks.id, id))
-}
+export type SingleBlock = Awaited<ReturnType<typeof getBlocks>>[number]
 
-export type SingleBlock = Awaited<ReturnType<typeof getBlock>>[number]
-
-export const getPostBySlug = async (slug: string) => {
+export const getBlocksByType = async (type: StarterBlockType) => {
 	const db = await getDb()
-	return await db.select().from(posts).where(eq(posts.slug, slug))
+	return await db.select().from(blocks).where(eq(blocks.type, type))
 }
 
 export const createBlock = async (state: ActionStatus, formData: FormData) => {
@@ -36,7 +33,7 @@ export const createBlock = async (state: ActionStatus, formData: FormData) => {
 			content,
 			title
 		})
-		revalidatePath('/admin/posts')
+		revalidatePath('/admin')
 		return getStatus('success')
 	}
 	return getStatus('error')

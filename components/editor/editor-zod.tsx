@@ -27,6 +27,7 @@ import {
 } from 'lucide-react'
 import { z } from 'zod'
 
+import type { SingleBlock } from '@/app/(server)/routers/blocks'
 import { Button } from '@/components/ui/button'
 import {
 	DropdownMenu,
@@ -95,7 +96,13 @@ export const formSchema = z.object({
 
 export type EditorFormData = z.infer<typeof formSchema>
 
-const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
+const EditorForm = ({
+	form,
+	starters
+}: {
+	form: UseFormReturn<EditorFormData>
+	starters: SingleBlock[]
+}) => {
 	const { setValue, watch } = useFormContext<EditorFormData>()
 	const { fields, append, remove, move } = useFieldArray({
 		name: 'blocks',
@@ -261,7 +268,11 @@ const EditorForm = ({ form }: { form: UseFormReturn<EditorFormData> }) => {
 						) : block.type === 'list' ? (
 							<ListInput form={form} index={index} />
 						) : block.type === 'cards' ? (
-							<CardsInput form={form} index={index} />
+							<CardsInput
+								form={form}
+								index={index}
+								starters={starters.filter(s => s.type === 'cards')}
+							/>
 						) : null}
 					</div>
 					<div className="flex items-center">

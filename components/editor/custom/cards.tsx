@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useFormState } from 'react-dom'
 import {
 	useFieldArray,
 	useFormContext,
@@ -9,6 +10,7 @@ import {
 
 import { Cross1Icon } from '@radix-ui/react-icons'
 
+import { createBlock, type SingleBlock } from '@/app/(server)/routers/blocks'
 import type { EditorFormData } from '@/components/editor/editor-zod'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -46,12 +48,15 @@ import { Textarea } from '@/components/ui/textarea'
 export const SaveStarter = ({ data }: { data: object }) => {
 	const [open, setOpen] = useState(false)
 	const [title, setTitle] = useState('')
+	const [state] = useFormState(createBlock, {})
 
-	const save = () => {
+	const save = async () => {
 		const content = JSON.stringify(data)
 		const formData = new FormData()
 		formData.set('title', title)
 		formData.set('content', content)
+		await createBlock(state, formData)
+		setOpen(false)
 	}
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -79,7 +84,7 @@ export const SaveStarter = ({ data }: { data: object }) => {
 						disabled={!title}
 						aria-disabled={!title}
 						className="mt-5"
-						onClick={() => setOpen(false)}
+						onClick={save}
 					>
 						Save Block
 					</Button>
@@ -197,10 +202,12 @@ export const CardsForm = ({
 
 export function CardsInput<T extends object>({
 	form,
-	index
+	index,
+	starters
 }: {
 	form: UseFormReturn<EditorFormData>
 	index: number
+	starters: SingleBlock[]
 }) {
 	const [edit, setEdit] = useState(false)
 	const [starter, setStarter] = useState('')
@@ -221,6 +228,12 @@ export function CardsInput<T extends object>({
 			setValue(`blocks.${index}.data.heading`, defaultCards.heading)
 			setValue(`blocks.${index}.data.subheading`, defaultCards.subheading)
 			setValue(`blocks.${index}.data.cards`, defaultCards.cards)
+		} else {
+			const data = starters[starters.findIndex(s => `${s.id}` === starter)]
+			const blockData = JSON.parse(data.content as string) as any
+			setValue(`blocks.${index}.data.heading`, blockData.heading)
+			setValue(`blocks.${index}.data.subheading`, blockData.subheading)
+			setValue(`blocks.${index}.data.cards`, blockData.cards)
 		}
 	}
 
@@ -258,6 +271,11 @@ export function CardsInput<T extends object>({
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="default">Default Cards</SelectItem>
+								{starters?.map(s => (
+									<SelectItem key={s.id} value={`${s.id}`}>
+										{s.title}
+									</SelectItem>
+								))}
 							</SelectContent>
 						</Select>
 						<Button
