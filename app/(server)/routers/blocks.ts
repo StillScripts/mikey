@@ -27,12 +27,14 @@ export const getPostBySlug = async (slug: string) => {
 
 export const createBlock = async (state: ActionStatus, formData: FormData) => {
 	const db = await getDb()
+	const title = formData.get('title') as string
 	const content = formData.get('content') as string
 
-	if (content && blocks) {
+	if (title && blocks) {
 		await db.insert(blocks).values({
 			type: 'cards',
-			content
+			content,
+			title
 		})
 		revalidatePath('/admin/posts')
 		return getStatus('success')

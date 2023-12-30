@@ -1,0 +1,1 @@
+ALTER TABLE `blocks` ADD `title` varchar(255) NOT NULL;

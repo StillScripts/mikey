@@ -30,5 +30,6 @@ export const posts = mysqlTable('posts', {
 export const blocks = mysqlTable('blocks', {
 	id: serial('id').primaryKey(),
 	type: mysqlEnum('type', ['cards']),
+	title: varchar('title', { length: 255 }).notNull(),
 	content: json('content')
 })
