@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import {
 	AvatarIcon,
 	HamburgerMenuIcon,
@@ -77,9 +79,9 @@ export const StickyHeader = () => {
 							<DropdownMenuContent>
 								<DropdownMenuLabel>My Account</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem>Profile</DropdownMenuItem>
-								<DropdownMenuItem>Billing</DropdownMenuItem>
-								<DropdownMenuItem>Team</DropdownMenuItem>
+								<DropdownMenuItem asChild>
+									<Link href="/admin/settings">Settings</Link>
+								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
