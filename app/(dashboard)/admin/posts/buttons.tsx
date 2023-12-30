@@ -5,9 +5,12 @@ import { useFormState } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { Loader2 } from 'lucide-react'
-
+import {
+	ActionProps,
+	SubmitButton
+} from '@/app/(dashboard)/_components/submit-button'
 import { deletePost } from '@/app/(server)/routers/posts'
+import { useSettings } from '@/components/providers'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -23,32 +26,8 @@ import { Button } from '@/components/ui/button'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/components/ui/use-toast'
 
-export const SubmitButton = ({
-	pending,
-	action
-}: {
-	pending?: boolean
-	action?: (payload: FormData) => void
-}) => {
-	return (
-		<Button
-			disabled={pending}
-			aria-disabled={pending}
-			formAction={action ?? undefined}
-		>
-			{pending ? (
-				<>
-					<Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving
-				</>
-			) : (
-				'Save Changes'
-			)}
-		</Button>
-	)
-}
-
 /** Header buttons in new post form. State is managed by `react-hook-form` */
-export const NewPostButtons = () => {
+export const NewPostButtonsCustom = () => {
 	const { isValidating, isSubmitting } = useFormState()
 	const pending = isValidating || isSubmitting
 	return (
@@ -64,6 +43,39 @@ export const NewPostButtons = () => {
 			</Button>
 			<SubmitButton pending={pending} />
 		</>
+	)
+}
+
+/** Header buttons in new post form. State is managed by the server action */
+export const NewPostButtonsEditorJs = ({
+	action
+}: {
+	action?: (payload: FormData) => void
+}) => {
+	const { pending } = useFormStatus()
+	return (
+		<>
+			<Button
+				type="button"
+				variant="outline"
+				disabled={pending}
+				aria-disabled={pending}
+				asChild
+			>
+				<Link href="/admin/posts">Discard</Link>
+			</Button>
+			<SubmitButton action={action} pending={pending} />
+		</>
+	)
+}
+
+export const NewPostButtons = ({ action }: ActionProps) => {
+	const { defaultEditor } = useSettings()
+
+	return defaultEditor === 'editor-js' ? (
+		<NewPostButtonsEditorJs action={action} />
+	) : (
+		<NewPostButtonsCustom />
 	)
 }
 

@@ -1,1 +1,2 @@
-export const EDITOR: 'editor.js' | 'custom' = 'custom'
+/** Default editor option */
+export const EDITOR = 'custom'
