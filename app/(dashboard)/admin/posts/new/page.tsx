@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { getBlocksByType } from '@/app/(server)/routers/blocks'
+import { getBlocks } from '@/app/(server)/routers/blocks'
 
 import { NewPostForm } from './form'
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 const NewPost = async () => {
-	const starters = await getBlocksByType('cards')
+	const starters = await getBlocks()
 	return <NewPostForm starters={starters} />
 }
 

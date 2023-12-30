@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 
+import { getBlocks } from '@/app/(server)/routers/blocks'
 import { getPost } from '@/app/(server)/routers/posts'
 
 import { EditPostForm as EditPostEditorJs } from './editor-js-form'
@@ -18,12 +19,13 @@ const EditPost = async ({ params, searchParams }: Params) => {
 	if (!post) {
 		notFound()
 	}
+	const starters = await getBlocks()
 
 	if (searchParams?.editor === 'editor-js') {
 		return <EditPostEditorJs post={post} />
 	}
 
-	return <EditPostForm post={post} />
+	return <EditPostForm post={post} starters={starters} />
 }
 
 export default EditPost

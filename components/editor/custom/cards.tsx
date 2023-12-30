@@ -243,13 +243,13 @@ export function CardsInput<T extends object>({
 				<p className="my-0 text-lg text-muted-foreground">Cards Section</p>
 				<div className="flex items-center space-x-2">
 					<Switch
-						id="edit-cards"
+						id={`edit-cards-${index}`}
 						checked={edit}
 						onCheckedChange={() => setEdit(!edit)}
 						disabled={!hasData}
 						aria-disabled={!hasData}
 					/>
-					<Label htmlFor="edit-cards">Edit</Label>
+					<Label htmlFor={`edit-cards-${index}`}>Edit</Label>
 				</div>
 			</CardHeader>
 			<CardContent>
