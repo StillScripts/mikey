@@ -38,7 +38,7 @@ export const ListInput = ({
 									<FormControl>
 										<Textarea
 											editor
-											className="min-w-[200px]"
+											className="h-[36px] min-w-[200px]"
 											placeholder="List item..."
 											onKeyUp={e => {
 												e.preventDefault()
@@ -68,7 +68,7 @@ export const ListInput = ({
 									className="text-destructive"
 									onClick={() => remove(listIndex)}
 								>
-									<Cross1Icon className="ml-2 h-4 w-4" />
+									<Cross1Icon className="h-4 w-4" />
 								</Button>
 							</div>
 						)}
