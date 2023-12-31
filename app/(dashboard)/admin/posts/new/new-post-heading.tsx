@@ -22,7 +22,7 @@ export const NewPostHeading = ({
 			<div className="mt-2 md:flex md:items-center md:justify-between">
 				<div className="min-w-0 flex-1">{children}</div>
 				<div className="mt-4 flex flex-shrink-0 space-x-3 md:ml-4 md:mt-0">
-					<NewPostButtons />
+					<NewPostButtons action={action} />
 				</div>
 			</div>
 		</div>

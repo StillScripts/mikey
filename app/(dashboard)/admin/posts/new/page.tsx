@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 
 import { getBlocks } from '@/app/(server)/routers/blocks'
+import { type EditorType, SettingsProvider } from '@/components/providers'
 
+import { NewPostFormEditorJs } from './editor-js-form'
 import { NewPostForm } from './form'
 
 type Params = {
@@ -14,10 +16,18 @@ export const metadata: Metadata = {
 
 const NewPost = async ({ searchParams }: Params) => {
 	const starters = await getBlocks()
-	// if (searchParams?.editor === 'editor-js') {
-	// 	return <EditPostEditorJs post={post} />
-	// }
-	return <NewPostForm starters={starters} />
+	const editor: EditorType =
+		searchParams?.editor === 'editor-js' ? 'editor-js' : 'custom'
+
+	return (
+		<SettingsProvider editor={editor}>
+			{editor === 'editor-js' ? (
+				<NewPostFormEditorJs starters={starters} />
+			) : (
+				<NewPostForm starters={starters} />
+			)}
+		</SettingsProvider>
+	)
 }
 
 export default NewPost
