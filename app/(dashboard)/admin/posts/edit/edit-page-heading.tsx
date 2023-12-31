@@ -18,7 +18,6 @@ export const EditPageHeading = ({
 			<Breadcrumbs
 				links={[
 					{ title: 'Posts', href: '/admin/posts' },
-					// @ts-expect-error this is a valid route
 					{ title: 'Edit Post', href: `/admin/posts/edit/${state?.id}` }
 				]}
 			/>

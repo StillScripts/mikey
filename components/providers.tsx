@@ -8,6 +8,20 @@ export const SettingsContext = createContext<
 	{ defaultEditor: EditorType } | undefined
 >(undefined)
 
+export const SettingsProvider = ({
+	children,
+	editor
+}: {
+	children: React.ReactNode
+	editor: EditorType
+}) => {
+	return (
+		<SettingsContext.Provider value={{ defaultEditor: editor }}>
+			{children}
+		</SettingsContext.Provider>
+	)
+}
+
 export const useSettings = () => {
 	const settings = useContext(SettingsContext)
 	if (typeof settings === 'undefined') {
@@ -16,12 +30,10 @@ export const useSettings = () => {
 	return settings
 }
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
-	return (
-		<ThemeProvider attribute="class">
-			<SettingsContext.Provider value={{ defaultEditor: 'custom' }}>
-				{children}
-			</SettingsContext.Provider>
-		</ThemeProvider>
-	)
+export const GlobalProviders = ({
+	children
+}: {
+	children: React.ReactNode
+}) => {
+	return <ThemeProvider attribute="class">{children}</ThemeProvider>
 }

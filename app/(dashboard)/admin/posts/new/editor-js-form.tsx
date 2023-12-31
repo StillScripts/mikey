@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useFormState } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -38,8 +39,30 @@ export const NewPostFormEditorJs = ({
 			version: '2.28.2'
 		}
 	})
+	const router = useRouter()
 	const { toast } = useToast()
 	const [state, create] = useFormState(createPost, {})
+
+	useEffect(() => {
+		if (state?.error) {
+			toast({
+				variant: 'destructive',
+				title: 'Uh oh! Something went wrong.',
+				description: 'An error occured when saving this data.'
+			})
+		} else if (state?.success) {
+			toast({
+				title: 'Success',
+				description: 'Your new post was successfully updated.',
+				action: (
+					<ToastAction altText="View all posts">
+						<Link href="/admin/posts">View all posts</Link>
+					</ToastAction>
+				)
+			})
+			router.refresh()
+		}
+	}, [router, state?.error, state?.success, toast])
 
 	useEffect(() => {
 		if (form.formState?.isSubmitSuccessful) {

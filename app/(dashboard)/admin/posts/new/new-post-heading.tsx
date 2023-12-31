@@ -4,7 +4,13 @@ import { Breadcrumbs } from '@/app/(dashboard)/_components/breadcrumbs'
 
 import { NewPostButtons } from '../buttons'
 
-export const NewPostHeading = ({ children }: { children: React.ReactNode }) => {
+export const NewPostHeading = ({
+	children,
+	action
+}: {
+	children: React.ReactNode
+	action?: (payload: FormData) => void
+}) => {
 	return (
 		<div className="pb-8">
 			<Breadcrumbs

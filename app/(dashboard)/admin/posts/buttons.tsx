@@ -79,7 +79,28 @@ export const NewPostButtons = ({ action }: ActionProps) => {
 	)
 }
 
-export const EditPostButtons = ({
+export const EditPostButtonsCustom = ({
+	id,
+	slug
+}: {
+	id: number
+	slug: string
+}) => {
+	const { isValidating, isSubmitting } = useFormState()
+	const pending = isValidating || isSubmitting
+
+	return (
+		<>
+			<Button variant="link" asChild>
+				<Link href={`/blog/${slug}`}>View Post</Link>
+			</Button>
+			<DeleteButton id={id} />
+			<SubmitButton pending={pending} />
+		</>
+	)
+}
+
+export const EditPostButtonsEditorJs = ({
 	action,
 	id,
 	slug
@@ -88,10 +109,37 @@ export const EditPostButtons = ({
 	id: number
 	slug: string
 }) => {
+	const { pending } = useFormStatus()
+
+	return (
+		<>
+			<Button variant="link" asChild>
+				<Link href={`/blog/${slug}`}>View Post</Link>
+			</Button>
+			<DeleteButton id={id} />
+			<SubmitButton action={action} pending={pending} />
+		</>
+	)
+}
+
+export const EditPostButtons = ({
+	action,
+	id,
+	slug
+}: ActionProps & { id: number; slug: string }) => {
+	const { defaultEditor } = useSettings()
+
+	return defaultEditor === 'editor-js' ? (
+		<EditPostButtonsEditorJs action={action} id={id} slug={slug} />
+	) : (
+		<EditPostButtonsCustom id={id} slug={slug} />
+	)
+}
+
+export const DeleteButton = ({ id }: { id: number }) => {
 	const router = useRouter()
 	const { toast } = useToast()
 	const { pending } = useFormStatus()
-
 	const handleDelete = async () => {
 		await deletePost(id)
 			.then(() => {
@@ -110,37 +158,32 @@ export const EditPostButtons = ({
 				})
 			})
 	}
+
 	return (
-		<>
-			<Button variant="link" asChild>
-				<Link href={`/blog/${slug}`}>View Post</Link>
-			</Button>
-			<AlertDialog>
-				<AlertDialogTrigger asChild>
-					<Button
-						type="button"
-						variant="destructive"
-						disabled={pending}
-						aria-disabled={pending}
-					>
-						Delete
-					</Button>
-				</AlertDialogTrigger>
-				<AlertDialogContent>
-					<AlertDialogHeader>
-						<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-						<AlertDialogDescription>
-							This action will delete this review.
-						</AlertDialogDescription>
-					</AlertDialogHeader>
-					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
-						<AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
-			<SubmitButton pending={pending} />
-		</>
+		<AlertDialog>
+			<AlertDialogTrigger asChild>
+				<Button
+					type="button"
+					variant="destructive"
+					disabled={pending}
+					aria-disabled={pending}
+				>
+					Delete
+				</Button>
+			</AlertDialogTrigger>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+					<AlertDialogDescription>
+						This action will delete this review.
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 	)
 }
 
