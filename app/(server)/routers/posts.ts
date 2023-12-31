@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 
 import { eq } from 'drizzle-orm'
+import slugify from 'slugify'
 
 import { getDb } from '@/db/get-connection'
 import { posts } from '@/db/schema'
@@ -29,9 +30,8 @@ export const createPost = async (state: ActionStatus, formData: FormData) => {
 	const db = await getDb()
 	const title = formData.get('title') as string
 	const blocks = formData.get('blocks') as string
-	console.log(title)
 	if (title && blocks) {
-		const slug = title.trim().toLowerCase().replace(/ /g, '-')
+		const slug = slugify(title, { strict: true, lower: true })
 		await db.insert(posts).values({
 			title,
 			slug,
