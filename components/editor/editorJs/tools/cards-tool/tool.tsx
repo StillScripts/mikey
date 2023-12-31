@@ -9,7 +9,6 @@ import type {
 } from '@editorjs/editorjs'
 
 import { ToolContainer } from '@/components/editor/editorJs/common/tool-container'
-import { CardsSection } from '@/components/ui/cards-section'
 
 import { CardsPreview, CardsProvider } from './context'
 import { type CardsToolData, CardsToolForm } from './form'

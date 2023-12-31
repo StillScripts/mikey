@@ -257,6 +257,7 @@ export function CardsInput<T extends object>({
 					edit ? (
 						<CardsForm form={form} index={index} data={data} />
 					) : (
+						// @ts-ignore
 						<CardsSection {...data} />
 					)
 				) : (

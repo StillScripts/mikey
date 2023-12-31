@@ -18,7 +18,8 @@ export const EditPageHeading = ({
 			<Breadcrumbs
 				links={[
 					{ title: 'Posts', href: '/admin/posts' },
-					{ title: 'Edit Post', href: `/admin/posts/edit/${state?.id}` }
+					// @ts-expect-error this should be valid
+					{ title: 'Edit Post', href: `/admin/posts/edit/${state?.id!}` }
 				]}
 			/>
 			<div className="mt-2 md:flex md:items-center md:justify-between">

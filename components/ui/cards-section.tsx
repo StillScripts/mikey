@@ -1,4 +1,4 @@
-import type { CardsToolData } from '@/components/editor/tools/cards-tool/form'
+import type { CardsToolData } from '@/components/editor/editorJs/tools/cards-tool/form'
 import {
 	Card,
 	CardDescription,
