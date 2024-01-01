@@ -1,5 +1,6 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import {
+	bigint,
 	boolean,
 	int,
 	json,
@@ -11,6 +12,15 @@ import {
 	varchar
 } from 'drizzle-orm/mysql-core'
 
+const createdAndUpdated = {
+	createdAt: timestamp('created_at')
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull(),
+	updatedAt: timestamp('updated_at')
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
+}
+
 export const posts = mysqlTable('posts', {
 	id: serial('id').primaryKey(),
 	title: varchar('title', { length: 255 }).notNull(),
@@ -20,12 +30,7 @@ export const posts = mysqlTable('posts', {
 	metaTitle: varchar('meta_title', { length: 255 }).notNull(),
 	description: text('description').notNull(),
 	published: boolean('published').default(false),
-	createdAt: timestamp('created_at')
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull(),
-	updatedAt: timestamp('updated_at')
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
+	...createdAndUpdated
 })
 
 export const blocks = mysqlTable('blocks', {
@@ -35,22 +40,54 @@ export const blocks = mysqlTable('blocks', {
 	content: json('content')
 })
 
-export const exerciseSession = mysqlTable('exercise_session', {
+/** Table for storing an exercise session */
+export const exerciseSessions = mysqlTable('exercise_sessions', {
 	id: serial('id').primaryKey(),
 	date: timestamp('date').notNull(),
 	notes: text('notes')
 })
 
-// TODO, add relationship where 1 session has many sets
+/** Table for storing each set in an exercise session */
+export const exerciseSets = mysqlTable('exercise_sets', {
+	id: serial('id').primaryKey(),
+	reps: int('reps'),
+	exerciseSessionId: bigint('exercise_session_id', {
+		mode:'bigint',
+		unsigned: true
+	}).references(() => exerciseSessions.id),
+	exerciseId: bigint('exercise_id', {mode:'bigint',unsigned:true}).references(() => exercises.id),
+	...createdAndUpdated
+})
 
-export const exerciseSet = mysqlTable('exercise_set', {
+/** Table for storing a unique type of exercise */
+export const exercises = mysqlTable('exercises', {
 	id: serial('id').primaryKey(),
 	title: varchar('title', { length: 255 }).notNull(),
-	reps: int('reps'),
-	createdAt: timestamp('created_at')
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull(),
-	updatedAt: timestamp('updated_at')
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
+	description: text('description').notNull(),
+	...createdAndUpdated
 })
+
+/** An exercise session can have many exercise sets */
+export const exerciseSessionsRelations = relations(
+	exerciseSessions,
+	({ many }) => ({
+		exerciseSets: many(exerciseSets)
+	})
+)
+
+/** An exercise set will always be linked to one exercise */
+export const exerciseSetsRelations = relations(exerciseSets, ({ one }) => ({
+	exerciseSessions: one(exerciseSessions, {
+		fields: [exerciseSets.exerciseSessionId],
+		references: [exerciseSessions.id]
+	}),
+	exercises: one(exercises, {
+		fields: [exerciseSets.exerciseId],
+		references: [exercises.id]
+	})
+}))
+
+/** An exercise can be included in many exercise sets */
+export const exercisesRelations = relations(exercises, ({ many }) => ({
+	exerciseSets: many(exerciseSets)
+}))
