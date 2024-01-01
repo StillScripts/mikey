@@ -43,7 +43,7 @@ export const createExerciseSession = async (
 			.finally(() => {
 				console.log({
 					notes,
-					date: new Date(date),
+					date: new Date(),
 					userId
 				})
 			})
