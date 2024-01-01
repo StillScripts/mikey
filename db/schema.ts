@@ -25,6 +25,9 @@ const createdAndUpdated = {
 		.notNull()
 }
 
+console.log(process.env.DATABASE_TABLE_PREFIX)
+const tablePrefix = process.env.DATABASE_TABLE_PREFIX ?? 'fitness'
+
 export const mysqlTable = mysqlTableCreator(
 	name => `${process.env.DATABASE_TABLE_PREFIX}_${name}`
 )

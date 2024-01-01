@@ -46,6 +46,7 @@ export const authOptions: NextAuthOptions = {
 			}
 		})
 	},
+	// @ts-expect-error This needs to be looked into as it should work...
 	adapter: DrizzleAdapter(db, mysqlTable),
 	providers: [
 		DiscordProvider({
