@@ -9,7 +9,7 @@
 		"lint": "next lint",
 		"db:generate": "drizzle-kit generate:mysql",
 		"db:migrate": "tsx db/migrate.ts",
-		"db:seed": "tsx db/seed.mts"
+		"db:seed": "tsx db/seed.ts"
 	},
 	"dependencies": {
 		"@editorjs/editorjs": "^2.28.2",
