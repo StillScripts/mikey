@@ -3,6 +3,7 @@ import {
 	getServerSession,
 	type NextAuthOptions
 } from 'next-auth'
+import type { Adapter } from 'next-auth/adapters'
 import DiscordProvider from 'next-auth/providers/discord'
 
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
@@ -46,8 +47,7 @@ export const authOptions: NextAuthOptions = {
 			}
 		})
 	},
-	// @ts-expect-error This needs to be looked into as it should work...
-	adapter: DrizzleAdapter(db, mysqlTable),
+	adapter: DrizzleAdapter(db, mysqlTable) as Adapter,
 	providers: [
 		DiscordProvider({
 			clientId: process.env.DISCORD_CLIENT_ID!,
