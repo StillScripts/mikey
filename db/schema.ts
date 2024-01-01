@@ -8,7 +8,7 @@ import {
 	int,
 	json,
 	mysqlEnum,
-	mysqlTable,
+	mysqlTableCreator,
 	primaryKey,
 	serial,
 	text,
@@ -24,6 +24,10 @@ const createdAndUpdated = {
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull()
 }
+
+export const mysqlTable = mysqlTableCreator(
+	name => `${process.env.DATABASE_TABLE_PREFIX}_${name}`
+)
 
 export const posts = mysqlTable('posts', {
 	id: serial('id').primaryKey(),
