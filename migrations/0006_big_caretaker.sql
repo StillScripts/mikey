@@ -1,0 +1,1 @@
+ALTER TABLE `exercise_sets` ADD `exercise_title` varchar(255);

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
+import { getServerAuthSession } from '@/app/(server)/auth'
 import { H2 } from '@/components/ui/typography'
 
 import { ExerciseSessionForm } from './form'
@@ -9,10 +11,15 @@ export const metadata: Metadata = {
 	description: 'Record a new exercise session'
 }
 
-const NewExerciseSession = () => {
+const NewExerciseSession = async () => {
+	const session = await getServerAuthSession()
+	if (!session) {
+		notFound()
+	}
 	return (
 		<div className="space-y-4 md:space-y-6">
 			<H2>Exercise Session</H2>
+			<p>Logged in as {session?.user?.email}</p>
 			<ExerciseSessionForm />
 		</div>
 	)

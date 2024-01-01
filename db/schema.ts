@@ -73,6 +73,7 @@ export const exerciseSets = mysqlTable('exercise_sets', {
 		mode: 'bigint',
 		unsigned: true
 	}).references(() => exercises.id),
+	exerciseTitle: varchar('exercise_title', { length: 255 }),
 	...createdAndUpdated
 })
 

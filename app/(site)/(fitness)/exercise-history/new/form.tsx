@@ -27,7 +27,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
-	date: z.date(),
+	date: z.date({ invalid_type_error: 'Must be a valid date' }),
 	notes: z.string(),
 	exercises: z.array(
 		z.object({
@@ -37,8 +37,10 @@ const formSchema = z.object({
 	)
 })
 
+export type NewExerciseSession = z.infer<typeof formSchema>
+
 export const ExerciseSessionForm = () => {
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<NewExerciseSession>({
 		resolver: zodResolver(formSchema)
 	})
 	const { fields, append, remove } = useFieldArray({
@@ -46,7 +48,9 @@ export const ExerciseSessionForm = () => {
 		control: form.control
 	})
 
-	function onSubmit(values: any) {}
+	function onSubmit(values: NewExerciseSession) {
+		console.log(JSON.stringify(values))
+	}
 
 	return (
 		<Form {...form}>
