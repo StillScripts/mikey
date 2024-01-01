@@ -25,10 +25,11 @@ const createdAndUpdated = {
 		.notNull()
 }
 
-const tablePrefix = process.env.DATABASE_TABLE_PREFIX ?? 'fitness'
+//const tablePrefix = process.env.DATABASE_TABLE_PREFIX ?? 'fitness'
 
 export const mysqlTable = mysqlTableCreator(
-	name => `${process.env.DATABASE_TABLE_PREFIX}_${name}`
+	name => name
+	//name => `${process.env.DATABASE_TABLE_PREFIX}_${name}`
 )
 
 export const posts = mysqlTable('posts', {
