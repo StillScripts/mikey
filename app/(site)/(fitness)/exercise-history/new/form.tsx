@@ -32,7 +32,7 @@ const formSchema = z.object({
 	exercises: z.array(
 		z.object({
 			title: z.string().min(1, { message: 'Required field' }),
-			reps: z.number()
+			reps: z.coerce.number()
 		})
 	)
 })
