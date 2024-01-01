@@ -55,7 +55,10 @@ export const blocks = mysqlTable('blocks', {
 export const exerciseSessions = mysqlTable('exercise_sessions', {
 	id: serial('id').primaryKey(),
 	date: timestamp('date').notNull(),
-	notes: text('notes')
+	notes: text('notes'),
+	userId: varchar('userId', { length: 255 })
+		.notNull()
+		.references(() => users.id)
 })
 
 /** Table for storing each set in an exercise session */
@@ -78,14 +81,21 @@ export const exercises = mysqlTable('exercises', {
 	id: serial('id').primaryKey(),
 	title: varchar('title', { length: 255 }).notNull(),
 	description: text('description').notNull(),
+	userId: varchar('userId', { length: 255 })
+		.notNull()
+		.references(() => users.id),
 	...createdAndUpdated
 })
 
 /** An exercise session can have many exercise sets */
 export const exerciseSessionsRelations = relations(
 	exerciseSessions,
-	({ many }) => ({
-		exerciseSets: many(exerciseSets)
+	({ many, one }) => ({
+		exerciseSets: many(exerciseSets),
+		user: one(users, {
+			fields: [exerciseSessions.userId],
+			references: [users.id]
+		})
 	})
 )
 
@@ -102,8 +112,12 @@ export const exerciseSetsRelations = relations(exerciseSets, ({ one }) => ({
 }))
 
 /** An exercise can be included in many exercise sets */
-export const exercisesRelations = relations(exercises, ({ many }) => ({
-	exerciseSets: many(exerciseSets)
+export const exercisesRelations = relations(exercises, ({ many, one }) => ({
+	exerciseSets: many(exerciseSets),
+	user: one(users, {
+		fields: [exercises.userId],
+		references: [users.id]
+	})
 }))
 
 // USER MANAGEMENT
@@ -119,7 +133,9 @@ export const users = mysqlTable('user', {
 })
 
 export const usersRelations = relations(users, ({ many }) => ({
-	accounts: many(accounts)
+	accounts: many(accounts),
+	exerciseSessions: many(exerciseSessions),
+	exercises: many(exercises)
 }))
 
 export const accounts = mysqlTable(
