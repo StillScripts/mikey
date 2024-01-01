@@ -1,11 +1,17 @@
 'use client'
+import { useEffect } from 'react'
+import { useFormState } from 'react-dom'
 import { useFieldArray, useForm } from 'react-hook-form'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarIcon, Cross1Icon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { z } from 'zod'
 
+import { SubmitButton2 } from '@/app/(dashboard)/_components/submit-button'
+import { createExerciseSession } from '@/app/(server)/routers/exercises'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -24,6 +30,8 @@ import {
 	PopoverTrigger
 } from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
+import { ToastAction } from '@/components/ui/toast'
+import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
@@ -39,22 +47,54 @@ const formSchema = z.object({
 
 export type NewExerciseSession = z.infer<typeof formSchema>
 
-export const ExerciseSessionForm = () => {
+export const ExerciseSessionForm = ({ userId }: { userId: string }) => {
+	const router = useRouter()
+	const [state, update] = useFormState(createExerciseSession, {})
+	const { toast } = useToast()
 	const form = useForm<NewExerciseSession>({
-		resolver: zodResolver(formSchema)
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			exercises: [{ title: 'Push-ups', reps: 10 }]
+		}
 	})
 	const { fields, append, remove } = useFieldArray({
 		name: 'exercises',
 		control: form.control
 	})
 
-	function onSubmit(values: NewExerciseSession) {
-		console.log(JSON.stringify(values))
-	}
+	useEffect(() => {
+		if (state?.error) {
+			toast({
+				variant: 'destructive',
+				title: 'Uh oh! Something went wrong.',
+				description: 'An error occured when saving this data.'
+			})
+		} else if (state?.success) {
+			toast({
+				title: 'Success',
+				description: 'Your exercise session was successfully recorded.',
+				action: (
+					<ToastAction altText="View all exercises">
+						<Link href="/">View all exercises</Link>
+					</ToastAction>
+				)
+			})
+			router.refresh()
+		}
+	}, [router, state?.error, state?.success, toast])
+
+	const date = form.watch()['date']
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+			<form
+				action={async (formData: FormData) => {
+					const valid = await form.trigger()
+					if (!valid) return
+					return update(formData)
+				}}
+				className="space-y-8"
+			>
 				{fields.map((field, index) => (
 					<div
 						key={field.id}
@@ -166,10 +206,22 @@ export const ExerciseSessionForm = () => {
 							</FormItem>
 						)}
 					/>
+
+					<input
+						type="date"
+						name="dateString"
+						value={date?.getTime()}
+						className="hidden"
+					/>
+
+					<input
+						type="hidden"
+						name="userId"
+						value={userId}
+						className="hidden"
+					/>
 				</div>
-				<Button className="w-full md:w-auto" type="submit">
-					Submit
-				</Button>
+				<SubmitButton2 className="w-full md:w-auto">Submit</SubmitButton2>
 			</form>
 		</Form>
 	)

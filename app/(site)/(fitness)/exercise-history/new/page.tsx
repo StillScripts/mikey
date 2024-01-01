@@ -13,14 +13,14 @@ export const metadata: Metadata = {
 
 const NewExerciseSession = async () => {
 	const session = await getServerAuthSession()
-	if (!session) {
+	if (!session?.user?.id) {
 		notFound()
 	}
 	return (
 		<div className="space-y-4 md:space-y-6">
 			<H2>Exercise Session</H2>
-			<p>Logged in as {session?.user?.email}</p>
-			<ExerciseSessionForm />
+			<p>Logged in as {session.user?.email}</p>
+			<ExerciseSessionForm userId={session.user.id} />
 		</div>
 	)
 }
