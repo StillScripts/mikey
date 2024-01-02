@@ -16,7 +16,7 @@ export const createExerciseSession = async (
 	const db = await getDb()
 	const titles: string[] = []
 	const reps: number[] = []
-	const sets: { exerciseTitle: string; reps: number; userId: string }[] = []
+	const sets: { exerciseTitle: string; reps: number }[] = []
 	for (const [key, value] of formData.entries()) {
 		if (key.includes('.title')) {
 			titles.push(value.toString())
@@ -25,7 +25,7 @@ export const createExerciseSession = async (
 		}
 	}
 	titles.forEach((title, index) => {
-		sets.push({ exerciseTitle: title, reps: reps[index], userId })
+		sets.push({ exerciseTitle: title, reps: reps[index] })
 	})
 
 	if (notes && userId) {
@@ -48,9 +48,13 @@ export const createExerciseSession = async (
 				})
 			})
 		if (sets.length > 0) {
+			const recent = await db.query.exerciseSessions.findFirst()
 			await db
 				.insert(exerciseSets)
-				.values(sets)
+				.values(
+					// @ts-ignore
+					sets.map(set => ({ ...set, exerciseSessionId: recent?.id + 1 }))
+				)
 				.catch(err => {
 					console.log(err?.message)
 					return getStatus('error')
