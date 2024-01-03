@@ -1,8 +1,18 @@
 'use server'
 
+import { eq } from 'drizzle-orm'
+
 import { getDb } from '@/db/get-connection'
 import { exerciseSessions, exerciseSets } from '@/db/schema'
 import { type ActionStatus, getStatus } from '@/lib/utils'
+
+export const getExerciseSession = async (id: number) => {
+	const db = await getDb()
+	return await db
+		.select()
+		.from(exerciseSessions)
+		.where(eq(exerciseSessions.id, id))
+}
 
 export const createExerciseSession = async (
 	state: ActionStatus,
