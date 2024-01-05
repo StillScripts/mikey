@@ -6,6 +6,14 @@ import { getDb } from '@/db/get-connection'
 import { exerciseSessions, exerciseSets } from '@/db/schema'
 import { type ActionStatus, getStatus } from '@/lib/utils'
 
+export const getExerciseSessions = async (userId: string) => {
+	const db = await getDb()
+	return await db.query.exerciseSessions.findMany({
+		where: eq(exerciseSessions.userId, userId),
+		with: { exerciseSets: true }
+	})
+}
+
 export const getExerciseSession = async (id: number) => {
 	const db = await getDb()
 	return await db.query.exerciseSessions.findFirst({
@@ -79,54 +87,3 @@ export const createExerciseSession = async (
 
 	return getStatus('success')
 }
-
-// update: protectedProcedure
-// .input(
-// 	z.object({
-// 		id: z.number(),
-// 		name: z.string().min(1),
-// 		description: z.string().optional(),
-// 		ingredients: z.array(
-// 			z.object({
-// 				name: z.string(),
-// 				quantity: z.string(),
-// 				recipeIngredientId: z.number().optional(),
-// 			}),
-// 		),
-// 	}),
-// )
-// .mutation(async ({ ctx, input }) => {
-// 	// Update the recipe
-// 	await ctx.db
-// 		.update(recipes)
-// 		.set({ name: input.name, description: input.description })
-// 		.where(eq(recipes.id, input.id));
-// 	// Create the new recipe ingredients
-// 	const newIngredients = input.ingredients.filter(
-// 		(ingredient) => !ingredient?.recipeIngredientId,
-// 	);
-// 	if (newIngredients.length > 0) {
-// 		await ctx.db.insert(recipeIngredients).values(
-// 			newIngredients.map((ingredient) => ({
-// 				...ingredient,
-// 				recipeId: input.id,
-// 			})),
-// 		);
-// 	}
-// 	const existingIngredients = input.ingredients.filter(
-// 		(ingredient) => ingredient?.recipeIngredientId,
-// 	);
-// 	if (existingIngredients.length > 0) {
-// 		await Promise.all(
-// 			existingIngredients.map((ingredient) =>
-// 				ctx.db
-// 					.update(recipeIngredients)
-// 					.set({
-// 						name: ingredient.name,
-// 						quantity: ingredient.quantity,
-// 					})
-// 					.where(eq(recipeIngredients.id, ingredient.recipeIngredientId!)),
-// 			),
-// 		);
-// 	}
-// }),
