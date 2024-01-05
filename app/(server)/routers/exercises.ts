@@ -8,11 +8,13 @@ import { type ActionStatus, getStatus } from '@/lib/utils'
 
 export const getExerciseSession = async (id: number) => {
 	const db = await getDb()
-	return await db
-		.select()
-		.from(exerciseSessions)
-		.where(eq(exerciseSessions.id, id))
+	return await db.query.exerciseSessions.findFirst({
+		where: eq(exerciseSessions.id, id),
+		with: { exerciseSets: true }
+	})
 }
+
+export type ExerciseSession = Awaited<ReturnType<typeof getExerciseSession>>
 
 export const createExerciseSession = async (
 	state: ActionStatus,

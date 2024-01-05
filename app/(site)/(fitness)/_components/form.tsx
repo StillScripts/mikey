@@ -11,7 +11,10 @@ import { format } from 'date-fns'
 import { z } from 'zod'
 
 import { SubmitButton2 } from '@/app/(dashboard)/_components/submit-button'
-import { createExerciseSession } from '@/app/(server)/routers/exercises'
+import {
+	createExerciseSession,
+	type ExerciseSession
+} from '@/app/(server)/routers/exercises'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -47,14 +50,27 @@ const formSchema = z.object({
 
 export type NewExerciseSession = z.infer<typeof formSchema>
 
-export const ExerciseSessionForm = ({ userId }: { userId: string }) => {
+export const ExerciseSessionForm = ({
+	userId,
+	exerciseSession
+}: {
+	userId: string
+	exerciseSession?: ExerciseSession
+}) => {
+	const sets = exerciseSession?.exerciseSets ?? []
 	const router = useRouter()
+	// TODO use updateExerciseSession if in update mode
 	const [state, update] = useFormState(createExerciseSession, {})
 	const { toast } = useToast()
 	const form = useForm<NewExerciseSession>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			exercises: [{ title: 'Push-ups', reps: 10 }]
+			exercises: sets.map(set => ({
+				title: set.exerciseTitle!,
+				reps: set.reps!
+			})),
+			notes: exerciseSession?.notes ?? '',
+			date: exerciseSession?.date
 		}
 	})
 	const { fields, append, remove } = useFieldArray({

@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { getServerAuthSession } from '@/app/(server)/auth'
+import { ExerciseSessionForm } from '@/app/(site)/(fitness)/_components/form'
 import { H2 } from '@/components/ui/typography'
-
-import { ExerciseSessionForm } from './form'
 
 export const metadata: Metadata = {
 	title: 'New Exercise Session',
