@@ -165,6 +165,11 @@ const FormMessage = React.forwardRef<
 })
 FormMessage.displayName = 'FormMessage'
 
+const FormUserId = ({ userId }: { userId: string }) => (
+	<input type="hidden" name="userId" value={userId} className="hidden" />
+)
+FormUserId.displayName = 'FormUserId'
+
 export {
 	useFormField,
 	Form,
@@ -173,5 +178,6 @@ export {
 	FormControl,
 	FormDescription,
 	FormMessage,
+	FormUserId,
 	FormField
 }

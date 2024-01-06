@@ -14,11 +14,16 @@ export const createExercise = async (
 	const title = formData.get('title') as string
 	const description = formData.get('description') as string
 	const userId = formData.get('userId') as string
-	await db.insert(exercises).values({
+	console.log({
 		title,
 		description,
 		userId
 	})
+	// await db.insert(exercises).values({
+	// 	title,
+	// 	description,
+	// 	userId
+	// })
 	return getStatus('success')
 }
 
