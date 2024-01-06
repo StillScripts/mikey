@@ -2,6 +2,8 @@ import { DesktopSidebar } from '@/app/(dashboard)/_components/desktop-sidebar'
 import { StickyHeader } from '@/app/(dashboard)/_components/sticky-header'
 import { Toaster } from '@/components/ui/toaster'
 
+export const dynamic = 'force-dynamic'
+
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => (
 	<div>
 		<DesktopSidebar />
