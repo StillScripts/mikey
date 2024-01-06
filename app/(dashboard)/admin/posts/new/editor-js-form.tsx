@@ -5,7 +5,7 @@ import { useFormState } from 'react-dom'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { EditorContainer } from '@/app/(dashboard)/_components/editor-container'
+import { FormContainer } from '@/app/(dashboard)/_components/form-container'
 import type { SingleBlock } from '@/app/(server)/routers/blocks'
 import { createPost } from '@/app/(server)/routers/posts'
 import { Editor } from '@/components/editor/editorJs/editor'
@@ -58,9 +58,9 @@ export const NewPostFormEditorJs = ({
 					required
 				/>
 			</NewPostHeading>
-			<EditorContainer>
+			<FormContainer>
 				<Editor />
-			</EditorContainer>
+			</FormContainer>
 		</form>
 	)
 }

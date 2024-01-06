@@ -3,8 +3,24 @@
 import { eq } from 'drizzle-orm'
 
 import { getDb } from '@/db/get-connection'
-import { exerciseSessions, exerciseSets } from '@/db/schema'
+import { exercises, exerciseSessions, exerciseSets } from '@/db/schema'
 import { type ActionStatus, getStatus } from '@/lib/utils'
+
+export const createExercise = async (
+	state: ActionStatus,
+	formData: FormData
+) => {
+	const db = await getDb()
+	const title = formData.get('title') as string
+	const description = formData.get('description') as string
+	const userId = formData.get('userId') as string
+	await db.insert(exercises).values({
+		title,
+		description,
+		userId
+	})
+	return getStatus('success')
+}
 
 export const getExerciseSessions = async (userId: string) => {
 	const db = await getDb()

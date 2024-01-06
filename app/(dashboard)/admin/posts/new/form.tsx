@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { EditorContainer } from '@/app/(dashboard)/_components/editor-container'
+import { FormContainer } from '@/app/(dashboard)/_components/form-container'
 import type { SingleBlock } from '@/app/(server)/routers/blocks'
 import { createPost } from '@/app/(server)/routers/posts'
 import Editor, {
@@ -90,9 +90,9 @@ export const NewPostForm = ({ starters }: { starters: SingleBlock[] }) => {
 						)}
 					/>
 				</NewPostHeading>
-				<EditorContainer>
+				<FormContainer>
 					<Editor form={form} starters={starters} />
-				</EditorContainer>
+				</FormContainer>
 			</form>
 		</Form>
 	)
