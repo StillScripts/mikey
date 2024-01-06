@@ -6,6 +6,13 @@ import { getDb } from '@/db/get-connection'
 import { exercises, exerciseSessions, exerciseSets } from '@/db/schema'
 import { type ActionStatus, getStatus } from '@/lib/utils'
 
+export const getUserExercises = async (userId: string) => {
+	const db = await getDb()
+	return await db.query.exercises.findMany({
+		where: eq(exercises.userId, userId)
+	})
+}
+
 export const createExercise = async (
 	state: ActionStatus,
 	formData: FormData
@@ -14,16 +21,11 @@ export const createExercise = async (
 	const title = formData.get('title') as string
 	const description = formData.get('description') as string
 	const userId = formData.get('userId') as string
-	console.log({
+	await db.insert(exercises).values({
 		title,
 		description,
 		userId
 	})
-	// await db.insert(exercises).values({
-	// 	title,
-	// 	description,
-	// 	userId
-	// })
 	return getStatus('success')
 }
 

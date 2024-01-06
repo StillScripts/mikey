@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
-import { getAllPosts } from '@/app/(server)/routers/posts'
+import { getServerAuthSession } from '@/app/(server)/auth'
+import { getUserExercises } from '@/app/(server)/routers/exercises'
 import { Button } from '@/components/ui/button'
 import {
 	DropdownMenu,
@@ -22,15 +24,17 @@ import {
 	TableRow
 } from '@/components/ui/table'
 
-// import { DeletePostMenuItem } from './buttons'
-
 export const metadata: Metadata = {
 	title: 'Your Posts',
 	description: 'View all your posts'
 }
 
 const Posts = async () => {
-	const allPosts = await getAllPosts()
+	const session = await getServerAuthSession()
+	if (!session?.user?.id) {
+		notFound()
+	}
+	const exercises = await getUserExercises(session.user.id)
 	return (
 		<>
 			<PageHeading
@@ -47,20 +51,20 @@ const Posts = async () => {
 				<TableHeader>
 					<TableRow>
 						<TableHead>Title</TableHead>
-						<TableHead>Slug</TableHead>
-						<TableHead>Published</TableHead>
-						<TableHead></TableHead>
+						<TableHead>Description</TableHead>
+						<TableHead>Actions</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{allPosts.map(({ id, title, published, slug }) => (
+					{exercises.map(({ id, title, description }) => (
 						<TableRow key={id}>
 							<TableCell className="font-medium">{title}</TableCell>
-							<TableCell>{slug}</TableCell>
-							<TableCell>{published ? 'Yes' : 'No'}</TableCell>
+							<TableCell>
+								<span className="truncate">{description}</span>
+							</TableCell>
 							<TableCell>
 								<DropdownMenu>
-									<DropdownMenuTrigger>
+									<DropdownMenuTrigger asChild>
 										<Button
 											variant="ghost"
 											className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
@@ -70,9 +74,6 @@ const Posts = async () => {
 										</Button>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent align="end" className="w-[160px]">
-										<DropdownMenuItem asChild>
-											<Link href={`/blog/${slug}`}>View</Link>
-										</DropdownMenuItem>
 										<DropdownMenuItem asChild>
 											<Link href={`/admin/posts/edit/${id}`}>Edit</Link>
 										</DropdownMenuItem>

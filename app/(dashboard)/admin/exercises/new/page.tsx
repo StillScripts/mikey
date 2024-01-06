@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { FormContainer } from '@/app/(dashboard)/_components/form-container'
+import { ExerciseForm } from '@/app/(dashboard)/_components/forms/exercise-form'
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { getServerAuthSession } from '@/app/(server)/auth'
-
-import { ExerciseForm } from './form'
 
 export const metadata: Metadata = {
 	title: 'Create New Exercise'
@@ -19,15 +17,13 @@ const NewExercise = async () => {
 	return (
 		<div>
 			<PageHeading
-				heading="Add New Exercise"
+				heading="New Exercise"
 				links={[
 					{ title: 'Exercises', href: '/admin/exercises' },
 					{ title: 'New Exercise', href: '/admin/exercises/new' }
 				]}
 			/>
-			<FormContainer>
-				<ExerciseForm userId={session.user.id} />
-			</FormContainer>
+			<ExerciseForm userId={session.user.id} />
 		</div>
 	)
 }
