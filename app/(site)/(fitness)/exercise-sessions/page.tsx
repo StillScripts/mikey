@@ -1,8 +1,18 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { getServerAuthSession } from '@/app/(server)/auth'
 import { getExerciseSessions } from '@/app/(server)/routers/exercises'
 import { Button } from '@/components/ui/button'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger
+} from '@/components/ui/dialog'
 import {
 	Table,
 	TableBody,
@@ -41,7 +51,37 @@ const ExerciseSessionsPage = async () => {
 											{new Date(item.date).toLocaleDateString()}
 										</TableCell>
 										<TableCell>
-											<Button type="button">Delete</Button>
+											<Dialog>
+												<DialogTrigger asChild>
+													<Button type="button">View Details</Button>
+												</DialogTrigger>
+												<DialogContent>
+													<DialogHeader>
+														<DialogTitle>Exercise Session Details</DialogTitle>
+														<DialogDescription>
+															{item.notes} (
+															{new Date(item.date).toLocaleDateString()})
+														</DialogDescription>
+													</DialogHeader>
+													<div className="text-muted-foreground">
+														<h5 className="mt-4 font-bold">Sets</h5>
+														<ul className="text-muted-foreground">
+															{item.exerciseSets.map(set => (
+																<li key={set.id}>
+																	{set.exerciseTitle} - {set.reps} reps
+																</li>
+															))}
+														</ul>
+													</div>
+													<DialogFooter>
+														<Button asChild>
+															<Link href={`/exercise-sessions/edit/${item.id}`}>
+																Edit
+															</Link>
+														</Button>
+													</DialogFooter>
+												</DialogContent>
+											</Dialog>
 										</TableCell>
 									</TableRow>
 								))}
