@@ -65,6 +65,7 @@ export const exerciseSessions = mysqlTable('exercise_sessions', {
 export const exerciseSets = mysqlTable('exercise_sets', {
 	id: serial('id').primaryKey(),
 	reps: int('reps'),
+	sets: int('sets').default(1),
 	exerciseSessionId: bigint('exercise_session_id', {
 		mode: 'bigint',
 		unsigned: true
