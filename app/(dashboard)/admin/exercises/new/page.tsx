@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 	title: 'Create New Exercise'
 }
 
-const NewExercise = async () => {
+const NewExercisePage = async () => {
 	const session = await getServerAuthSession()
 	if (!session?.user?.id) {
 		notFound()
@@ -28,4 +28,4 @@ const NewExercise = async () => {
 	)
 }
 
-export default NewExercise
+export default NewExercisePage

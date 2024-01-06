@@ -13,6 +13,15 @@ export const getUserExercises = async (userId: string) => {
 	})
 }
 
+export const getExercise = async (id: number) => {
+	const db = await getDb()
+	return await db.query.exercises.findFirst({
+		where: eq(exercises.id, id)
+	})
+}
+
+export type Exercise = Awaited<ReturnType<typeof getExercise>>
+
 export const createExercise = async (
 	state: ActionStatus,
 	formData: FormData

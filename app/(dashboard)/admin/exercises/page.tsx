@@ -75,7 +75,7 @@ const Posts = async () => {
 									</DropdownMenuTrigger>
 									<DropdownMenuContent align="end" className="w-[160px]">
 										<DropdownMenuItem asChild>
-											<Link href={`/admin/posts/edit/${id}`}>Edit</Link>
+											<Link href={`/admin/exercises/edit/${id}`}>Edit</Link>
 										</DropdownMenuItem>
 										{/* <DeletePostMenuItem id={id} /> */}
 									</DropdownMenuContent>

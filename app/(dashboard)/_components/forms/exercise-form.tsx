@@ -10,7 +10,7 @@ import { z } from 'zod'
 
 import { FormContainer } from '@/app/(dashboard)/_components/form-container'
 import { SubmitButton2 } from '@/app/(dashboard)/_components/submit-button'
-import { createExercise } from '@/app/(server)/routers/exercises'
+import { createExercise, type Exercise } from '@/app/(server)/routers/exercises'
 import {
 	Card,
 	CardContent,
@@ -44,10 +44,14 @@ export type NewExercise = z.infer<typeof formSchema>
 
 export const ExerciseForm = ({
 	title = 'Add A New Exercise',
-	userId
+	description = 'Create a new exercise that you can add to workouts',
+	userId,
+	exercise
 }: {
 	title?: string
+	description?: string
 	userId: string
+	exercise?: Exercise
 }) => {
 	const router = useRouter()
 	const [state, action] = useFormState(createExercise, {})
@@ -55,7 +59,9 @@ export const ExerciseForm = ({
 	const form = useForm<NewExercise>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			userId
+			userId,
+			title: exercise?.title ?? '',
+			description: exercise?.description ?? ''
 		}
 	})
 
@@ -93,9 +99,7 @@ export const ExerciseForm = ({
 					<Card>
 						<CardHeader>
 							<CardTitle>{title}</CardTitle>
-							<CardDescription>
-								Create a new exercise that you can add to workouts
-							</CardDescription>
+							<CardDescription>{description}</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-6">
 							<FormField

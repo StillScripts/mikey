@@ -1,37 +1,46 @@
 import { notFound } from 'next/navigation'
 
-import { getBlocks } from '@/app/(server)/routers/blocks'
-import { getPost } from '@/app/(server)/routers/posts'
-import { type EditorType, SettingsProvider } from '@/components/providers'
-
-import { EditPostForm as EditPostEditorJs } from './editor-js-form'
-import { EditPostForm } from './form'
+import { ExerciseForm } from '@/app/(dashboard)/_components/forms/exercise-form'
+import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
+import { getServerAuthSession } from '@/app/(server)/auth'
+import { getExercise } from '@/app/(server)/routers/exercises'
 
 type Params = {
 	params: { id: string }
-	searchParams: { [key: string]: string | undefined }
 }
 
-const EditPost = async ({ params, searchParams }: Params) => {
-	const posts = await getPost(parseInt(params.id))
-	const post = posts ? posts[0] : null
-	if (!post) {
+const EditExercisePage = async ({ params }: Params) => {
+	const session = await getServerAuthSession()
+	const userId = session?.user?.id
+	if (!userId) {
 		notFound()
 	}
-	const starters = await getBlocks()
-
-	const editor: EditorType =
-		searchParams?.editor === 'editor-js' ? 'editor-js' : 'custom'
-
+	const id = parseInt(params.id)
+	const exercise = await getExercise(id)
+	if (exercise?.userId !== userId) {
+		notFound()
+	}
 	return (
-		<SettingsProvider editor={editor}>
-			{editor === 'editor-js' ? (
-				<EditPostEditorJs post={post} />
-			) : (
-				<EditPostForm post={post} starters={starters} />
-			)}
-		</SettingsProvider>
+		<div>
+			<PageHeading
+				heading={`Edit ${exercise.title}`}
+				links={[
+					{ title: 'Exercises', href: '/admin/exercises' },
+					{
+						title: 'Edit Exercise',
+						// @ts-expect-error this should be valid
+						href: `/admin/exercises/edit/${exercise.id}`
+					}
+				]}
+			/>
+			<ExerciseForm
+				title="Edit This Exercise"
+				description="Update the title or description of this exercise"
+				userId={userId}
+				exercise={exercise}
+			/>
+		</div>
 	)
 }
 
-export default EditPost
+export default EditExercisePage
