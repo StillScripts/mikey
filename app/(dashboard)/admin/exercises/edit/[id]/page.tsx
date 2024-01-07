@@ -28,11 +28,7 @@ const EditExercisePage = async ({ params }: Params) => {
 				heading={`Edit ${exercise.title}`}
 				links={[
 					{ title: 'Exercises', href: '/admin/exercises' },
-					{
-						title: 'Edit Exercise',
-						// @ts-expect-error
-						href: `/admin/exercises/edit/${exercise.id}`
-					}
+					{ title: 'Edit Exercise' }
 				]}
 			>
 				<Button variant="outline" asChild>

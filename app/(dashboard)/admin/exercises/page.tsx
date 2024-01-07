@@ -38,10 +38,7 @@ const Posts = async () => {
 	const exercises = await getUserExercises(session.user.id)
 	return (
 		<>
-			<PageHeading
-				heading="Exercises"
-				links={[{ title: 'Exercises', href: '/admin/exercises' }]}
-			>
+			<PageHeading heading="Exercises" links={[{ title: 'Exercises' }]}>
 				<Button type="button" asChild>
 					<Link href="/admin/exercises/new">New Exercise</Link>
 				</Button>

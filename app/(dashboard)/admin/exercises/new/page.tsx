@@ -20,7 +20,7 @@ const NewExercisePage = async () => {
 				heading="New Exercise"
 				links={[
 					{ title: 'Exercises', href: '/admin/exercises' },
-					{ title: 'New Exercise', href: '/admin/exercises/new' }
+					{ title: 'New Exercise' }
 				]}
 			/>
 			<ExerciseForm userId={session.user.id} />
