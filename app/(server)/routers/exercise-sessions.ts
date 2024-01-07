@@ -74,6 +74,12 @@ export const createExerciseSession = async (
 	const allSets = getAllSets(formData)
 
 	if (notes && userId) {
+		console.log({
+			id,
+			notes,
+			date: new Date(date),
+			userId
+		})
 		await db
 			.insert(exerciseSessions)
 			.values({
@@ -94,6 +100,7 @@ export const createExerciseSession = async (
 				})
 			})
 		if (allSets.length > 0) {
+			console.log(allSets)
 			await db
 				.insert(exerciseSets)
 				.values(

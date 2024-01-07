@@ -69,9 +69,9 @@ export const exerciseSets = mysqlTable('exercise_sets', {
 	exerciseSessionId: varchar('exercise_session_id', { length: 255 })
 		.notNull()
 		.references(() => exerciseSessions.id),
-	exerciseId: varchar('exercise_id', { length: 255 })
-		.notNull()
-		.references(() => exercises.id),
+	exerciseId: varchar('exercise_id', { length: 255 }).references(
+		() => exercises.id
+	),
 	exerciseTitle: varchar('exercise_title', { length: 255 }),
 	...createdAndUpdated
 })

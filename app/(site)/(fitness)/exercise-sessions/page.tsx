@@ -39,7 +39,12 @@ const ExerciseSessionsPage = async () => {
 		<main className="p-4 md:p-6">
 			<div className="space-y-6 md:space-y-8">
 				<div className="space-y-4 md:space-y-6">
-					<H2>Exercise Sessions</H2>
+					<div className="sm:flex sm:flex-row sm:items-center sm:justify-between">
+						<H2>Exercise Session</H2>
+						<Button className="mt-4 sm:mt-0" asChild>
+							<Link href="/exercise-sessions/new">New Session</Link>
+						</Button>
+					</div>
 					<div className="rounded-lg border shadow-sm">
 						<Table>
 							<TableHeader>

@@ -18,7 +18,6 @@ const NewExerciseSession = async () => {
 	return (
 		<div className="space-y-4 md:space-y-6">
 			<H2>Exercise Session</H2>
-			<p>Logged in as {session.user?.email}</p>
 			<ExerciseSessionForm userId={session.user.id} />
 		</div>
 	)
