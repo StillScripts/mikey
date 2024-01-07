@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 
 import { eq } from 'drizzle-orm'
 import slugify from 'slugify'
+import { v4 as uuidv4 } from 'uuid'
 
 import { getDb } from '@/db/get-connection'
 import { posts } from '@/db/schema'
@@ -14,16 +15,20 @@ export const getAllPosts = async () => {
 	return await db.select().from(posts)
 }
 
-export const getPost = async (id: number) => {
+export const getPost = async (id: string) => {
 	const db = await getDb()
-	return await db.select().from(posts).where(eq(posts.id, id))
+	return await db.query.posts.findFirst({
+		where: eq(posts.id, id)
+	})
 }
 
-export type SinglePost = Awaited<ReturnType<typeof getPost>>[number]
+export type SinglePost = Awaited<ReturnType<typeof getPost>>
 
 export const getPostBySlug = async (slug: string) => {
 	const db = await getDb()
-	return await db.select().from(posts).where(eq(posts.slug, slug))
+	return await db.query.posts.findFirst({
+		where: eq(posts.slug, slug)
+	})
 }
 
 export const createPost = async (state: ActionStatus, formData: FormData) => {
@@ -33,6 +38,7 @@ export const createPost = async (state: ActionStatus, formData: FormData) => {
 	if (title && blocks) {
 		const slug = slugify(title, { strict: true, lower: true })
 		await db.insert(posts).values({
+			id: uuidv4(),
 			title,
 			slug,
 			metaTitle: title,
@@ -71,7 +77,7 @@ export const updatePost = async (
 	return getStatus('error')
 }
 
-export const deletePost = async (id: number) => {
+export const deletePost = async (id: string) => {
 	const db = await getDb()
 	await db.delete(posts).where(eq(posts.id, id))
 	revalidatePath('/admin/posts')

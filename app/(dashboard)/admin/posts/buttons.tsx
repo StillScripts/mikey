@@ -83,7 +83,7 @@ export const EditPostButtonsCustom = ({
 	id,
 	slug
 }: {
-	id: number
+	id: string
 	slug: string
 }) => {
 	const { isValidating, isSubmitting } = useFormState()
@@ -106,7 +106,7 @@ export const EditPostButtonsEditorJs = ({
 	slug
 }: {
 	action?: (payload: FormData) => void
-	id: number
+	id: string
 	slug: string
 }) => {
 	const { pending } = useFormStatus()
@@ -126,7 +126,7 @@ export const EditPostButtons = ({
 	action,
 	id,
 	slug
-}: ActionProps & { id: number; slug: string }) => {
+}: ActionProps & { id: string; slug: string }) => {
 	const { defaultEditor } = useSettings()
 
 	return defaultEditor === 'editor-js' ? (
@@ -136,7 +136,7 @@ export const EditPostButtons = ({
 	)
 }
 
-export const DeleteButton = ({ id }: { id: number }) => {
+export const DeleteButton = ({ id }: { id: string }) => {
 	const router = useRouter()
 	const { toast } = useToast()
 	const { pending } = useFormStatus()
@@ -187,7 +187,7 @@ export const DeleteButton = ({ id }: { id: number }) => {
 	)
 }
 
-export const DeletePostMenuItem = ({ id }: { id: number }) => {
+export const DeletePostMenuItem = ({ id }: { id: string }) => {
 	return (
 		<DropdownMenuItem>
 			<button onClick={async () => await deletePost(id)}>Delete</button>

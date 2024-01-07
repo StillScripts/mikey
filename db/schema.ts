@@ -33,7 +33,7 @@ export const mysqlTable = mysqlTableCreator(
 )
 
 export const posts = mysqlTable('posts', {
-	id: serial('id').primaryKey(),
+	id: varchar('id', { length: 255 }).notNull().primaryKey(),
 	title: varchar('title', { length: 255 }).notNull(),
 	slug: varchar('slug', { length: 255 }).notNull(),
 	content: json('content'),
@@ -45,7 +45,7 @@ export const posts = mysqlTable('posts', {
 })
 
 export const blocks = mysqlTable('blocks', {
-	id: serial('id').primaryKey(),
+	id: varchar('id', { length: 255 }).notNull().primaryKey(),
 	type: mysqlEnum('type', ['cards']),
 	title: varchar('title', { length: 255 }).notNull(),
 	content: json('content')

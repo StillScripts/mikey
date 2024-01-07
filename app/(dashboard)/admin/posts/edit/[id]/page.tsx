@@ -13,11 +13,7 @@ type Params = {
 }
 
 const EditPost = async ({ params, searchParams }: Params) => {
-	const posts = await getPost(parseInt(params.id))
-	const post = posts ? posts[0] : null
-	if (!post) {
-		notFound()
-	}
+	const post = await getPost(params.id)
 	const starters = await getBlocks()
 
 	const editor: EditorType =

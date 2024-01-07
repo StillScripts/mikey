@@ -35,7 +35,7 @@ export const EditPostForm = ({
 	post: SinglePost
 	starters: SingleBlock[]
 }) => {
-	const blocks = JSON.parse(post.draftContent as string)?.blocks ?? []
+	const blocks = JSON.parse(post?.draftContent as string)?.blocks ?? []
 	console.log(blocks)
 	const form = useForm<EditorFormData>({
 		resolver: zodResolver(formSchema),
@@ -43,7 +43,7 @@ export const EditPostForm = ({
 			time: new Date().getTime(),
 			blocks,
 			version: '2.28.2',
-			title: post.title
+			title: post?.title ?? ''
 		}
 	})
 	const router = useRouter()
