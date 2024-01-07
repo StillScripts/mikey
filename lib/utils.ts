@@ -27,3 +27,25 @@ export const getStatus = (
 export function generateBlockId(): string {
 	return nanoid(10)
 }
+
+/** Typesafe version of Object.keys */
+export const getKeys = Object.keys as <T extends object>(
+	obj: T
+) => Array<keyof T>
+
+/** Typesafe version of Object.keys */
+export const getValues = Object.values as <T extends object>(
+	obj: T
+) => Array<T[keyof T]>
+
+/** Extract common values from the ExerciseForm */
+export function extractFormData<T extends string>(
+	formData: FormData,
+	keys: T[]
+) {
+	const data: Partial<Record<T, string>> = {}
+	keys.forEach(key => {
+		data[key] = formData.get(key) as string
+	})
+	return data as Record<T, string>
+}

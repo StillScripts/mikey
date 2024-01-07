@@ -13,9 +13,9 @@ import { z } from 'zod'
 import { SubmitButton2 } from '@/app/(dashboard)/_components/submit-button'
 import {
 	createExerciseSession,
-	type ExerciseSession,
 	updateExerciseSession
-} from '@/app/(server)/routers/exercises'
+} from '@/app/(server)/routers/exercise-sessions'
+import { type ExerciseSession } from '@/app/(server)/routers/exercises'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -105,7 +105,7 @@ export const ExerciseSessionForm = ({
 		}
 	}, [router, state?.error, state?.success, toast])
 
-	const date = form.watch()['date']
+	const date = form.watch().date
 
 	return (
 		<Form {...form}>

@@ -45,6 +45,7 @@ const formSchema = z.object({
 })
 
 export type NewExercise = z.infer<typeof formSchema>
+export type ExerciseFormKey = keyof NewExercise
 
 export const ExerciseForm = ({
 	title = 'Add A New Exercise',
