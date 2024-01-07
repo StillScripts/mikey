@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { getServerAuthSession } from '@/app/(server)/auth'
@@ -9,6 +10,11 @@ export const dynamic = 'force-dynamic'
 
 type Params = {
 	params: { id: string }
+}
+
+export const metadata: Metadata = {
+	title: 'Edit Exercise Session',
+	description: 'Update your details for this exercise session'
 }
 
 const EditExerciseSession = async ({ params }: Params) => {
