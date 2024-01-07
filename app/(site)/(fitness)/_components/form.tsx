@@ -13,7 +13,8 @@ import { z } from 'zod'
 import { SubmitButton2 } from '@/app/(dashboard)/_components/submit-button'
 import {
 	createExerciseSession,
-	type ExerciseSession
+	type ExerciseSession,
+	updateExerciseSession
 } from '@/app/(server)/routers/exercises'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -24,7 +25,8 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	FormMessage
+	FormMessage,
+	FormUserId
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
@@ -43,6 +45,7 @@ const formSchema = z.object({
 	exercises: z.array(
 		z.object({
 			title: z.string().min(1, { message: 'Required field' }),
+			sets: z.coerce.number(),
 			reps: z.coerce.number()
 		})
 	)
@@ -59,8 +62,11 @@ export const ExerciseSessionForm = ({
 }) => {
 	const sets = exerciseSession?.exerciseSets ?? []
 	const router = useRouter()
+	const serverAction = exerciseSession?.id
+		? updateExerciseSession
+		: createExerciseSession
 	// TODO use updateExerciseSession if in update mode
-	const [state, update] = useFormState(createExerciseSession, {})
+	const [state, action] = useFormState(serverAction, {})
 	const { toast } = useToast()
 	const form = useForm<NewExerciseSession>({
 		resolver: zodResolver(formSchema),
@@ -107,7 +113,7 @@ export const ExerciseSessionForm = ({
 				action={async (formData: FormData) => {
 					const valid = await form.trigger()
 					if (!valid) return
-					return update(formData)
+					return action(formData)
 				}}
 				className="space-y-8"
 			>
@@ -131,6 +137,19 @@ export const ExerciseSessionForm = ({
 						/>
 
 						<div className="col-span-2 flex items-end space-x-1 sm:space-x-2">
+							<FormField
+								control={form.control}
+								name={`exercises.${index}.sets`}
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>Sets</FormLabel>
+										<FormControl>
+											<Input placeholder="1" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 							<FormField
 								control={form.control}
 								name={`exercises.${index}.reps`}
@@ -160,7 +179,7 @@ export const ExerciseSessionForm = ({
 				<Button
 					type="button"
 					variant="outline"
-					onClick={() => append({ title: '', reps: 0 })}
+					onClick={() => append({ title: '', sets: 1, reps: 0 })}
 				>
 					Add Exercise Set
 				</Button>
@@ -224,18 +243,18 @@ export const ExerciseSessionForm = ({
 					/>
 
 					<input
-						type="date"
+						type="hidden"
 						name="dateString"
-						value={date?.getTime()}
+						value={`${date}`}
 						className="hidden"
 					/>
-
 					<input
 						type="hidden"
-						name="userId"
-						value={userId}
+						name="id"
+						value={exerciseSession?.id}
 						className="hidden"
 					/>
+					<FormUserId userId={userId} />
 				</div>
 				<SubmitButton2 className="w-full md:w-auto">Submit</SubmitButton2>
 			</form>

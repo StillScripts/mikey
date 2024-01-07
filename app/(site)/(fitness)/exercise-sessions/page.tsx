@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -22,6 +23,11 @@ import {
 	TableRow
 } from '@/components/ui/table'
 import { H2 } from '@/components/ui/typography'
+
+export const metadata: Metadata = {
+	title: 'Exercise Sessions',
+	description: 'View your exercise sessions'
+}
 
 const ExerciseSessionsPage = async () => {
 	const session = await getServerAuthSession()

@@ -16,13 +16,11 @@ const EditExerciseSession = async ({ params }: Params) => {
 	if (!session?.user?.id) {
 		notFound()
 	}
-	const exerciseSession = await getExerciseSession(parseInt(params.id))
+	const exerciseSession = await getExerciseSession(params.id)
 
 	if (!exerciseSession) {
 		notFound()
 	}
-
-	console.log(exerciseSession)
 
 	return (
 		<div className="space-y-4 md:space-y-6">
