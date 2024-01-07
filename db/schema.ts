@@ -13,6 +13,7 @@ import {
 	timestamp,
 	varchar
 } from 'drizzle-orm/mysql-core'
+import { v4 as uuidv4 } from 'uuid'
 
 const createdAndUpdated = {
 	createdAt: timestamp('created_at')
@@ -59,7 +60,10 @@ export const exerciseSessions = mysqlTable('exercise_sessions', {
 
 /** Table for storing each set in an exercise session */
 export const exerciseSets = mysqlTable('exercise_sets', {
-	id: varchar('id', { length: 255 }).notNull().primaryKey(),
+	id: varchar('id', { length: 255 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => uuidv4()),
 	reps: int('reps'),
 	sets: int('sets').default(1),
 	exerciseSessionId: varchar('exercise_session_id', { length: 255 })

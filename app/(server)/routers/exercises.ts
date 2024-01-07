@@ -6,10 +6,9 @@ import { eq } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 
 import type { ExerciseFormKey } from '@/app/(dashboard)/_components/forms/exercise-form'
-import { type ActionStatus, extractFormData, getStatus } from '@/lib/utils'
-
 import { getDb } from '@/db/get-connection'
-import { exercises, exerciseSessions } from '@/db/schema'
+import { exercises } from '@/db/schema'
+import { type ActionStatus, extractFormData, getStatus } from '@/lib/utils'
 
 const exerciseFormKeys: ExerciseFormKey[] = ['title', 'description', 'userId']
 

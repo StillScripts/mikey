@@ -43,7 +43,9 @@ const config = {
 							],
 							['^react', '^next'],
 							['^@?\\w'],
-							['^(@/app|@/components|@/lib|@/server|@/styles|@/trpc)(/.*|$)'],
+							[
+								'^(@/app|@/components|@/db|@/lib|@/server|@/styles|@/trpc)(/.*|$)'
+							],
 							['^\\u0000'],
 							['^\\.\\.(?!/?$)', '^\\.\\./?$'],
 							['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],

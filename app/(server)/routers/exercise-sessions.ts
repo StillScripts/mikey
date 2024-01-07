@@ -1,11 +1,11 @@
+'use server'
 /* eslint-disable no-console */
 import { eq } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 
-import { type ActionStatus, getStatus } from '@/lib/utils'
-
 import { getDb } from '@/db/get-connection'
 import { exerciseSessions, exerciseSets } from '@/db/schema'
+import { type ActionStatus, getStatus } from '@/lib/utils'
 
 export const getExerciseSessions = async (userId: string) => {
 	const db = await getDb()
@@ -25,28 +25,53 @@ export const getExerciseSession = async (id: string) => {
 
 export type ExerciseSession = Awaited<ReturnType<typeof getExerciseSession>>
 
-export const createExerciseSession = async (
-	state: ActionStatus,
-	formData: FormData
-) => {
-	const id = uuidv4()
-	const notes = formData.get('notes') as string
-	const date = formData.get('dateString') as string
-	const userId = formData.get('userId') as string
-	const db = await getDb()
+const getAllSets = (formData: FormData) => {
 	const titles: string[] = []
 	const reps: number[] = []
-	const sets: { exerciseTitle: string; reps: number }[] = []
+	const sets: number[] = []
+	const ids: Record<number, string> = {}
+	const allSets: {
+		exerciseTitle: string
+		reps: number
+		sets: number
+		id?: string
+	}[] = []
+	let index = 0
 	for (const [key, value] of formData.entries()) {
 		if (key.includes('.title')) {
 			titles.push(value.toString())
 		} else if (key.includes('.reps')) {
 			reps.push(parseInt(value.toString()))
+		} else if (key.includes('.sets')) {
+			sets.push(parseInt(value.toString()))
+		} else if (key.includes('.id')) {
+			ids[index] = value.toString()
 		}
+		index++
 	}
 	titles.forEach((title, index) => {
-		sets.push({ exerciseTitle: title, reps: reps[index] })
+		const id = ids[index]
+		allSets.push({
+			exerciseTitle: title,
+			reps: reps[index]!,
+			sets: sets[index]!,
+			id: id
+		})
 	})
+	return allSets
+}
+
+export const createExerciseSession = async (
+	state: ActionStatus,
+	formData: FormData
+) => {
+	const db = await getDb()
+	const id = uuidv4()
+	const notes = formData.get('notes') as string
+	const date = formData.get('dateString') as string
+	const userId = formData.get('userId') as string
+
+	const allSets = getAllSets(formData)
 
 	if (notes && userId) {
 		await db
@@ -54,7 +79,7 @@ export const createExerciseSession = async (
 			.values({
 				id,
 				notes,
-				date: new Date(),
+				date: new Date(date),
 				userId
 			})
 			.catch(err => {
@@ -64,29 +89,28 @@ export const createExerciseSession = async (
 			.finally(() => {
 				console.log({
 					notes,
-					date: new Date(),
+					date: new Date(date),
 					userId
 				})
 			})
-		if (sets.length > 0) {
-			const recent = await db.query.exerciseSessions.findFirst()
+		if (allSets.length > 0) {
 			await db
 				.insert(exerciseSets)
 				.values(
 					// @ts-expect-error this doesn't matter
-					sets.map(set => ({ ...set, exerciseSessionId: recent?.id + 1 }))
+					allSets.map(set => ({ ...set, exerciseSessionId: id }))
 				)
 				.catch(err => {
 					console.log(err)
 					return getStatus('error')
 				})
 				.finally(() => {
-					console.log(sets)
+					console.log(allSets)
 				})
 		}
 	}
 
-	return getStatus('success')
+	return getStatus('success', id)
 }
 
 export const updateExerciseSession = async (
@@ -101,27 +125,7 @@ export const updateExerciseSession = async (
 	console.log(id)
 	const userId = formData.get('userId') as string
 	const db = await getDb()
-	const titles: string[] = []
-	const reps: number[] = []
-	const sets: number[] = []
-	const exerciseSets: { exerciseTitle: string; reps: number; sets: number }[] =
-		[]
-	for (const [key, value] of formData.entries()) {
-		if (key.includes('.title')) {
-			titles.push(value.toString())
-		} else if (key.includes('.reps')) {
-			reps.push(parseInt(value.toString()))
-		} else if (key.includes('.sets')) {
-			sets.push(parseInt(value.toString()))
-		}
-	}
-	titles.forEach((title, index) => {
-		exerciseSets.push({
-			exerciseTitle: title,
-			reps: reps[index]!,
-			sets: sets[index]!
-		})
-	})
+	const allSets = getAllSets(formData)
 
 	if (notes && userId) {
 		console.log({
@@ -137,23 +141,25 @@ export const updateExerciseSession = async (
 		// 		userId
 		// 	})
 		// 	.where(eq(exerciseSessions.id, id))
-		if (sets.length > 0) {
-			const newSets = sets.filter(set => !set?.id)
-			console.log(sets)
-			const recent = await db.query.exerciseSessions.findFirst()
-			// await db
-			// 	.insert(exerciseSets)
-			// 	.values(
-			// 		// @ts-ignore
-			// 		sets.map(set => ({ ...set, exerciseSessionId: recent?.id + 1 }))
-			// 	)
-			// 	.catch(err => {
-			// 		console.log(err?.message)
-			// 		return getStatus('error')
-			// 	})
-			// 	.finally(() => {
-			// 		console.log(sets)
-			// 	})
+		if (allSets.length > 0) {
+			const newSets = allSets.filter(set => !set?.id)
+			//const existingSets = allSets.filter(set => set?.id)
+
+			if (newSets.length > 0) {
+				await db
+					.insert(exerciseSets)
+					.values(
+						// @ts-expect-error This is hard to type...
+						newSets.map(set => ({ ...set, exerciseSessionId: id }))
+					)
+					.catch(err => {
+						console.log(err)
+						return getStatus('error')
+					})
+					.finally(() => {
+						console.log(allSets)
+					})
+			}
 		}
 	}
 
