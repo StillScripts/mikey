@@ -2,7 +2,6 @@ import { type AdapterAccount } from 'next-auth/adapters'
 
 import { relations, sql } from 'drizzle-orm'
 import {
-	bigint,
 	boolean,
 	index,
 	int,
@@ -10,7 +9,6 @@ import {
 	mysqlEnum,
 	mysqlTableCreator,
 	primaryKey,
-	serial,
 	text,
 	timestamp,
 	varchar
@@ -24,8 +22,6 @@ const createdAndUpdated = {
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull()
 }
-
-//const tablePrefix = process.env.DATABASE_TABLE_PREFIX ?? 'fitness'
 
 export const mysqlTable = mysqlTableCreator(
 	name => name
@@ -53,7 +49,7 @@ export const blocks = mysqlTable('blocks', {
 
 /** Table for storing an exercise session */
 export const exerciseSessions = mysqlTable('exercise_sessions', {
-	id: serial('id').primaryKey(),
+	id: varchar('id', { length: 255 }).notNull().primaryKey(),
 	date: timestamp('date').notNull(),
 	notes: text('notes'),
 	userId: varchar('userId', { length: 255 })
@@ -63,24 +59,22 @@ export const exerciseSessions = mysqlTable('exercise_sessions', {
 
 /** Table for storing each set in an exercise session */
 export const exerciseSets = mysqlTable('exercise_sets', {
-	id: serial('id').primaryKey(),
+	id: varchar('id', { length: 255 }).notNull().primaryKey(),
 	reps: int('reps'),
 	sets: int('sets').default(1),
-	exerciseSessionId: bigint('exercise_session_id', {
-		mode: 'bigint',
-		unsigned: true
-	}).references(() => exerciseSessions.id),
-	exerciseId: bigint('exercise_id', {
-		mode: 'bigint',
-		unsigned: true
-	}).references(() => exercises.id),
+	exerciseSessionId: varchar('exercise_session_id', { length: 255 })
+		.notNull()
+		.references(() => exerciseSessions.id),
+	exerciseId: varchar('exercise_id', { length: 255 })
+		.notNull()
+		.references(() => exercises.id),
 	exerciseTitle: varchar('exercise_title', { length: 255 }),
 	...createdAndUpdated
 })
 
 /** Table for storing a unique type of exercise */
 export const exercises = mysqlTable('exercises', {
-	id: serial('id').primaryKey(),
+	id: varchar('id', { length: 255 }).notNull().primaryKey(),
 	title: varchar('title', { length: 255 }).notNull(),
 	description: text('description').notNull(),
 	userId: varchar('userId', { length: 255 })
