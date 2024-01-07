@@ -3,9 +3,16 @@
 import { eq } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
 
+import type { ExerciseSessionFormKey } from '@/app/(site)/(fitness)/_components/exercise-session-form'
 import { getDb } from '@/db/get-connection'
 import { exerciseSessions, exerciseSets } from '@/db/schema'
-import { type ActionStatus, getStatus } from '@/lib/utils'
+import { type ActionStatus, extractFormData, getStatus } from '@/lib/utils'
+
+const exerciseSessionFormKeys: ExerciseSessionFormKey[] = [
+	'dateString',
+	'notes',
+	'userId'
+]
 
 export const getExerciseSessions = async (userId: string) => {
 	const db = await getDb()
@@ -67,25 +74,20 @@ export const createExerciseSession = async (
 ) => {
 	const db = await getDb()
 	const id = uuidv4()
-	const notes = formData.get('notes') as string
-	const date = formData.get('dateString') as string
-	const userId = formData.get('userId') as string
+	const { notes, dateString, userId } = extractFormData<ExerciseSessionFormKey>(
+		formData,
+		exerciseSessionFormKeys
+	)
 
 	const allSets = getAllSets(formData)
 
 	if (notes && userId) {
-		console.log({
-			id,
-			notes,
-			date: new Date(date),
-			userId
-		})
 		await db
 			.insert(exerciseSessions)
 			.values({
 				id,
 				notes,
-				date: new Date(date),
+				date: new Date(dateString),
 				userId
 			})
 			.catch(err => {
@@ -95,18 +97,14 @@ export const createExerciseSession = async (
 			.finally(() => {
 				console.log({
 					notes,
-					date: new Date(date),
+					date: new Date(dateString),
 					userId
 				})
 			})
 		if (allSets.length > 0) {
-			console.log(allSets)
 			await db
 				.insert(exerciseSets)
-				.values(
-					// @ts-expect-error this doesn't matter
-					allSets.map(set => ({ ...set, exerciseSessionId: id }))
-				)
+				.values(allSets.map(set => ({ ...set, exerciseSessionId: id })))
 				.catch(err => {
 					console.log(err)
 					return getStatus('error')
@@ -124,20 +122,18 @@ export const updateExerciseSession = async (
 	state: ActionStatus,
 	formData: FormData
 ) => {
-	const notes = formData.get('notes') as string
-	// for some reason this isn't working
-	const date = formData.get('dateString') as string
-	console.log(date)
-	const id = formData.get('id') as string
-	console.log(id)
-	const userId = formData.get('userId') as string
 	const db = await getDb()
+	const id = formData.get('id') as string
+	const { notes, dateString, userId } = extractFormData<ExerciseSessionFormKey>(
+		formData,
+		exerciseSessionFormKeys
+	)
 	const allSets = getAllSets(formData)
 
 	if (notes && userId) {
 		console.log({
 			notes,
-			date: new Date(date),
+			date: new Date(dateString),
 			userId
 		})
 		// await db
@@ -155,10 +151,7 @@ export const updateExerciseSession = async (
 			if (newSets.length > 0) {
 				await db
 					.insert(exerciseSets)
-					.values(
-						// @ts-expect-error This is hard to type...
-						newSets.map(set => ({ ...set, exerciseSessionId: id }))
-					)
+					.values(newSets.map(set => ({ ...set, exerciseSessionId: id })))
 					.catch(err => {
 						console.log(err)
 						return getStatus('error')
@@ -170,7 +163,7 @@ export const updateExerciseSession = async (
 		}
 	}
 
-	return getStatus('success')
+	return getStatus('success', id)
 }
 
 // update: protectedProcedure

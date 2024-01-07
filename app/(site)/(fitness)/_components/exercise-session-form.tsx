@@ -15,7 +15,7 @@ import {
 	createExerciseSession,
 	updateExerciseSession
 } from '@/app/(server)/routers/exercise-sessions'
-import { type ExerciseSession } from '@/app/(server)/routers/exercises'
+import { type ExerciseSession } from '@/app/(server)/routers/exercise-sessions'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -41,6 +41,7 @@ import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
 	date: z.date({ invalid_type_error: 'Must be a valid date' }),
+	dateString: z.string(),
 	notes: z.string(),
 	exercises: z.array(
 		z.object({
@@ -48,10 +49,12 @@ const formSchema = z.object({
 			sets: z.coerce.number(),
 			reps: z.coerce.number()
 		})
-	)
+	),
+	userId: z.string()
 })
 
 export type NewExerciseSession = z.infer<typeof formSchema>
+export type ExerciseSessionFormKey = keyof NewExerciseSession
 
 export const ExerciseSessionForm = ({
 	userId,
@@ -241,8 +244,7 @@ export const ExerciseSessionForm = ({
 							</FormItem>
 						)}
 					/>
-
-					<HiddenField name="dateString" value={`${date}`} />
+					<HiddenField name="dateString" value={`${date.toISOString()}`} />
 					<HiddenField name="userId" value={userId} />
 					{exerciseSession?.id && (
 						<HiddenField name="id" value={exerciseSession.id} />
