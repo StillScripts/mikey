@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { getServerAuthSession } from '@/app/(server)/auth'
-import { ExerciseSessionForm } from '@/app/(site)/(fitness)/_components/form'
+import { ExerciseSessionForm } from '@/app/(site)/(fitness)/_components/exercise-session-form'
 import { H2 } from '@/components/ui/typography'
 
 export const metadata: Metadata = {

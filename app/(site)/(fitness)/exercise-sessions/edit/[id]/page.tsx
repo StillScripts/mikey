@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { getServerAuthSession } from '@/app/(server)/auth'
 import { getExerciseSession } from '@/app/(server)/routers/exercises'
-import { ExerciseSessionForm } from '@/app/(site)/(fitness)/_components/form'
+import { ExerciseSessionForm } from '@/app/(site)/(fitness)/_components/exercise-session-form'
 import { H2 } from '@/components/ui/typography'
 
 export const dynamic = 'force-dynamic'

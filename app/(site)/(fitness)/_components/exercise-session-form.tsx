@@ -65,7 +65,7 @@ export const ExerciseSessionForm = ({
 	const serverAction = exerciseSession?.id
 		? updateExerciseSession
 		: createExerciseSession
-	// TODO use updateExerciseSession if in update mode
+
 	const [state, action] = useFormState(serverAction, {})
 	const { toast } = useToast()
 	const form = useForm<NewExerciseSession>({
@@ -212,7 +212,7 @@ export const ExerciseSessionForm = ({
 											<Button
 												variant={'outline'}
 												className={cn(
-													'w-[240px] pl-3 text-left font-normal',
+													'w-full pl-3 text-left font-normal',
 													!field.value && 'text-muted-foreground'
 												)}
 											>
