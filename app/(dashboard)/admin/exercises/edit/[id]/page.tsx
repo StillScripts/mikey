@@ -28,7 +28,6 @@ const EditExercisePage = async ({ params }: Params) => {
 					{ title: 'Exercises', href: '/admin/exercises' },
 					{
 						title: 'Edit Exercise',
-						// @ts-expect-error this should be valid
 						href: `/admin/exercises/edit/${exercise.id}`
 					}
 				]}

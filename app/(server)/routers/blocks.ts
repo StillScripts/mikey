@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 
 import { eq } from 'drizzle-orm'
+import { v4 as uuidv4 } from 'uuid'
 
 import { getDb } from '@/db/get-connection'
 import { blocks } from '@/db/schema'
@@ -29,6 +30,7 @@ export const createBlock = async (state: ActionStatus, formData: FormData) => {
 
 	if (title && blocks) {
 		await db.insert(blocks).values({
+			id: uuidv4(),
 			type: 'cards',
 			content,
 			title
