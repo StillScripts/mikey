@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation'
 
 import {
 	GearIcon,
-	HeartFilledIcon,
 	HomeIcon,
-	Pencil2Icon
+	Pencil2Icon,
+	RocketIcon
 } from '@radix-ui/react-icons'
 
 import { Button } from '@/components/ui/button'
@@ -37,7 +37,7 @@ export const SidebarNavigation = () => {
 		{
 			name: 'Exercises',
 			href: '/admin/exercises',
-			icon: HeartFilledIcon,
+			icon: RocketIcon,
 			current: pathname.includes('/admin/exercises')
 		},
 		{

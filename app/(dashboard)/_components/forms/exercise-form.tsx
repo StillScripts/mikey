@@ -10,7 +10,11 @@ import { z } from 'zod'
 
 import { FormContainer } from '@/app/(dashboard)/_components/form-container'
 import { SubmitButton2 } from '@/app/(dashboard)/_components/submit-button'
-import { createExercise, type Exercise } from '@/app/(server)/routers/exercises'
+import {
+	createExercise,
+	type Exercise,
+	updateExercise
+} from '@/app/(server)/routers/exercises'
 import {
 	Card,
 	CardContent,
@@ -54,7 +58,8 @@ export const ExerciseForm = ({
 	exercise?: Exercise
 }) => {
 	const router = useRouter()
-	const [state, action] = useFormState(createExercise, {})
+	const serverAction = exercise?.id ? updateExercise : createExercise
+	const [state, action] = useFormState(serverAction, {})
 	const { toast } = useToast()
 	const form = useForm<NewExercise>({
 		resolver: zodResolver(formSchema),
@@ -75,16 +80,20 @@ export const ExerciseForm = ({
 		} else if (state?.success) {
 			toast({
 				title: 'Success',
-				description: 'Your exercise session was successfully recorded.',
+				description: 'Your exercise was successfully recorded.',
 				action: (
 					<ToastAction altText="View all exercises">
 						<Link href="/">View all exercises</Link>
 					</ToastAction>
 				)
 			})
+			if (!exercise?.id && state?.id) {
+				// // @ts-expect-error this should be valid
+				router.push(`/admin/exercises/edit/${state?.id}`)
+			}
 			router.refresh()
 		}
-	}, [router, state?.error, state?.success, toast])
+	}, [exercise?.id, router, state?.error, state?.id, state?.success, toast])
 
 	return (
 		<FormContainer>
@@ -138,6 +147,7 @@ export const ExerciseForm = ({
 								)}
 							/>
 							<HiddenField name="userId" value={userId} />
+							{exercise?.id && <HiddenField name="id" value={exercise.id} />}
 						</CardContent>
 						<CardFooter>
 							<SubmitButton2 className="w-full md:w-auto">Submit</SubmitButton2>

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 
+import { DeleteExerciseMenuItem } from '@/app/(dashboard)/_components/buttons/exercise-buttons'
 import { PageHeading } from '@/app/(dashboard)/_components/page-heading'
 import { getServerAuthSession } from '@/app/(server)/auth'
 import { getUserExercises } from '@/app/(server)/routers/exercises'
@@ -47,7 +48,7 @@ const Posts = async () => {
 			</PageHeading>
 			<h1 className="mb-6 text-xl font-bold">Exercises</h1>
 			<Table>
-				<TableCaption>A list of your posts.</TableCaption>
+				<TableCaption>A list of your exercises.</TableCaption>
 				<TableHeader>
 					<TableRow>
 						<TableHead>Title</TableHead>
@@ -77,7 +78,7 @@ const Posts = async () => {
 										<DropdownMenuItem asChild>
 											<Link href={`/admin/exercises/edit/${id}`}>Edit</Link>
 										</DropdownMenuItem>
-										{/* <DeletePostMenuItem id={id} /> */}
+										<DeleteExerciseMenuItem id={id} />
 									</DropdownMenuContent>
 								</DropdownMenu>
 							</TableCell>

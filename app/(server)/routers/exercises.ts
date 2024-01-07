@@ -1,6 +1,9 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { eq } from 'drizzle-orm'
+import { v4 as uuidv4 } from 'uuid'
 
 import { getDb } from '@/db/get-connection'
 import { exercises, exerciseSessions, exerciseSets } from '@/db/schema'
@@ -22,19 +25,46 @@ export const getExercise = async (id: string) => {
 
 export type Exercise = Awaited<ReturnType<typeof getExercise>>
 
+/** Extract common values from the ExerciseForm */
+const getExerciseFormData = (formData: FormData) => {
+	const title = formData.get('title') as string
+	const description = formData.get('description') as string
+	const userId = formData.get('userId') as string
+	return { title, description, userId }
+}
+
 export const createExercise = async (
 	state: ActionStatus,
 	formData: FormData
 ) => {
 	const db = await getDb()
-	const title = formData.get('title') as string
-	const description = formData.get('description') as string
-	const userId = formData.get('userId') as string
+	const id = uuidv4()
+	const { title, description, userId } = getExerciseFormData(formData)
 	await db.insert(exercises).values({
+		id,
 		title,
 		description,
 		userId
 	})
+	return getStatus('success', id)
+}
+
+export const updateExercise = async (
+	state: ActionStatus,
+	formData: FormData
+) => {
+	const db = await getDb()
+	const id = formData.get('id') as string
+	const { title, description, userId } = getExerciseFormData(formData)
+	await db
+		.update(exercises)
+		.set({
+			id,
+			title,
+			description,
+			userId
+		})
+		.where(eq(exercises.id, id))
 	return getStatus('success')
 }
 
@@ -233,3 +263,9 @@ export const updateExerciseSession = async (
 //         );
 //       }
 //     }),
+
+export const deleteExercise = async (id: string) => {
+	const db = await getDb()
+	await db.delete(exercises).where(eq(exercises.id, id))
+	revalidatePath('/admin/exercises')
+}

@@ -6,14 +6,21 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
 }
 
-export type ActionStatus = { error?: boolean; success?: boolean }
+export type ActionStatus = {
+	error?: boolean
+	success?: boolean
+	id?: string | null
+}
 
-export const getStatus = (status: 'success' | 'error'): ActionStatus => {
+export const getStatus = (
+	status: 'success' | 'error',
+	id?: string
+): ActionStatus => {
 	switch (status) {
 		case 'success':
-			return { error: false, success: true }
+			return { error: false, success: true, id: id ?? null }
 		case 'error':
-			return { error: true, success: false }
+			return { error: true, success: false, id: id ?? null }
 	}
 }
 
