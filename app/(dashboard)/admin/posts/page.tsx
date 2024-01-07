@@ -33,10 +33,7 @@ const Posts = async () => {
 	const allPosts = await getAllPosts()
 	return (
 		<>
-			<PageHeading
-				heading="Blog Posts"
-				links={[{ title: 'Posts', href: '/admin/posts' }]}
-			>
+			<PageHeading heading="Blog Posts" links={[{ title: 'Posts' }]}>
 				<Button type="button" asChild>
 					<Link href="/admin/posts/new">New Post</Link>
 				</Button>
