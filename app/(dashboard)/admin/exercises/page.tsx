@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import { type Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -26,8 +26,8 @@ import {
 } from '@/components/ui/table'
 
 export const metadata: Metadata = {
-	title: 'Your Posts',
-	description: 'View all your posts'
+	title: 'Your Exercises',
+	description: 'View all your exercises'
 }
 
 const Posts = async () => {

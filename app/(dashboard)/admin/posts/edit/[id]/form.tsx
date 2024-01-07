@@ -36,7 +36,6 @@ export const EditPostForm = ({
 	starters: SingleBlock[]
 }) => {
 	const blocks = JSON.parse(post?.draftContent as string)?.blocks ?? []
-	console.log(blocks)
 	const form = useForm<EditorFormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
