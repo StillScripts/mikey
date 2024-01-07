@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { getServerAuthSession } from '@/app/(server)/auth'
-import { getExerciseSessions } from '@/app/(server)/routers/exercises'
+import { getExerciseSessions } from '@/app/(server)/routers/exercise-sessions'
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,

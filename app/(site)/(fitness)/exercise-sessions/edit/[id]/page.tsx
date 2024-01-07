@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { getServerAuthSession } from '@/app/(server)/auth'
-import { getExerciseSession } from '@/app/(server)/routers/exercises'
+import { getExerciseSession } from '@/app/(server)/routers/exercise-sessions'
 import { ExerciseSessionForm } from '@/app/(site)/(fitness)/_components/exercise-session-form'
 import { H2 } from '@/components/ui/typography'
 

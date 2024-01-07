@@ -70,24 +70,6 @@ export const updateExercise = async (
 	return getStatus('success')
 }
 
-export const getExerciseSessions = async (userId: string) => {
-	const db = await getDb()
-	return await db.query.exerciseSessions.findMany({
-		where: eq(exerciseSessions.userId, userId),
-		with: { exerciseSets: true }
-	})
-}
-
-export const getExerciseSession = async (id: string) => {
-	const db = await getDb()
-	return await db.query.exerciseSessions.findFirst({
-		where: eq(exerciseSessions.id, id),
-		with: { exerciseSets: true }
-	})
-}
-
-export type ExerciseSession = Awaited<ReturnType<typeof getExerciseSession>>
-
 export const deleteExercise = async (id: string) => {
 	const db = await getDb()
 	await db.delete(exercises).where(eq(exercises.id, id))

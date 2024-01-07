@@ -7,6 +7,24 @@ import { type ActionStatus, getStatus } from '@/lib/utils'
 import { getDb } from '@/db/get-connection'
 import { exerciseSessions, exerciseSets } from '@/db/schema'
 
+export const getExerciseSessions = async (userId: string) => {
+	const db = await getDb()
+	return await db.query.exerciseSessions.findMany({
+		where: eq(exerciseSessions.userId, userId),
+		with: { exerciseSets: true }
+	})
+}
+
+export const getExerciseSession = async (id: string) => {
+	const db = await getDb()
+	return await db.query.exerciseSessions.findFirst({
+		where: eq(exerciseSessions.id, id),
+		with: { exerciseSets: true }
+	})
+}
+
+export type ExerciseSession = Awaited<ReturnType<typeof getExerciseSession>>
+
 export const createExerciseSession = async (
 	state: ActionStatus,
 	formData: FormData
