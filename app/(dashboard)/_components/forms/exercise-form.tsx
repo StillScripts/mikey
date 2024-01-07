@@ -27,7 +27,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-	FormUserId
+	HiddenField
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -137,7 +137,7 @@ export const ExerciseForm = ({
 									</FormItem>
 								)}
 							/>
-							<FormUserId userId={userId} />
+							<HiddenField name="userId" value={userId} />
 						</CardContent>
 						<CardFooter>
 							<SubmitButton2 className="w-full md:w-auto">Submit</SubmitButton2>

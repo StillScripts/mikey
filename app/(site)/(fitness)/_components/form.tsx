@@ -26,7 +26,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-	FormUserId
+	HiddenField
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
@@ -242,19 +242,11 @@ export const ExerciseSessionForm = ({
 						)}
 					/>
 
-					<input
-						type="hidden"
-						name="dateString"
-						value={`${date}`}
-						className="hidden"
-					/>
-					<input
-						type="hidden"
-						name="id"
-						value={exerciseSession?.id}
-						className="hidden"
-					/>
-					<FormUserId userId={userId} />
+					<HiddenField name="dateString" value={`${date}`} />
+					<HiddenField name="userId" value={userId} />
+					{exerciseSession?.id && (
+						<HiddenField name="id" value={exerciseSession.id} />
+					)}
 				</div>
 				<SubmitButton2 className="w-full md:w-auto">Submit</SubmitButton2>
 			</form>
