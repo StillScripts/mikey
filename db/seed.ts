@@ -1,4 +1,5 @@
 import { drizzle } from 'drizzle-orm/mysql2'
+import { v4 as uuidv4 } from 'uuid'
 
 import 'dotenv/config'
 
@@ -6,7 +7,7 @@ import { getConnection } from './get-connection'
 import { posts } from './schema'
 
 const samplePost = {
-	id: 7232358,
+	id: uuidv4(),
 	title: 'Tesla',
 	description: 'Learn about Tesla vehicles',
 	slug: 'tesla',
