@@ -1,7 +1,11 @@
 'use client'
 import { useEffect } from 'react'
 import { useFormState } from 'react-dom'
-import { useFieldArray, useForm } from 'react-hook-form'
+import {
+	useFieldArray,
+	useForm,
+	useFormState as useFormStuff
+} from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -41,20 +45,28 @@ import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
 	date: z.date({ invalid_type_error: 'Must be a valid date' }),
-	dateString: z.string(),
+	dateString: z.string().optional(),
 	notes: z.string(),
 	exercises: z.array(
 		z.object({
 			title: z.string().min(1, { message: 'Required field' }),
 			sets: z.coerce.number(),
-			reps: z.coerce.number()
+			reps: z.coerce.number(),
+			id: z.string().optional()
 		})
 	),
-	userId: z.string()
+	userId: z.string().optional()
 })
 
 export type NewExerciseSession = z.infer<typeof formSchema>
 export type ExerciseSessionFormKey = keyof NewExerciseSession
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Errors = () => {
+	const { errors } = useFormStuff()
+	// eslint-disable-next-line no-console
+	console.log(errors)
+}
 
 export const ExerciseSessionForm = ({
 	userId,
@@ -76,7 +88,9 @@ export const ExerciseSessionForm = ({
 		defaultValues: {
 			exercises: sets.map(set => ({
 				title: set.exerciseTitle!,
-				reps: set.reps!
+				reps: set.reps!,
+				sets: set.sets!,
+				id: set.id
 			})),
 			notes: exerciseSession?.notes ?? '',
 			date: exerciseSession?.date
@@ -166,6 +180,19 @@ export const ExerciseSessionForm = ({
 									</FormItem>
 								)}
 							/>
+							<FormField
+								control={form.control}
+								name={`exercises.${index}.id`}
+								render={({ field }) => (
+									<FormItem className="hidden">
+										<FormLabel>ID</FormLabel>
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 							<Button
 								className="text-red-600 hover:text-red-700"
 								variant="ghost"
@@ -244,10 +271,40 @@ export const ExerciseSessionForm = ({
 							</FormItem>
 						)}
 					/>
-					<HiddenField name="dateString" value={`${date.toISOString()}`} />
-					<HiddenField name="userId" value={userId} />
+
+					{date && (
+						<FormField
+							control={form.control}
+							name="dateString"
+							render={({ field }) => (
+								<FormItem>
+									<FormControl>
+										<input
+											className="hidden"
+											{...field}
+											value={`${date.toISOString()}`}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					)}
+					<FormField
+						control={form.control}
+						name="userId"
+						render={({ field }) => (
+							<FormItem>
+								<FormControl>
+									<input className="hidden" {...field} value={userId} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 					{exerciseSession?.id && (
-						<HiddenField name="id" value={exerciseSession.id} />
+						/** @ts-expect-error so annoying*/
+						<HiddenField form={form} name="id" value={exerciseSession.id} />
 					)}
 				</div>
 				<SubmitButton2 className="w-full md:w-auto">Submit</SubmitButton2>

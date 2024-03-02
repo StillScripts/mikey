@@ -38,12 +38,13 @@ export const createExercise = async (
 		formData,
 		exerciseFormKeys
 	)
-	await db.insert(exercises).values({
+	const res = await db.insert(exercises).values({
 		id,
 		title,
 		description,
 		userId
 	})
+	console.log(res)
 	return getStatus('success', id)
 }
 

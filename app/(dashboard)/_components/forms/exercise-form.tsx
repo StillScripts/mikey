@@ -30,8 +30,7 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	FormMessage,
-	HiddenField
+	FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -41,7 +40,8 @@ import { useToast } from '@/components/ui/use-toast'
 const formSchema = z.object({
 	title: z.string().min(1, { message: 'Required field' }),
 	description: z.string().optional(),
-	userId: z.string()
+	userId: z.string(),
+	id: z.string().optional()
 })
 
 export type NewExercise = z.infer<typeof formSchema>
@@ -84,7 +84,7 @@ export const ExerciseForm = ({
 				description: 'Your exercise was successfully recorded.',
 				action: (
 					<ToastAction altText="View all exercises">
-						<Link href="/">View all exercises</Link>
+						<Link href="/admin/exercises">View all exercises</Link>
 					</ToastAction>
 				)
 			})
@@ -147,8 +147,36 @@ export const ExerciseForm = ({
 									</FormItem>
 								)}
 							/>
-							<HiddenField name="userId" value={userId} />
-							{exercise?.id && <HiddenField name="id" value={exercise.id} />}
+							<FormField
+								control={form.control}
+								name="userId"
+								render={({ field }) => (
+									<FormItem>
+										<FormControl>
+											<input className="hidden" {...field} value={userId} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							{exercise?.id && (
+								<FormField
+									control={form.control}
+									name="id"
+									render={({ field }) => (
+										<FormItem>
+											<FormControl>
+												<input
+													className="hidden"
+													{...field}
+													value={exercise.id}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							)}
 						</CardContent>
 						<CardFooter>
 							<SubmitButton2 className="w-full md:w-auto">Submit</SubmitButton2>

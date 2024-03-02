@@ -80,6 +80,7 @@ export const createExerciseSession = async (
 	)
 
 	const allSets = getAllSets(formData)
+	console.log(allSets)
 
 	if (notes && userId) {
 		await db
@@ -87,8 +88,8 @@ export const createExerciseSession = async (
 			.values({
 				id,
 				notes,
-				date: new Date(dateString),
-				userId
+				date: new Date(),
+				userId: '5902f309-854e-4d23-ae47-6d8dbca38c13'
 			})
 			.catch(err => {
 				console.log(err)
@@ -97,7 +98,7 @@ export const createExerciseSession = async (
 			.finally(() => {
 				console.log({
 					notes,
-					date: new Date(dateString),
+					date: new Date(),
 					userId
 				})
 			})
@@ -129,24 +130,18 @@ export const updateExerciseSession = async (
 		exerciseSessionFormKeys
 	)
 	const allSets = getAllSets(formData)
-
-	if (notes && userId) {
-		console.log({
-			notes,
-			date: new Date(dateString),
-			userId
-		})
-		// await db
-		// 	.update(exerciseSessions)
-		// 	.set({
-		// 		notes,
-		// 		date: new Date(),
-		// 		userId
-		// 	})
-		// 	.where(eq(exerciseSessions.id, id))
+	if (userId) {
+		await db
+			.update(exerciseSessions)
+			.set({
+				notes,
+				date: new Date(dateString),
+				userId
+			})
+			.where(eq(exerciseSessions.id, id))
 		if (allSets.length > 0) {
 			const newSets = allSets.filter(set => !set?.id)
-			//const existingSets = allSets.filter(set => set?.id)
+			const existingSets = allSets.filter(set => set?.id)
 
 			if (newSets.length > 0) {
 				await db
@@ -159,6 +154,16 @@ export const updateExerciseSession = async (
 					.finally(() => {
 						console.log(allSets)
 					})
+			}
+			if (existingSets.length) {
+				await Promise.all(
+					existingSets.map(set =>
+						db
+							.update(exerciseSets)
+							.set({ ...set, exerciseSessionId: id })
+							.where(eq(exerciseSets.id, set.id!))
+					)
+				)
 			}
 		}
 	}
