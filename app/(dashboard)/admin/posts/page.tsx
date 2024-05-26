@@ -33,10 +33,7 @@ const Posts = async () => {
 	const allPosts = await getAllPosts()
 	return (
 		<>
-			<PageHeading
-				heading="Blog Posts"
-				links={[{ title: 'Posts', href: '/admin/posts' }]}
-			>
+			<PageHeading heading="Blog Posts" links={[{ title: 'Posts' }]}>
 				<Button type="button" asChild>
 					<Link href="/admin/posts/new">New Post</Link>
 				</Button>
@@ -60,7 +57,7 @@ const Posts = async () => {
 							<TableCell>{published ? 'Yes' : 'No'}</TableCell>
 							<TableCell>
 								<DropdownMenu>
-									<DropdownMenuTrigger>
+									<DropdownMenuTrigger asChild>
 										<Button
 											variant="ghost"
 											className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"

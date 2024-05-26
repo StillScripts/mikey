@@ -5,8 +5,7 @@ import { BlockRenderer } from '@/components/editor/block-renderer'
 import { Section } from '@/components/ui/section'
 
 const BlogArticle = async ({ params }: { params: { slug: string } }) => {
-	const posts = await getPostBySlug(params.slug)
-	const post = posts ? posts[0] : null
+	const post = await getPostBySlug(params.slug)
 	if (!post) {
 		notFound()
 	}

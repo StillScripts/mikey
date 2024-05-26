@@ -1,14 +1,15 @@
 import * as React from 'react'
 import {
 	Controller,
-	ControllerProps,
-	FieldPath,
-	FieldValues,
+	type ControllerProps,
+	type FieldPath,
+	type FieldValues,
 	FormProvider,
-	useFormContext
+	useFormContext,
+	type UseFormReturn
 } from 'react-hook-form'
 
-import * as LabelPrimitive from '@radix-ui/react-label'
+import type * as LabelPrimitive from '@radix-ui/react-label'
 import { Slot } from '@radix-ui/react-slot'
 
 import { Label } from '@/components/ui/label'
@@ -165,6 +166,30 @@ const FormMessage = React.forwardRef<
 })
 FormMessage.displayName = 'FormMessage'
 
+const HiddenField = ({
+	form,
+	name,
+	value
+}: {
+	form: UseFormReturn<Record<string, unknown>, unknown, undefined>
+	name: string
+	value: string
+}) => (
+	<FormField
+		control={form.control}
+		name={name}
+		render={({ field }) => (
+			<FormItem>
+				<FormControl>
+					<input type="hidden" className="hidden" {...field} value={value} />
+				</FormControl>
+				<FormMessage />
+			</FormItem>
+		)}
+	/>
+)
+HiddenField.displayName = 'HiddenField'
+
 export {
 	useFormField,
 	Form,
@@ -173,5 +198,6 @@ export {
 	FormControl,
 	FormDescription,
 	FormMessage,
+	HiddenField,
 	FormField
 }

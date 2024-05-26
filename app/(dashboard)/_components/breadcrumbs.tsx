@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 
 export interface BreadcrubLink {
 	title: string
-	href: Route
+	href?: Route
 }
 
 export const Breadcrumbs = ({ links }: { links?: BreadcrubLink[] }) => {
@@ -19,7 +19,7 @@ export const Breadcrumbs = ({ links }: { links?: BreadcrubLink[] }) => {
 					className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700"
 				>
 					<ChevronLeft
-						className="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-gray-400"
+						className="-ml-1 mr-1 h-5 w-5 flex-shrink-0 text-muted-foreground"
 						aria-hidden="true"
 					/>
 					Back
@@ -34,16 +34,22 @@ export const Breadcrumbs = ({ links }: { links?: BreadcrubLink[] }) => {
 							</Button>
 						</div>
 					</li>
-					{links?.map((link, i) => (
+					{links?.map(link => (
 						<li key={link.title}>
 							<div className="flex items-center">
 								<ChevronRight
-									className="h-5 w-5 flex-shrink-0 text-gray-400"
+									className="h-5 w-5 flex-shrink-0 text-muted-foreground"
 									aria-hidden="true"
 								/>
-								<Button className="ml-4" variant="link" asChild>
-									<Link href={link.href}>{link.title}</Link>
-								</Button>
+								{link?.href ? (
+									<Button className="ml-4" variant="link" asChild>
+										<Link href={link.href}>{link.title}</Link>
+									</Button>
+								) : (
+									<Button className="ml-4" variant="link" disabled>
+										{link.title}
+									</Button>
+								)}
 							</div>
 						</li>
 					))}

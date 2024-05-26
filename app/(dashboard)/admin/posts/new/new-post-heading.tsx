@@ -16,7 +16,7 @@ export const NewPostHeading = ({
 			<Breadcrumbs
 				links={[
 					{ title: 'Posts', href: '/admin/posts' },
-					{ title: 'New Post', href: '/admin/posts/new' }
+					{ title: 'New Post' }
 				]}
 			/>
 			<div className="mt-2 md:flex md:items-center md:justify-between">

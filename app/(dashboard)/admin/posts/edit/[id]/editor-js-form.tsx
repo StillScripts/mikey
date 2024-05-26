@@ -5,7 +5,7 @@ import { useFormState } from 'react-dom'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { EditorContainer } from '@/app/(dashboard)/_components/editor-container'
+import { FormContainer } from '@/app/(dashboard)/_components/form-container'
 import { type SinglePost, updatePost } from '@/app/(server)/routers/posts'
 import { Editor } from '@/components/editor/editorJs/editor'
 import { Textarea } from '@/components/ui/textarea'
@@ -53,9 +53,9 @@ export const EditPostForm = ({ post }: { post: SinglePost }) => {
 					className="text-2xl font-bold sm:text-3xl"
 				/>
 			</EditPageHeading>
-			<EditorContainer>
+			<FormContainer>
 				<Editor data={state?.draftContent as string} />
-			</EditorContainer>
+			</FormContainer>
 		</form>
 	)
 }

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { EditorContainer } from '@/app/(dashboard)/_components/editor-container'
+import { FormContainer } from '@/app/(dashboard)/_components/form-container'
 import type { SingleBlock } from '@/app/(server)/routers/blocks'
 import { type SinglePost, updatePost } from '@/app/(server)/routers/posts'
 import Editor, {
@@ -35,15 +35,14 @@ export const EditPostForm = ({
 	post: SinglePost
 	starters: SingleBlock[]
 }) => {
-	const blocks = JSON.parse(post.draftContent as string)?.blocks ?? []
-	console.log(blocks)
+	const blocks = JSON.parse(post?.draftContent as string)?.blocks ?? []
 	const form = useForm<EditorFormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			time: new Date().getTime(),
 			blocks,
 			version: '2.28.2',
-			title: post.title
+			title: post?.title ?? ''
 		}
 	})
 	const router = useRouter()
@@ -102,9 +101,9 @@ export const EditPostForm = ({
 						)}
 					/>
 				</EditPageHeading>
-				<EditorContainer>
+				<FormContainer>
 					<Editor form={form} starters={starters} />
-				</EditorContainer>
+				</FormContainer>
 			</form>
 		</Form>
 	)

@@ -1,0 +1,1 @@
+ALTER TABLE `exercise_sets` MODIFY COLUMN `exercise_id` varchar(255);
